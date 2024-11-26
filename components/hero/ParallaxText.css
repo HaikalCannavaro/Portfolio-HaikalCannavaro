@@ -1,0 +1,56 @@
+/* Container styling */
+.parallax-container {
+    margin: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 0.8; /* leading-[0.8] */
+    letter-spacing: -2px; /* tracking-[-2px] */
+    width: 100vw;
+  }
+  
+  /* Inner text container styling */
+  .parallax-text {
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-size: 4rem; /* 24px */
+    font-weight: 600; /* font-semibold */
+    text-transform: uppercase;
+  }
+  
+
+  
+  /* Individual span styling */
+  .parallax-span {
+    margin-right: 2.5rem; /* mr-10 */
+    display: block;
+  }
+  
+
+    /* Responsif */
+    @media (min-width: 340px) {
+      /* sm */
+      .parallax-text{
+        font-size: 2rem; /* 24px */
+        font-weight: 600; /* font-semibold */
+      }
+      
+    }
+    
+    @media (min-width: 768px) {
+      /* md */
+      .parallax-text{
+        font-size: 3rem; /* 24px */
+        font-weight: 600; /* font-semibold */
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      /* lg */
+      .parallax-text{
+        font-size: 4rem; /* 24px */
+        font-weight: 600; /* font-semibold */
+      }
+    }

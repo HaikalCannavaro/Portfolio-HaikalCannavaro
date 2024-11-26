@@ -1,0 +1,45 @@
+/* Style utama */
+.title {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    text-align: center;
+    font-size: 96px; 
+    font-weight: 800; 
+    line-height: 1; 
+    color: #dcd9d9; 
+  }
+  
+
+  
+  /* Responsif */
+  @media (min-width: 340px) {
+    /* sm */
+    .title {
+      font-size: 75px; 
+      line-height: 1;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    /* md */
+    .title {
+      font-size: 120px; 
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    /* lg */
+    .title {
+      font-size: 180px; 
+    }
+  }
+  
+  /* Style untuk kontainer kata Haikal Cannavaro */
+  .wordContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+  

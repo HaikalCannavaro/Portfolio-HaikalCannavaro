@@ -1,0 +1,98 @@
+.heroContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .textContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .animateWords {
+    display: inline-block;
+    overflow: hidden;
+    padding-top: 0.25rem; /* pt-1 equivalent */
+    margin-right: -1rem; /* -mr-4 equivalent */
+  }
+  
+  @media (min-width: 640px) {
+    /* sm */
+    .animateWords {
+      margin-right: -1.25rem; /* sm:-mr-5 equivalent */
+      margin-bottom: -0.5rem; /* sm:-mb-2 equivalent */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    /* md */
+    .animateWords {
+      margin-right: -1.75rem; /* md:-mr-7 equivalent */
+      margin-bottom: -0.75rem; /* md:-mb-3 equivalent */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    /* lg */
+    .animateWords {
+      margin-right: -2.25rem; /* lg:-mr-9 equivalent */
+      margin-bottom: -1rem; /* lg:-mb-4 equivalent */
+    }
+  }
+  
+  .imageWrapper {
+    position: absolute;
+    top: 0;
+    bottom: 3.5rem; /* bottom-14 equivalent */
+    margin: auto;
+    cursor: pointer;
+  }
+  
+  @media (min-width: 768px) {
+    /* md */
+    .imageWrapper {
+      bottom: 6rem; /* md:bottom-24 equivalent */
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    /* xl */
+    .imageWrapper {
+      bottom: 8rem; /* xl:bottom-32 equivalent */
+    }
+  }
+  
+  .heroImage {
+    height: auto;
+    width: 100px; /* w-[100px] equivalent */
+    border-radius: 16px; /* rounded-[16px] equivalent */
+    filter: grayscale(0.8); /* Initial grayscale */
+    transition: filter 0.5s ease; /* Smooth transition for hover */
+  
+    /* Hover effect */
+    &:hover {
+      filter: grayscale(0); /* Remove grayscale on hover */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    /* md */
+    .heroImage {
+      width: 200px; /* md:w-[200px] equivalent */
+      border-radius: 32px; /* md:rounded-[32px] equivalent */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    /* lg */
+    .heroImage {
+      width: 245px; /* lg:w-[245px] equivalent */
+    }
+  }
+  
+
+

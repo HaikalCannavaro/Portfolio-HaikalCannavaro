@@ -1,0 +1,111 @@
+.paragraph{
+    font-size: 15px;
+    max-width: 1280px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    margin-bottom: 1vw;
+    text-align: justify;
+    .word{
+      margin-right: 12px;
+      margin-top: 8px;
+      position: relative;
+      
+      .shadow{
+        position: absolute;
+        opacity: 0.3;
+      }
+    }
+  }
+  
+  
+  .aboutText {
+    font-weight: bold;
+    margin-bottom: 4vh;
+    margin-left: 10vw;
+    font-size: 50px;
+    display: flex;
+    justify-content:left;
+  }
+  
+.aboutContainer{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10vw;
+    margin-bottom: 20vw;
+    flex-direction: column;
+
+}
+.aboutDesc{
+    max-width: 100%;
+}
+
+.aboutProfile{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: row;
+    gap: 5vw;
+
+}
+
+.schoolContainer{
+  background-color: #27272a;
+  margin-top: 5vh;
+  border-radius: 10px;
+}
+
+.schoolText{
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 1vw;
+    margin-left: 2vw;
+    margin-top: 1vw;
+}
+
+.schoolDescContainer{
+  margin-left: 2vw;
+  margin-right: 2vw;
+  margin-bottom: 2vw;
+  display: flex;
+  justify-content:left;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.schoolDesc{
+    font-size: 15px;
+    font-weight: 500;
+
+}
+
+.skillsContainer{
+  background-color: #27272a;
+  margin-top: 5vh;
+  border-radius: 10px;
+}
+
+.skillsText{
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 1vw;
+  margin-left: 2vw;
+  margin-top: 1vw;
+}
+
+.skillsDescContainer{
+  margin-left: 2vw;
+  margin-right: 2vw;
+  margin-bottom: 2vw;
+  display: flex;
+  justify-content:left;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skillsDesc{
+  font-size: 15px;
+  font-weight: 500;
+}
+
+
