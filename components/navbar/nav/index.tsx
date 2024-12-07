@@ -67,10 +67,10 @@ const Index: React.FC = () => {
         </div>
         
         <div className={styles.footer}>
-          <a href="#">Github</a>
+          <a href="https://.github.com/HaikalCannavaro" target="_blank">Github</a>
           <a href="https://www.instagram.com/haikalcnnvr/profilecard/?igsh=cXYyZmI0ZDR6M3U1" target="_blank">Instagram</a>
-          <a href="#">Email</a>
-          <a href="#">LinkedIn</a>
+          <a href="mailto:haikalcannavaro64@gmail.com" target="_blank">Email</a>
+          <a href=" https://wa.me/6285943486854?text=I'm%20Haikal%20Cannavaro" target="_blank">Whatsapp</a>
         </div>
       </div>
       <Curve/>

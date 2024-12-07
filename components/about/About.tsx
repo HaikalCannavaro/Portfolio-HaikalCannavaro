@@ -1,3 +1,4 @@
+
 import style from '../about/About.module.css'
 import Character from '../about/Character';
 import AnimateHeading from "../about/Heading";
@@ -34,36 +35,28 @@ export default function Home() {
                 </div>
 
                 <div className={style.skillsProfile}>
-                    <div className={style.imageLeftContainer}>
-                        <div className={style.image1LeftContainer}>
+                    <div className={style.skillsContainer}>
+                        <div className={style.skillsRow}>
                             <Image src={"/image/JAVA.png"} width={75} height={75} alt="Java"/>
-                            <div className={style.loader1}/>
+                            <Image src={"/image/C++.png"} width={75} height={75} alt="Java"/>
                         </div>
-                        <div className={style.image2LeftContainer}>
-                            <Image src={"/image/C++.png"} width={75} height={75} alt="C++"/>
-                            <div className={style.loader2}/>
+                        <div className={style.skillsRow}>
+                            <Image src={"/image/HTML.png"} width={75} height={75} alt="Java"/>
+                            <a target="_blank" className={style.skillsIcon}>
+                                <span className={style.skillsText}>Skills</span>
+                            </a>
+                            <Image src={"/image/CSS.png"} width={75} height={75} alt="Java"/>
                         </div>
-                    </div>
-                    <div className={style.middleSkillContainer}>
-                        <div className={style.skillsContainer}>
-                            <AnimateHeading title="Skills" className={style.skillsText} delay={0.5} />
-                        </div>
-                        <div className={style.image5MiddleContainer}>
-                            <div className={style.loader5}/>
-                            <Image src={"/image/GO2.png"} width={75} height={75} alt="GoLang" className={style.imgGo}/>
+                        <div className={style.skillsRow}>
+                            <Image src={"/image/GO2.png"} width={75} height={75} alt="Java" className={style.GO}/>
                         </div>
                     </div>
-                    <div className={style.imageRightContainer}>
-                        <div className={style.image3RightContainer}>
-                            <div className={style.loader3}/>
-                            <Image src={"/image/HTML.png"} width={75} height={75} alt="HTML"/>
-                        </div>
-                        <div className={style.image4RightContainer}>
-                            <div className={style.loader4}/>
-                            <Image src={"/image/CSS.png"} width={75} height={75} alt="CSS"/>
-                        </div>
-                    </div>
-                </div>    
+                    <div className={style.Line1}/>
+                    <div className={style.Line2}/>
+                    <div className={style.Line3}/>
+                    <div className={style.Line4}/>
+                    <div className={style.Line5}/>
+                </div>
             </section>
         </main>
     );
