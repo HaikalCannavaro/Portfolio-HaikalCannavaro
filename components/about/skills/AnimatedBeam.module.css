@@ -1,0 +1,13 @@
+/* AnimatedBeam.module.css */
+.animatedBeam {
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(0, 0); /* GPU acceleration */
+    stroke-width: 2;
+  }
+  
+  .transformGpu {
+    transform: translate(0, 0); /* GPU acceleration */
+  }

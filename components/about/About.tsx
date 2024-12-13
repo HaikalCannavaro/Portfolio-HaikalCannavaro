@@ -3,7 +3,7 @@ import style from '../about/About.module.css'
 import Character from '../about/Character';
 import AnimateHeading from "../about/Heading";
 import AnimateBody from './Body';
-import Image from "next/image";
+import Skills from "./skills/skills"
 const paragraph= "Hi! My name is Haikal Cannavaro, and I’m a beginner programmer just starting my journey in the world of software development.\nWith a strong passion for learning, I’m continuously honing my coding skills and exploring the latest technologies. I believe every line of code is a step toward creative solutions and innovation. Currently, I’m focusing on mastering the basics of programming, algorithm logic, and building simple projects to enhance my abilities. I’m committed to growing and learning in this exciting field."
 
 export default function Home() {
@@ -34,29 +34,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className={style.skillsProfile}>
-                    <div className={style.skillsContainer}>
-                        <div className={style.skillsRow}>
-                            <Image src={"/image/JAVA.png"} width={75} height={75} alt="Java"/>
-                            <Image src={"/image/C++.png"} width={75} height={75} alt="Java"/>
-                        </div>
-                        <div className={style.skillsRow}>
-                            <Image src={"/image/HTML.png"} width={75} height={75} alt="Java"/>
-                            <a target="_blank" className={style.skillsIcon}>
-                                <span className={style.skillsText}>Skills</span>
-                            </a>
-                            <Image src={"/image/CSS.png"} width={75} height={75} alt="Java"/>
-                        </div>
-                        <div className={style.skillsRow}>
-                            <Image src={"/image/GO2.png"} width={75} height={75} alt="Java" className={style.GO}/>
-                        </div>
-                    </div>
-                    <div className={style.Line1}/>
-                    <div className={style.Line2}/>
-                    <div className={style.Line3}/>
-                    <div className={style.Line4}/>
-                    <div className={style.Line5}/>
-                </div>
+                <Skills/>
             </section>
         </main>
     );
