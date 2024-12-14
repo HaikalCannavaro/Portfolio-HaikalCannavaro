@@ -1,5 +1,4 @@
 import "./globals.css";
-import Header from '../components/navbar/NavMenuButton';
 export const metadata = {
   title: "Portfolio Haikal Cannavaro",
   description: "Made by Haikal Cannavaro",
@@ -19,7 +18,6 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         />
       </head>
       <body>
-        <Header />
         {children}
       </body>
     </html>

@@ -1,0 +1,21 @@
+.HomeButton{
+    display: inline-flex;
+    position: fixed;
+    align-items: center;
+    gap: 0.5rem; 
+    top: 1.25rem;
+    left: 2.5%;
+    z-index: 1000;
+}
+.HomeButton:hover .codeIcon{
+    transform: rotate(20deg) scale(1.2);
+}
+
+.codeIcon{
+    transition: transform 300ms ease-in-out;
+}
+.HomeText{
+    font-size: 16px; 
+    font-weight: 600; 
+    text-transform: uppercase;
+}
