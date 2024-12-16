@@ -22,7 +22,8 @@
     flex-direction: column;
     font-size: 56px;
     gap: 12px;
-    margin-top: 80px;
+    margin-top: 40px;
+    align-items: center;
   }
   
   .menu .body .nav .header {
@@ -62,14 +63,14 @@
     bottom: -2px; /* Jarak garis dari teks */
     width: 100%;
     height: 3px; /* Ketebalan garis */
-    background-color: white; /* Warna garis */
+    background-color: rgb(26, 19, 220); /* Warna garis */
     transform: scaleX(0); /* Awal: tersembunyi */
     transform-origin: bottom right;
     transition: transform 0.3s ease-in-out;
   }
   
   .menu .footer a:hover {
-    color: white; /* Warna teks tetap putih */
+    color: rgb(26, 19, 220); /* Warna teks tetap putih */
   }
   
   .menu .footer a:hover::after {
@@ -77,3 +78,49 @@
     transform-origin: bottom left;
   }
   
+
+/* Ketika tinggi layar di bawah 900px */
+@media screen and (min-height: 900px) {
+
+
+  .menu .body .nav {
+    font-size: 36px; /* Mengecilkan ukuran font */
+    gap: 8px; /* Mengurangi jarak antar item menu */
+    margin-top: 20px; /* Mengurangi margin atas */
+  }
+
+  .menu .body .nav .header {
+    font-size: 10px; /* Mengecilkan ukuran header */
+    margin-bottom: 20px; /* Kurangi jarak bawah */
+  }
+
+  .menu .footer {
+    font-size: 10px; /* Mengecilkan ukuran font footer */
+    gap: 30px; /* Mengurangi jarak antar item footer */
+    margin-top: 10px; /* Kurangi jarak ke atas */
+  }
+}
+
+/* Ketika tinggi layar di bawah 700px */
+@media screen and (max-height: 640px) {
+
+
+  .menu .body .nav {
+    font-size: 45px; /* Font lebih kecil */
+    gap: 15px;
+    margin-top: 40px;
+  }
+
+  .menu .footer {
+    font-size: 8px; /* Footer lebih kecil */
+    gap: 30px;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .menu .body {
+    padding: 20px 10px; /* Padding lebih kecil agar muat */
+    justify-content: flex-start; /* Mendorong konten ke atas */
+  }
+}  

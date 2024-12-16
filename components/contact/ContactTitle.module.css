@@ -1,0 +1,14 @@
+/* File: ContactTitle.module.css */
+.container {
+    padding-top: 6rem; /* py-24 */
+    padding-bottom: 6rem;
+    text-align: center;
+    font-size: 3rem; /* text-5xl */
+    font-weight: bold;
+  }
+  
+  .titleText {
+    color: #27272a; /* text-zinc-200 */
+  }
+  
+  

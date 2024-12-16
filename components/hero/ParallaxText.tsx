@@ -12,6 +12,7 @@ import {
 import { useRef } from "react";
 import { wrap } from "@motionone/utils";
 import "./ParallaxText.css"; // Import file CSS
+import { Infinity } from "lucide-react";
 
 interface ParallaxTextProps {
   children: string;
@@ -32,8 +33,8 @@ export default function ParallaxText({
     stiffness: 300,
   });
   const skewVelocity = useSpring(scrollVelocity, {
-    stiffness: 400,
-    damping: 30,
+    stiffness: 100,
+    damping: 20,
   });
 
   const skewVelocityFactor = useTransform(

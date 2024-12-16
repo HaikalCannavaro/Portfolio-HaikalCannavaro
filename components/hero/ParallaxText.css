@@ -5,8 +5,8 @@
     flex-wrap: nowrap;
     overflow: hidden;
     white-space: nowrap;
-    line-height: 0.8; /* leading-[0.8] */
-    letter-spacing: -2px; /* tracking-[-2px] */
+    line-height: 0.8;
+    letter-spacing: -2px;
     width: 100vw;
   }
   

@@ -1,0 +1,14 @@
+.container {
+    position: fixed; /* Tetap di belakang semua konten */
+    inset: 0; /* Mengisi seluruh layar */
+    pointer-events: none; /* Tidak mempengaruhi interaksi pengguna */
+    z-index: -1; /* Letakkan di belakang konten lain */
+    background-color: transparent;
+  }
+  
+  .canvas {
+    display: block; /* Hilangkan margin bawaan */
+    width: 100%;
+    height: 100%;
+  }
+  
