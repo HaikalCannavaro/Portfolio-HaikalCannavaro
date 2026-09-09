@@ -1,7 +1,7 @@
 /* File: ContactTitle.module.css */
 .container {
     padding-top: 6rem; /* py-24 */
-    padding-bottom: 6rem;
+    padding-bottom: 3rem;
     text-align: center;
     font-size: 3rem; /* text-5xl */
     font-weight: bold;

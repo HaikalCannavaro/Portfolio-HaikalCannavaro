@@ -28,12 +28,12 @@ const navItems: NavItem[] = [
     href: "#about",
   },
   {
-    title: "Work",
-    href: "#work",
+    title: "Skills",
+    href: "#skills",
   },
   {
-    title: "Contact",
-    href: "#contact",
+    title: "Work",
+    href: "#work",
   },
 ]
 

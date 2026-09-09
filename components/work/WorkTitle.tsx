@@ -4,13 +4,13 @@ import useIsomorphicLayoutEffect from "../../hooks/UseIsomorphicLayoutEffect";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
-import styles from "./ContactTitle.module.css";
+import styles from "./WorkTitle.module.css";
 
-interface ContactTitleProps {
+interface WorkTitleProps {
   title: string;
 }
 
-export default function ContactTitle({ title }: ContactTitleProps) {
+export default function WorkTitle({ title }: WorkTitleProps) {
   const el = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

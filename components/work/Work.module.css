@@ -1,0 +1,109 @@
+.workSection {
+  position: relative;
+  margin-top: 6rem;
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+
+    background:
+        /* Lapisan atas: Menyimulasikan kaca putih bening tanpa filter blur (aman buat animasi) */
+        linear-gradient(rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0.4)),
+        /* Lapisan bawah: Warna gradien lu */
+        linear-gradient(135deg,
+            #8d1bff 0%,
+            /* Biru pastel lembut di pojok kiri atas */
+            #9494ff 35%,
+            /* Mulai memudar jadi abu-abu cerah/netral */
+            #656586 65%,
+            /* Tahan netral di tengah (tempat Card lo numpuk) */
+            #581d97 100%
+            /* Ungu pastel lembut di pojok kanan bawah */
+        );
+}
+
+
+
+.wrapper {
+  width: 100%;
+  overflow: hidden;
+  padding: 0 5%; /* px-[5%] */
+}
+
+.workContent {
+  position: relative;
+  display: flex;
+  min-height: 100vh; /* min-h-[100svh] */
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 3rem; /* pt-12 */
+}
+/* Container pembungkus kumpulan Card Project */
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px; /* Jarak antar Card */
+  width: 100%;
+  margin-top: 40px; /* Jarak dari WorkTitle lu ke Card */
+  padding-bottom: 30px;
+}
+
+/* Biar pas di layar HP ngga maksa grid-nya ngelewatin batas layar */
+@media screen and (max-width: 600px) {
+  .projectGrid {
+    grid-template-columns: 1fr; /* Jadi cuma 1 kolom atas-bawah */
+  }
+}
+
+
+/* Container buat naruh tombol di tengah */
+.viewMoreContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 0px;
+  padding-bottom: 20px;
+}
+
+/* Desain Tombol "View More" */
+.viewMoreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px; /* Bentuk pill (kapsul) panjang */
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+/* Animasi Panah Bawaan Tombol */
+.btnArrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+/* Hover Effect Tombol */
+.viewMoreBtn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+  transform: translateY(-2px); /* Ngangkat dikit */
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Panahnya gerak maju pas tombol di-hover */
+.viewMoreBtn:hover .btnArrow {
+  transform: translateX(4px);
+}

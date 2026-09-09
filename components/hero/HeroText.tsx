@@ -26,14 +26,6 @@ export default function HeroText() {
           }}
           className={styles.imageWrapper} // Tambahkan class
         >
-          <Image
-            src={"/profileimage/ProfileEdited.jpg"}
-            width={150}
-            height={150}
-            priority
-            alt="Haikal Cannavaro"
-            className={styles.heroImage} // Gunakan class CSS untuk styling gambar
-          />
         </motion.div>
       </div>
     </div>

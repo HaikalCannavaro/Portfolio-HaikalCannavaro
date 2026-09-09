@@ -23,7 +23,7 @@ const Paragraph: React.FC<ParagraphProps> = ({ value }) => {
     const element = useRef<HTMLParagraphElement | null>(null);
     const { scrollYProgress } = useScroll({
         target: element,
-        offset: ["start 0.8", "start 0.4"]
+        offset: ["start 0.7", "start 0.25"]
     });
 
     const words = value.split(" ");

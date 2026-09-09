@@ -20,64 +20,152 @@
 }
 
 
-.aboutText {
-  font-weight: bold;
-  margin-bottom: 4vh;
-  margin-left: 10vw;
-  font-size: 50px;
+/* Container buat Heading dan Garis */
+.headerWrapper {
   display: flex;
-  justify-content:left;
+  align-items: center;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-bottom: 4vh;
+}
+.headerWrapper::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #363636;
+  margin-left: 20px;
 }
 
-.aboutContainer{
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10vw;
-  margin-bottom: 20vw;
-  flex-direction: column;
+/* Modifikasi .aboutText biar cuma ngurusin hurufnya aja */
+.aboutText {
+  font-weight: bold;
+  font-size: 50px;
+  color: #ffffff;
+  /* Hapus margin-left & margin-bottom di sini, karena udah di-handle sama .headerWrapper */
+  margin: 0; 
+}
 
+
+.aboutContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10vw;
+  margin-bottom: 10vh; /* Jarak antara About Me ke judul Education di bawahnya */
+}
+
+/* Container Utama Education */
+.educationContainer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10vh; /* Jarak antara Education ke bagian Skills di bawahnya */
 }
 .aboutDesc{
   max-width: 100%;
 }
 
-.aboutProfile{
+.aboutProfile {
   display: flex;
-  justify-content:center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start; /* Biar sejajar rata atas */
   flex-direction: row;
   gap: 5vw;
-
+  margin-left: 10vw; /* Samain indentasinya sama paragraf */
+  margin-right: 10vw;
+  margin-top: 5vh;
+  flex-wrap: wrap; /* Biar numpuk ke bawah di layar kecil */
 }
 
-.schoolContainer{
-margin-top: 5vh;
-border-radius: 20px;
-width: 35vw;
+.schoolContainer {
+  display: block; 
+  text-decoration: none; 
+  color: inherit; 
+  
+  /* Bikin bentuknya rapi */
+  width: 35vw;
+  min-width: 300px;
+  border-radius: 16px; /* Ujung membulat yang pas, nggak terlalu tajam/bulat */
+  background-color: #1a1a1a; /* Hitam abu-abu pekat (bukan hitam absolut #000) */
+  
+  /* Border tipis biar tegas, pisah dari background utama */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  
+  /* Transisi halus buat efek saat cursor ngelewat */
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              border-color 0.3s ease, 
+              box-shadow 0.3s ease;
 }
 
-
-.schoolText{
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 1vw;
-  margin-left: 2vw;
-  margin-top: 1vw;
+.schoolContentWrapper {
+  position: relative; 
+  padding: 30px 40px; 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.schoolDescContainer{
-margin-left: 2vw;
-margin-right: 2vw;
-margin-bottom: 2vw;
-display: flex;
-justify-content:left;
-flex-direction: column;
-gap: 0.5rem;
+.schoolContainer:hover {
+  transform: translateY(-5px); 
+  border-color: rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); 
 }
-.schoolDesc{
-  font-size: 15px;
+.schoolContainer:hover .schoolText {
+  color: #c2a4ff; 
+}
+
+.schoolLinkBtn {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  
+  background-color: #2a2a2a; 
+  color: #ffffff;
+  
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateX(-15px) rotate(-45deg); 
+}
+
+.schoolContainer:hover .schoolLinkBtn {
+  opacity: 1;
+  background-color: #ffffff; 
+  color: #000000;
+  transform: translateX(0) rotate(0deg); 
+}
+.schoolText {
+  font-size: 26px; 
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  transition: color 0.3s ease; 
+  letter-spacing: -0.5px;
+}
+
+.schoolDescContainer {
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  gap: 6px; 
+}
+
+.schoolDesc {
+  font-size: 16px;
   font-weight: 500;
+  color: #b3b3b3;
+}
 
+.schoolYear {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666666; 
+  text-transform: uppercase; 
+  letter-spacing: 1px;
 }
 
 .titleContainer{

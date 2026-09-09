@@ -4,16 +4,16 @@ import useIsomorphicLayoutEffect from "../../hooks/UseIsomorphicLayoutEffect";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
-import styles from "./ContactRounded.module.css";
+import styles from "./WorkRounded.module.css";
 
-export default function ContactRounded() {
+export default function WorkRounded() {
   const el = useRef<HTMLDivElement | null>(null);
 
   useIsomorphicLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        `.${styles.contactRound}`,
+        `.${styles.workRound}`,
         { scale: 1 },
         {
           scaleY: 0,
@@ -36,7 +36,7 @@ export default function ContactRounded() {
       ref={el}
       className={styles.container}
     >
-      <div className={styles.contactRound} />
+      <div className={styles.workRound} />
     </div>
   );
 }

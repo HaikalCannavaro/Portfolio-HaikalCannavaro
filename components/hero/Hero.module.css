@@ -7,10 +7,34 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh; /* min-h-screen */
-  width: 100%; /* w-full */
+  width: 100%;
   }
   
 
 .parallaxSection{
   margin-top: 8vw;
 }  
+
+/* WADAH PORTAL (TEMPAT 3D LANYARD MENDARAT) */
+.lanyardPortalWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999; /* Terbang di atas segalanya */
+  pointer-events: none; /* WADAH harus nembus biar kursor bisa turun ke teks */
+}
+
+/* KONTEN TEKS LO */
+.heroContentWrapper {
+  position: relative;
+  z-index: 15; /* Teks di bawah portal */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto; /* Teksnya bisa diklik/disorot secara normal */
+}

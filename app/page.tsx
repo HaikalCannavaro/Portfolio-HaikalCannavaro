@@ -2,7 +2,7 @@ import About from "../components/about/About";
 import Hero from "../components/hero/Hero";
 import Nav from "../components/navbar/NavMenuButton";
 import NavHome from "../components/navhome/NavHome";
-import Contact from "../components/contact/Contact";
+import Contact from "../components/work/Work";
 import FlickeringGrid from "../components/providers/FlickeringGrids"; // Tambahkan ini
 import styles from "./page.module.css";
 
