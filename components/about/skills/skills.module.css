@@ -227,3 +227,59 @@
   border-radius: 50%;
   transform: rotate(var(--angle)) translateY(-280px) rotate(calc(var(--angle) * -1));
 }
+
+/* =========================================
+   RESPONSIVE (MOBILE & TABLET)
+========================================= */
+
+@media screen and (max-width: 768px) {
+  /* 1. Perkecil Container Utama Orbit */
+  .orbitContainer {
+    width: 320px; /* Diperkecil supaya muat di HP */
+    height: 320px;
+  }
+
+  /* 2. Perkecil Ukuran Bulatan Tengah (User) */
+  .centerNode {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* 3. Perkecil Ukuran Satelit dan Radius Putarannya (translateY) */
+  .satelliteNode {
+    width: 50px;
+    height: 50px;
+    /* Ubah translateY(-280px) jadi lebih kecil (-150px) 
+       supaya nggak nabrak pinggiran layar HP */
+    transform: rotate(var(--angle)) translateY(-150px) rotate(calc(var(--angle) * -1));
+  }
+
+  /* Perkecil icon di dalam bulatan biar proporsional */
+  .circle img, .circle svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Pastikan circle padding lebih kecil di HP */
+  .circle {
+    padding: 0.5rem;
+  }
+  .videoContainer {
+    top: 5vh; /* Tadinya 15vh, dibikin lebih kecil biar naik */
+    height: calc(100% - 5vh);
+  }
+}
+
+@media screen and (max-width: 400px) {
+  /* Buat layar HP super kecil (kayak iPhone SE) */
+  .orbitContainer {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .satelliteNode {
+    width: 45px;
+    height: 45px;
+    transform: rotate(var(--angle)) translateY(-130px) rotate(calc(var(--angle) * -1));
+  }
+}

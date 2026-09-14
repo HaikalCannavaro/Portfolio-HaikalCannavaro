@@ -1,4 +1,5 @@
 import "./globals.css";
+import SmoothScroll from '../components/SmoothScroll'; 
 export const metadata = {
   title: "Portfolio Haikal Cannavaro",
   description: "Made by Haikal Cannavaro",
@@ -18,7 +19,9 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         />
       </head>
       <body>
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

@@ -79,48 +79,52 @@
   }
   
 
-/* Ketika tinggi layar di bawah 900px */
-@media screen and (min-height: 900px) {
+@media screen and (max-width: 768px) {
+  .menu {
+    /* Hapus ukuran full-screen */
+    height: auto;
+    min-height: unset;
+    
+    /* Bikin jadi kotak kecil (misal lebar cuma 70% atau fixed width) */
+    width: 250px; 
+    
+    /* Kasih margin biar nggak nempel ujung banget, 
+       tergantung dari mana tombol burger lu muncul */
+    top: 20px;
+    right: 20px;
+    
+    /* Bikin ujung-ujungnya melengkung manis */
+    border-radius: 16px; 
+    
+    /* EFEK GLASSMORPHISM KHUSUS MOBILE */
+    background: rgba(15, 15, 15, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
 
+  .menu .body {
+    /* Padding dikurangin banyak biar kotaknya ringkas */
+    padding: 30px 20px;
+    justify-content: flex-start;
+  }
 
   .menu .body .nav {
-    font-size: 36px; /* Mengecilkan ukuran font */
-    gap: 8px; /* Mengurangi jarak antar item menu */
-    margin-top: 20px; /* Mengurangi margin atas */
+    font-size: 28px; /* Teks menu dikecilin */
+    gap: 15px;
+    margin-top: 10px;
+    align-items: flex-start; /* Opsional: dibikin rata kiri biar lebih rapi di kotak kecil */
   }
 
   .menu .body .nav .header {
-    font-size: 10px; /* Mengecilkan ukuran header */
-    margin-bottom: 20px; /* Kurangi jarak bawah */
+    margin-bottom: 20px;
   }
 
   .menu .footer {
-    font-size: 10px; /* Mengecilkan ukuran font footer */
-    gap: 30px; /* Mengurangi jarak antar item footer */
-    margin-top: 10px; /* Kurangi jarak ke atas */
+    margin-top: 30px; /* Jarak antara navigasi sama footer (socmed dll) */
+    flex-wrap: wrap; /* Biar kalau footernya kepanjangan dia turun ke bawah */
+    gap: 20px;
+    justify-content: flex-start;
   }
-}
-
-/* Ketika tinggi layar di bawah 700px */
-@media screen and (max-height: 640px) {
-
-
-  .menu .body .nav {
-    font-size: 45px; /* Font lebih kecil */
-    gap: 15px;
-    margin-top: 40px;
-  }
-
-  .menu .footer {
-    font-size: 8px; /* Footer lebih kecil */
-    gap: 30px;
-  }
-}
-
-
-@media screen and (max-width: 768px) {
-  .menu .body {
-    padding: 20px 10px; /* Padding lebih kecil agar muat */
-    justify-content: flex-start; /* Mendorong konten ke atas */
-  }
-}  
+} 

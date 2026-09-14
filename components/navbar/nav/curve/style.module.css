@@ -7,4 +7,8 @@
     fill: rgb(41, 41, 41);
     stroke: none;
   }
-  
+  @media screen and (max-width: 768px) {
+  .svgCurve {
+    display: none;
+  }
+}
