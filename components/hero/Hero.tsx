@@ -15,19 +15,16 @@ export default function Hero() {
   const device = useDeviceType();
   const isMobile = device === 'mobile-small' || device === 'mobile-large';
 
-  // Bikin config/settingan terpisah biar kode lu tetep bersih
-    const getLanyardConfig = () => {
+  const getLanyardConfig = () => {
     switch (device) {
-      case 'mobile-small': 
-         return { position: [0, 8, 18], positionGroup: [0, 8, 0], fov: 45 };
+      case 'mobile-small':
+        return { position: [0, 8, 18], positionGroup: [0, 8, 0], fov: 45 };
       case 'mobile-large':
-         return { position: [0, 8, 16], positionGroup: [0, 6.8, 0], fov: 40 };
+        return { position: [0, 8, 16], positionGroup: [0, 6.8, 0], fov: 40 };
       case 'tablet':
-        // FOV & Z-Position dibikin SAMA kayak desktop (20 dan 20).
-        // TAPI positionGroup (posisi jangkar gantungannya) kita ubah X-nya jadi minus (contoh: -2.5) biar dia geser ke kiri.
         return { position: [0, 0, 20], positionGroup: [3, 4, 0], fov: 20 };
       default: // desktop
-        return { position: [0, 0, 20], positionGroup: [0, 4, 0], fov: 20 };
+        return { position: [0, 0, 20], positionGroup: [4, 4, 0], fov: 20 };
     }
   };
 
@@ -42,13 +39,13 @@ export default function Hero() {
       animate="animate"
     >
       <div className={styles.lanyardPortalWrapper}>
-        <Lanyard 
-          position={lanyardConfig.position as any} 
+        <Lanyard
+          position={lanyardConfig.position as any}
           positionGroup={lanyardConfig.positionGroup as any}
           fov={lanyardConfig.fov}
-          gravity={[0, -40, 0]} 
-          frontImage={"/profileimage/ProfileEdited.jpg"} 
-          backImage={"/profileimage/ProfileEdited.jpg"} 
+          gravity={[0, -40, 0]}
+          frontImage={"/profileimage/ProfileEdited.jpg"}
+          backImage={"/profileimage/ProfileEdited.jpg"}
           imageFit="cover"
         />
       </div>
@@ -63,10 +60,10 @@ export default function Hero() {
       </div>
 
       {isMobile && (
-  <div className={styles.globeWrapper}>
-    <GlobePulse className={styles.globe} />
-  </div>
-)}
+        <div className={styles.globeWrapper}>
+          <GlobePulse className={styles.globe} />
+        </div>
+      )}
     </motion.section>
   );
 }

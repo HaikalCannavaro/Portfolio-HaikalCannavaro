@@ -7,10 +7,15 @@ export default function useDeviceType() {
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
-            if (width <= 430) setDevice('mobile-small'); // iPhone Basic, SE, Android standar
-            else if (width <= 768) setDevice('mobile-large'); // iPhone Pro Max / Plus
-            else if (width <= 1380) setDevice('tablet'); // iPad biasa / iPad Pro portrait
-            else setDevice('desktop'); // Laptop / Layar gede
+            if (width <= 430) {
+                setDevice('mobile-small');
+            } else if (width <= 768) {
+                setDevice('mobile-large');
+            } else if (width <= 1380) {
+                setDevice('tablet');
+            } else {
+                setDevice('desktop');
+            }
         };
 
         handleResize(); // Panggil pas pertama kali load
