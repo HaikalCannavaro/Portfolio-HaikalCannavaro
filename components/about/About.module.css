@@ -1,23 +1,37 @@
-.paragraph{
+.paragraph {
   font-size: 15px;
   max-width: 1280px;
-  display: flex;
-  flex-wrap: wrap;
+  
+  /* HAPUS display flex dan flex-wrap */
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  
   margin-left: 10vw;
   margin-right: 10vw;
-  margin-bottom: 1vw;
+  margin-bottom: 24px;
+  
+  /* Pake block biasa dan nyalain justify */
+  display: block; 
   text-align: justify;
-  .word{
-    margin-right: 12px;
-    margin-top: 8px;
-    position: relative;
-    
-    .shadow{
-      position: absolute;
-      opacity: 0.3;
-    }
-  }
+  line-height: 1.8; /* Biar spasinya lega pas dibaca */
 }
+
+.paragraph .word {
+  /* HAPUS SEMUA margin. Browser yang akan ngatur spasi sendiri. */
+  /* margin-right: 12px; */
+  /* margin-top: 8px; */
+  
+  position: relative;
+  
+  /* Pake inline-block (standar elemen di dalam teks) */
+  display: inline-block; 
+}
+
+.paragraph .word .shadow {
+  position: absolute;
+  opacity: 0.3;
+}
+
 
 
 /* Container buat Heading dan Garis */
@@ -198,6 +212,67 @@ gap: 0.5rem;
 font-size: 15px;
 font-weight: 500;
 }
+
+@media screen and (max-width: 1024px) {
+  .schoolContainer {
+    width: 40vw; 
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .headerWrapper {
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+  .aboutText {
+    font-size: 32px;
+  }
+
+  .paragraph {
+    margin-left: 5vw;
+    margin-right: 5vw;
+    font-size: 14px;
+  }
+
+  .aboutProfile {
+    margin-left: 5vw;
+    margin-right: 5vw;
+    flex-direction: column;
+    gap: 3vh;
+  }
+
+  .schoolContainer {
+    width: 100%; 
+    min-width: unset; 
+  }
+
+  .schoolContentWrapper {
+    padding: 24px 20px;
+  }
+
+  .schoolText {
+    font-size: 20px; 
+  }
+
+  .schoolDesc {
+    font-size: 14px; 
+    padding-right: 40px; 
+  }
+  
+  .schoolYear {
+    font-size: 12px;
+  }
+
+  .schoolLinkBtn {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
 
 
 
