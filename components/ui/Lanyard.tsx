@@ -77,19 +77,16 @@ export default function Lanyard({
     return (
         <div className="lanyard-wrapper">
             <Canvas
-                // Canvas itself stays pointer-events: none so it's transparent to
-                // clicks everywhere except the card mesh, which re-enables it below.
                 style={{ pointerEvents: 'none' }}
-                // Fiber listens for pointer events on document.body instead of just
-                // the canvas box, so dragging still works even though the wrapper
-                // chain above has pointer-events: none.
-                eventSource={typeof window !== 'undefined' ? document.body : undefined}
+                // Ubah eventSource jadi gini biar lebih aman nangkap event di Next.js App Router
+                eventSource={typeof window !== 'undefined' ? document.getElementById('root') || document.body : undefined}
                 eventPrefix="client"
                 camera={{ position, fov }}
                 dpr={[1, isMobile ? 1.5 : 2]}
                 gl={{ alpha: transparent }}
                 onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
             >
+
                 <ambientLight intensity={Math.PI} />
                 <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
                     <Band

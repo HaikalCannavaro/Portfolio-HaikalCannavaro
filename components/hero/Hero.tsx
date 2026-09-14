@@ -2,27 +2,42 @@
 
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react"; // Tambahkan ini
 import HeroText from "./HeroText";
-import styles from "./Hero.module.css"; // Import file CSS Module
+import styles from "./Hero.module.css";
 import ParallaxText from "./ParallaxText";
 
-// ssr: false is required — Canvas/Rapier need WebGL + WASM, which don't
-// exist during server render. Without this, Lanyard can fail to mount
-// silently and just never appear.
 const Lanyard = dynamic(() => import("../ui/Lanyard"), { ssr: false });
 
 export default function Hero() {
+  // 1. Tambahkan deteksi isMobile
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <motion.section
       id="hero"
-      className={styles.heroSection} // Gunakan class dari CSS Module
+      className={styles.heroSection}
       initial="initial"
       animate="animate"
     >
-      {/* Portal 3D lanyard - pointer-events: none so it doesn't block the text below,
-          the card itself re-enables pointer-events via Lanyard's own wrapper */}
       <div className={styles.lanyardPortalWrapper}>
-        <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage={"/profileimage/ProfileEdited.jpg"} backImage={"/profileimage/ProfileEdited.jpg"} />
+        <Lanyard 
+          // 2. Sesuaikan nilai ini persis dengan kode Shelina
+          position={isMobile ? [0, 8, 20] : [0, 0, 25]} 
+          positionGroup={isMobile ? [0, 10, 0] : [5, 5, 0]}
+          fov={isMobile ? 50 : 15}
+          gravity={[0, -40, 0]} 
+          frontImage={"/profileimage/ProfileEdited.jpg"} 
+          backImage={"/profileimage/ProfileEdited.jpg"} 
+          imageFit="cover"
+        />
       </div>
 
       <div className={styles.heroContentWrapper}>
