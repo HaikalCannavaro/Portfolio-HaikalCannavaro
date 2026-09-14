@@ -45,7 +45,7 @@
   bottom: 5%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 1000; /* was 5 — now above .lanyardPortalWrapper's 999 */
   pointer-events: none;
   width: 280px;
 }

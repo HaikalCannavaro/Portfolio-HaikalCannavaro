@@ -16,10 +16,8 @@ interface GlobePulseProps {
 }
 
 const defaultMarkers: PulseMarker[] = [
-    { id: "pulse-1", location: [51.51, -0.13], delay: 0 },
-    { id: "pulse-2", location: [40.71, -74.01], delay: 0.5 },
-    { id: "pulse-3", location: [35.68, 139.65], delay: 1 },
-    { id: "pulse-4", location: [-33.87, 151.21], delay: 1.5 },
+    { id: "pulse-riau", location: [0.51, 101.45], delay: 0 },
+    { id: "pulse-bandung", location: [-6.92, 107.62], delay: 0.6 },
 ]
 
 export function GlobePulse({
@@ -36,11 +34,14 @@ export function GlobePulse({
 
     const handlePointerDown = useCallback((e: React.PointerEvent) => {
         pointerInteracting.current = { x: e.clientX, y: e.clientY }
-        if (canvasRef.current) canvasRef.current.style.cursor = "grabbing"
+        if (canvasRef.current) {
+            canvasRef.current.style.cursor = "grabbing"
+            canvasRef.current.setPointerCapture(e.pointerId)
+        }
         isPausedRef.current = true
     }, [])
 
-    const handlePointerUp = useCallback(() => {
+    const handlePointerUp = useCallback((_e: PointerEvent) => { // native type, not React.PointerEvent
         if (pointerInteracting.current !== null) {
             phiOffsetRef.current += dragOffset.current.phi
             thetaOffsetRef.current += dragOffset.current.theta
@@ -55,8 +56,8 @@ export function GlobePulse({
         const handlePointerMove = (e: PointerEvent) => {
             if (pointerInteracting.current !== null) {
                 dragOffset.current = {
-                    phi: (e.clientX - pointerInteracting.current.x) / 300,
-                    theta: (e.clientY - pointerInteracting.current.y) / 1000,
+                    phi: (e.clientX - pointerInteracting.current.x) / 120,   // was /300 — lower = faster
+                    theta: (e.clientY - pointerInteracting.current.y) / 120, // was /1000 — lower = faster
                 }
             }
         }
