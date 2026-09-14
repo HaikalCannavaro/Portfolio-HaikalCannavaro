@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react"
 import createGlobe from "cobe"
+import useDeviceType from "../../hooks/useDeviceType";
 
 interface PulseMarker {
     id: string
@@ -29,6 +30,7 @@ export function GlobePulse({
     className = "",
     speed = 0.003,
 }: GlobePulseProps) {
+    const device = useDeviceType();
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const pointerInteracting = useRef<{ x: number; y: number } | null>(null)
     const dragOffset = useRef({ phi: 0, theta: 0 })
@@ -45,7 +47,7 @@ export function GlobePulse({
         isPausedRef.current = true
     }, [])
 
-    const handlePointerUp = useCallback((_e: PointerEvent) => { // native type, not React.PointerEvent
+    const handlePointerUp = useCallback((_e: PointerEvent) => { 
         if (pointerInteracting.current !== null) {
             phiOffsetRef.current += dragOffset.current.phi
             thetaOffsetRef.current += dragOffset.current.theta
@@ -60,8 +62,8 @@ export function GlobePulse({
         const handlePointerMove = (e: PointerEvent) => {
             if (pointerInteracting.current !== null) {
                 dragOffset.current = {
-                    phi: (e.clientX - pointerInteracting.current.x) / 120,   // was /300 — lower = faster
-                    theta: (e.clientY - pointerInteracting.current.y) / 120, // was /1000 — lower = faster
+                    phi: (e.clientX - pointerInteracting.current.x) / 120,   
+                    theta: (e.clientY - pointerInteracting.current.y) / 120, 
                 }
             }
         }
@@ -101,7 +103,7 @@ export function GlobePulse({
                 if (!isPausedRef.current) phi += speed
                 globe!.update({
                     phi: phi + phiOffsetRef.current + dragOffset.current.phi,
-                    theta: 0.2 + thetaOffsetRef.current + dragOffset.current.theta,
+theta: 0.2 + thetaOffsetRef.current + dragOffset.current.theta,
                 })
                 animationId = requestAnimationFrame(animate)
             }
@@ -127,8 +129,19 @@ export function GlobePulse({
         }
     }, [markers, speed])
 
+    // SCALING LOGIC MENGGUNAKAN HOOK
+    let scaleValue = "scale(1)";
+    if (device === 'mobile-small') {
+        scaleValue = "scale(0.85)"; // Kecilin 15% buat layar sempit
+    } else if (device === 'mobile-large') {
+        scaleValue = "scale(0.95)"; // Kecilin 5% aja
+    }
+
     return (
-        <div className={`relative aspect-square select-none ${className}`}>
+        <div 
+            className={`relative aspect-square select-none ${className}`}
+            style={{ transform: scaleValue, transformOrigin: "center center" }}
+        >
             <style>{`
         @keyframes pulse-expand {
           0% { transform: scaleX(0.3) scaleY(0.3); opacity: 0.8; }
@@ -144,7 +157,7 @@ export function GlobePulse({
                 }}
             />
             {markers.map((m) => {
-                const pulseColor = m.color ?? "#33ccdd" // fallback if color isn't set
+                const pulseColor = m.color ?? "#33ccdd" 
                 return (
                     <div
                         key={m.id}

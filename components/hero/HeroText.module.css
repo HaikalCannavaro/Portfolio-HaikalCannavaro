@@ -39,9 +39,9 @@
     @media (max-width: 768px) {
     /* md */
     .animateWords {
-      margin-right: -1.75rem; 
+      margin-right: -1rem; 
       margin-bottom: -0.75rem; 
-      font-size: 60px; 
+      font-size: 50px; 
     }
   }
   

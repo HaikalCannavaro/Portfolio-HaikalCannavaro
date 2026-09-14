@@ -165,9 +165,44 @@
 
 
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1400px) {
+  .headerWrapper, .paragraph, .aboutProfile {
+    margin-left: 8vw;
+    margin-right: 8vw;
+  }
+
+  .aboutProfile {
+    flex-direction: row; 
+    gap: 3vw; 
+    justify-content: space-between;
+  }
+
   .schoolContainer {
-    width: 40vw; 
+    width: 48%; 
+    min-width: 250px; 
+  }
+
+  .schoolContentWrapper {
+    padding: 24px;
+    padding-bottom: 70px; 
+  }
+
+  .schoolText {
+    font-size: 22px; 
+    padding-right: 30px; 
+  }
+
+  .schoolDescContainer {
+    padding-right: 35px; 
+  }
+
+  .schoolDesc {
+    font-size: 15px;
+  }
+
+  .schoolLinkBtn {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
   }
 }
 
@@ -190,7 +225,7 @@
   .aboutProfile {
     margin-left: 5vw;
     margin-right: 5vw;
-    flex-direction: column;
+    flex-direction: column; 
     gap: 3vh;
   }
 
