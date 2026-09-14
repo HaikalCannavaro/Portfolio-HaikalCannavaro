@@ -7,6 +7,7 @@ interface PulseMarker {
     id: string
     location: [number, number]
     delay: number
+    color?: string
 }
 
 interface GlobePulseProps {
@@ -16,8 +17,11 @@ interface GlobePulseProps {
 }
 
 const defaultMarkers: PulseMarker[] = [
-    { id: "pulse-riau", location: [0.51, 101.45], delay: 0 },
+    { id: "pulse-riau", location: [0.51, 101.45], delay: 0, color: "#45ff64" },
     { id: "pulse-bandung", location: [-6.92, 107.62], delay: 0.6 },
+    { id: "pulse-spain", location: [40.42, -3.70], delay: 1.2, color: "#ff3333" },
+    { id: "pulse-huinan", location: [42.68, 126.05], delay: 1.8, color: "#ff3333" },
+    { id: "pulse-tegal", location: [-6.87, 109.14], delay: 2.4 },
 ]
 
 export function GlobePulse({
@@ -139,42 +143,45 @@ export function GlobePulse({
                     transition: "opacity 1.2s ease", borderRadius: "50%", touchAction: "none",
                 }}
             />
-            {markers.map((m) => (
-                <div
-                    key={m.id}
-                    style={{
-                        position: "absolute",
-                        // @ts-expect-error CSS Anchor Positioning
-                        positionAnchor: `--cobe-${m.id}`,
-                        bottom: "anchor(center)",
-                        left: "anchor(center)",
-                        translate: "-50% 50%",
-                        width: 40, height: 40,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        pointerEvents: "none" as const,
-                        opacity: `var(--cobe-visible-${m.id}, 0)`,
-                        filter: `blur(calc((1 - var(--cobe-visible-${m.id}, 0)) * 8px))`,
-                        transition: "opacity 0.4s, filter 0.4s",
-                    }}
-                >
-                    <span style={{
-                        position: "absolute", inset: 0,
-                        border: "2px solid #33ccdd", borderRadius: "50%", opacity: 0,
-                        animation: `pulse-expand 2s ease-out infinite ${m.delay}s`,
-                    }} />
-                    <span style={{
-                        position: "absolute", inset: 0,
-                        border: "2px solid #33ccdd", borderRadius: "50%", opacity: 0,
-                        animation: `pulse-expand 2s ease-out infinite ${m.delay + 0.5}s`,
-                    }} />
-                    <span style={{
-                        width: 10, height: 10, background: "#33ccdd", borderRadius: "50%",
-                        boxShadow: "0 0 0 3px #111, 0 0 0 5px #33ccdd",
-                    }} />
-                </div>
-            ))}
+            {markers.map((m) => {
+                const pulseColor = m.color ?? "#33ccdd" // fallback if color isn't set
+                return (
+                    <div
+                        key={m.id}
+                        style={{
+                            position: "absolute",
+                            // @ts-expect-error CSS Anchor Positioning
+                            positionAnchor: `--cobe-${m.id}`,
+                            bottom: "anchor(center)",
+                            left: "anchor(center)",
+                            translate: "-50% 50%",
+                            width: 40, height: 40,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            pointerEvents: "none" as const,
+                            opacity: `var(--cobe-visible-${m.id}, 0)`,
+                            filter: `blur(calc((1 - var(--cobe-visible-${m.id}, 0)) * 8px))`,
+                            transition: "opacity 0.4s, filter 0.4s",
+                        }}
+                    >
+                        <span style={{
+                            position: "absolute", inset: 0,
+                            border: `2px solid ${pulseColor}`, borderRadius: "50%", opacity: 0,
+                            animation: `pulse-expand 2s ease-out infinite ${m.delay}s`,
+                        }} />
+                        <span style={{
+                            position: "absolute", inset: 0,
+                            border: `2px solid ${pulseColor}`, borderRadius: "50%", opacity: 0,
+                            animation: `pulse-expand 2s ease-out infinite ${m.delay + 0.5}s`,
+                        }} />
+                        <span style={{
+                            width: 10, height: 10, background: pulseColor, borderRadius: "50%",
+                            boxShadow: `0 0 0 3px #111, 0 0 0 5px ${pulseColor}`,
+                        }} />
+                    </div>
+                )
+            })}
         </div>
     )
 }
