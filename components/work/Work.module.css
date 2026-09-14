@@ -42,7 +42,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding-top: 3rem; /* pt-12 */
 }
 /* Container pembungkus kumpulan Card Project */
 .projectGrid {
