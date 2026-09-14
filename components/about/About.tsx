@@ -4,9 +4,7 @@ import AnimateHeading from "../about/Heading";
 import AnimateBody from './Body';
 import Skills from "./skills/skills"
 
-const para1 = "Hi! My name is Haikal Cannavaro, and I am an aspiring software developer with a strong curiosity for modern technologies.";
-const para2 = "My journey into programming started with a simple fascination for how things work behind the screen, which quickly grew into a passion for building functional web applications. I constantly challenge myself to learn new tech stacks, from designing interactive user interfaces to understanding backend architectures.";
-const para3 = "What makes my approach different is my proficiency in AI-Assisted Development. Instead of just writing code manually, I actively use Large Language Models (LLMs) and advanced AI tools to speed up my workflow, debug issues faster, and build smarter solutions. I integrate prompt engineering into my daily development process to automate tasks and collaborate with AI effectively. I am driven by innovation, always eager to learn emerging trends, and fully committed to turning creative ideas into real digital products.";
+const para1 = "Hi! My name is Haikal Cannavaro, and I am an aspiring software developer with a strong curiosity for modern technologies. My journey into programming started with a simple fascination for how things work behind the screen, which quickly grew into a passion for building functional web applications. I constantly challenge myself to learn new tech stacks, from designing interactive user interfaces to understanding backend architectures. What makes my approach different is my proficiency in AI-Assisted Development. Instead of just writing code manually, I actively use Large Language Models (LLMs) and advanced AI tools to speed up my workflow, debug issues faster, and build smarter solutions. I integrate prompt engineering into my daily development process to automate tasks and collaborate with AI effectively. I am driven by innovation, always eager to learn emerging trends, and fully committed to turning creative ideas into real digital products.";
 
 export default function Home() {
     return (
@@ -19,15 +17,7 @@ export default function Home() {
                     </div>
                     <Character 
                         value={para1} 
-                        offset={["start 0.8", "start 0.65"]} 
-                    />
-                    <Character 
-                        value={para2} 
-                        offset={["start 0.7", "start 0.35"]} 
-                    />
-                    <Character 
-                        value={para3} 
-                        offset={["start 0.45", "start 0.25"]} 
+                        offset={["start 0.6", "start 0.2"]} 
                     />
                 </div>
             </section>
