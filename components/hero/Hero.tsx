@@ -7,6 +7,7 @@ import HeroText from "./HeroText";
 import styles from "./Hero.module.css";
 import ParallaxText from "./ParallaxText";
 
+const GlobePulse = dynamic(() => import("../ui/wireframe-dotted-globe").then(m => m.GlobePulse), { ssr: false });
 const Lanyard = dynamic(() => import("../ui/Lanyard"), { ssr: false });
 
 export default function Hero() {
@@ -48,6 +49,12 @@ export default function Hero() {
           </ParallaxText>
         </div>
       </div>
+
+      {isMobile && (
+  <div className={styles.globeWrapper}>
+    <GlobePulse className={styles.globe} />
+  </div>
+)}
     </motion.section>
   );
 }
