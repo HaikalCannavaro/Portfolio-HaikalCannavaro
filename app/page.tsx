@@ -3,21 +3,16 @@ import Hero from "../components/hero/Hero";
 import Nav from "../components/navbar/NavMenuButton";
 import NavHome from "../components/navhome/NavHome";
 import Contact from "../components/work/Work";
-import FlickeringGrid from "../components/providers/FlickeringGrids"; // Tambahkan ini
+import FlickeringGrid from "../components/providers/FlickeringGrids";
+import ResetOnRefresh from "../components/providers/ResetOnRefresh"; // 1. Import komponen reset
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <>
-      {/* Grid Background */}
-      {/*<FlickeringGrid
-        squareSize={3}
-        gridGap={15}
-        color="rgb(107, 114, 128)"
-        maxOpacity={0.4}
-        flickerChance={0.005}
-      />
-      */}
+      {/* Panggil komponen reset-nya di mana aja (dia invisible) */}
+      <ResetOnRefresh />
+
       {/* Navigation */}
       <div className={styles.Nav}>
         <NavHome />

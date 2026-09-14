@@ -168,7 +168,7 @@
 }
 
 
-
+@media (hover: hover) and (pointer: fine) {
 /* Hover Effect: Border nyala ungu & glow bayangan ungu */
 .circle:hover {
   background: rgba(194, 164, 255, 0.1);
@@ -188,7 +188,7 @@
   filter: grayscale(0%) contrast(1) brightness(1); /* Balik ke warna asli */
   opacity: 1;
 }
-
+}
 .circleRow{
     display: flex;
     flex-direction: column;
