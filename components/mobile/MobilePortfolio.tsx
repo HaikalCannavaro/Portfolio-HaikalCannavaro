@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { FacetMark, HCMonogram } from "../brand/BrandMarks";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import useMotionAllowed from "../../hooks/useMotionAllowed";
@@ -45,7 +46,7 @@ export default function MobilePortfolio() {
 
   return (
     <div className={styles.mobile}>
-      <header className={styles.header}><a href="#m-home" aria-label="Haikal, home">HC<span>✳</span></a><span>SOFTWARE DEVELOPER</span><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal">↗</a></header>
+      <header className={styles.header}><a href="#m-home" aria-label="Haikal, home"><HCMonogram /></a><span>SOFTWARE DEVELOPER</span><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal">↗</a></header>
       <main>
         <section id="m-home" ref={hero} className={styles.hero}>
           <div className={styles.issue}><span>PORTFOLIO / SELECTED WORK</span><span>01—04</span></div>
@@ -54,7 +55,7 @@ export default function MobilePortfolio() {
           </motion.h1>
           <div className={styles.portraitStage}>
             <span className={styles.orbit} aria-hidden="true" /><span className={styles.orbitSmall} aria-hidden="true" />
-            <motion.span className={styles.star} aria-hidden="true" style={animate ? { rotate: portraitRotate } : undefined}>✳</motion.span>
+            <motion.span className={styles.star} aria-hidden="true" style={animate ? { rotate: portraitRotate } : undefined}><FacetMark /></motion.span>
             <span className={styles.sideNote}>CURIOUS BY NATURE.<br />DEVELOPER BY DESIGN.</span>
             <motion.button className={styles.portraitCard} type="button" aria-label="Turn Haikal's portrait" aria-pressed={portraitTurned} onClick={() => setPortraitTurned(v => !v)}
               style={animate ? { y: portraitY, rotate: portraitRotate } : { rotate: -7 }} whileTap={animate ? { scale: .96 } : undefined}>
@@ -67,7 +68,7 @@ export default function MobilePortfolio() {
           </div>
           <div className={styles.heroBottom}><p>I turn curious ideas into<br /><strong>working digital experiences.</strong></p><a href="#m-work" aria-label="Explore selected work">↓</a></div>
         </section>
-        <div className={styles.ticker} aria-hidden="true"><motion.div style={animate ? { x: tickerX } : undefined}>{Array.from({ length: 4 }, (_, i) => <span key={i}>CODE WITH CURIOSITY <b>✳</b> BUILD WITH INTENT <b>✳</b> </span>)}</motion.div></div>
+        <div className={styles.ticker} aria-hidden="true"><motion.div style={animate ? { x: tickerX } : undefined}>{Array.from({ length: 4 }, (_, i) => <span key={i}>CODE WITH CURIOSITY <b><FacetMark /></b> BUILD WITH INTENT <b><FacetMark /></b> </span>)}</motion.div></div>
 
         <section id="m-work" className={styles.work}>
           <SectionTitle number="01">SELECTED WORK</SectionTitle>
@@ -91,7 +92,7 @@ export default function MobilePortfolio() {
 
         <section id="m-about" className={styles.about}>
           <SectionTitle number="02">THE PERSON BEHIND THE CODE</SectionTitle>
-          <motion.div {...reveal}><h2>A curious mind.<br />A builder’s<br /><em>instinct.</em><span aria-hidden="true">✳</span></h2><p>I’m Haikal, an aspiring software developer exploring the space between thoughtful interfaces and the systems that power them.</p><p>I use AI-assisted development to experiment, solve problems, and turn creative ideas into real digital products.</p></motion.div>
+          <motion.div {...reveal}><h2>A curious mind.<br />A builder’s<br /><em>instinct.</em><span aria-hidden="true"><FacetMark /></span></h2><p>I’m Haikal, an aspiring software developer exploring the space between thoughtful interfaces and the systems that power them.</p><p>I use AI-assisted development to experiment, solve problems, and turn creative ideas into real digital products.</p></motion.div>
           <button className={styles.aboutToggle} type="button" aria-expanded={aboutOpen} aria-controls="m-journey" onClick={() => setAboutOpen(v => !v)}>MY JOURNEY <motion.span animate={{ rotate: aboutOpen ? 45 : 0 }} transition={{ duration: animate ? .25 : 0 }}>+</motion.span></button>
           <motion.div id="m-journey" initial={false} animate={{ height: aboutOpen ? "auto" : 0, opacity: aboutOpen ? 1 : 0 }} transition={{ duration: animate ? .45 : 0, ease }} className={styles.journey} inert={!aboutOpen}>
             <div><span>2023 — PRESENT</span><h3>Telkom University Bandung</h3><p>Bachelor of Science in Software Engineering</p></div><div><span>2020 — 2023</span><h3>Pius Tegal Senior Highschool</h3><p>Science Major</p></div>

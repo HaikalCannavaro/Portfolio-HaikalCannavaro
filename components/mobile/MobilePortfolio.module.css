@@ -111,3 +111,5 @@
 }
 @keyframes typeRise { from { transform:translateY(115%) rotate(4deg); } to { transform:translateY(0) rotate(0); } }
 
+
+@media(max-width:768px) { .header > a:first-child svg { width:55px; height:40px; } }
