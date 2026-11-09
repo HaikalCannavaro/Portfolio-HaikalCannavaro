@@ -40,16 +40,125 @@
   pointer-events: auto;
 }
 
-.globeWrapper {
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000; /* was 5 — now above .lanyardPortalWrapper's 999 */
-  pointer-events: none;
-  width: 280px;
+.compactHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: center;
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+  min-height: 100vh;
+  min-height: 100svh;
+  max-width: 64rem;
+  margin-inline: auto;
+  padding: 7rem var(--portfolio-gutter) 3rem;
+  background: radial-gradient(ellipse at 75% 40%, #21142f 0%, transparent 58%);
 }
 
-.globe {
-  pointer-events: auto;
+.heroIntro {
+  min-width: 0;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--portfolio-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.heroIntro h1 {
+  margin-block: 0.65rem 1rem;
+  font-size: clamp(2.5rem, 8.8vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.heroIntro h1 span {
+  display: block;
+}
+
+.summary {
+  max-width: 32rem;
+  color: #d0c9d8;
+  font-size: clamp(0.9375rem, 2vw, 1.125rem);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1.5rem;
+}
+
+.actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.625rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.actions .primaryAction {
+  color: #1b1028;
+  background: var(--portfolio-accent);
+}
+
+.actions .secondaryAction {
+  border-color: #53445e;
+  color: #f9fafb;
+  background: #17111e;
+}
+
+.portraitFrame {
+  width: 13rem;
+  padding: 0.6rem;
+  border: 1px solid #544066;
+  border-radius: 1.25rem;
+  background: #201729;
+  transform: rotate(4deg);
+}
+
+.portrait {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: 0.8rem;
+  background: #302139;
+}
+
+.portrait img {
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+@media (max-width: 680px) {
+  .compactHero {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    gap: 1.5rem;
+    padding-top: 5.5rem;
+    background: radial-gradient(ellipse at 65% 28%, #251537 0%, transparent 65%);
+  }
+
+  .portraitFrame {
+    grid-row: 1;
+    justify-self: center;
+    width: clamp(8rem, 37vw, 10.5rem);
+  }
 }

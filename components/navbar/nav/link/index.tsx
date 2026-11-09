@@ -13,9 +13,10 @@ interface LinkProps {
   data: LinkData;
   isActive: boolean;
   setSelectedIndicator: (href: string) => void;
+  onNavigate: () => void;
 }
 
-export default function Index({ data, isActive, setSelectedIndicator }: LinkProps) {
+export default function Index({ data, isActive, setSelectedIndicator, onNavigate }: LinkProps) {
   const { title, href, index } = data;
 
   return (
@@ -34,7 +35,7 @@ export default function Index({ data, isActive, setSelectedIndicator }: LinkProp
         className={styles.indicator}
       >
       </motion.div>
-      <Link href={href}>{title}</Link>
+      <Link href={href} onClick={onNavigate}>{title}</Link>
     </motion.div>
   );
 }

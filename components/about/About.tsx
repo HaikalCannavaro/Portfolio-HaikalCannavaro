@@ -2,13 +2,13 @@ import style from '../about/About.module.css'
 import Character from '../about/Character';
 import AnimateHeading from "../about/Heading";
 import AnimateBody from './Body';
-import Skills from "./skills/skills"
+import SkillsSection from "./skills/SkillsSection";
 
 const para1 = "Hi! My name is Haikal Cannavaro, and I am an aspiring software developer with a strong curiosity for modern technologies. My journey into programming started with a simple fascination for how things work behind the screen, which quickly grew into a passion for building functional web applications. I constantly challenge myself to learn new tech stacks, from designing interactive user interfaces to understanding backend architectures. What makes my approach different is my proficiency in AI-Assisted Development. Instead of just writing code manually, I actively use Large Language Models (LLMs) and advanced AI tools to speed up my workflow, debug issues faster, and build smarter solutions. I integrate prompt engineering into my daily development process to automate tasks and collaborate with AI effectively. I am driven by innovation, always eager to learn emerging trends, and fully committed to turning creative ideas into real digital products.";
 
 export default function Home() {
     return (
-        <main>
+        <div>
             {/* SECTION 1: ABOUT ME */}
             <section className={style.aboutContainer}>
                 <div className={style.aboutDesc}>
@@ -64,7 +64,7 @@ export default function Home() {
             </section>
 
             {/* SECTION 3: SKILLS (Terpisah dari struktur di atas karena punya file CSS dan animasi sendiri) */}
-            <Skills />
-        </main>
+            <SkillsSection />
+        </div>
     );
 }

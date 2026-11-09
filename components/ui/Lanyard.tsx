@@ -150,6 +150,16 @@ type LanyardRigidBody = RapierRigidBody & {
     lerped?: THREE.Vector3;
 };
 
+type LanyardModel = {
+    nodes: { card: THREE.Mesh; clip: THREE.Mesh; clamp: THREE.Mesh };
+    materials: {
+        base: THREE.MeshStandardMaterial & { map: THREE.Texture };
+        metal: THREE.MeshStandardMaterial;
+    };
+};
+
+type TextureImage = ImageBitmap | HTMLImageElement;
+
 function Band({
     maxSpeed = 50,
     minSpeed = 0,
@@ -188,16 +198,16 @@ function Band({
         return body.lerped;
     };
 
-    const { nodes, materials } = useGLTF(cardGLB) as any;
+    const { nodes, materials } = useGLTF(cardGLB) as unknown as LanyardModel;
     const texture = useTexture(lanyardImage || lanyard);
     const frontTex = useTexture(frontImage || BLANK_PIXEL);
     const backTex = useTexture(backImage || BLANK_PIXEL);
 
     const cardMap = useMemo(() => {
-        const baseMap = materials.base.map as THREE.Texture;
+        const baseMap = materials.base.map;
         if (!frontImage && !backImage) return baseMap;
 
-        const baseImg = baseMap.image as any;
+        const baseImg = baseMap.image as TextureImage;
         const W = baseImg.width;
         const H = baseImg.height;
         const canvas = document.createElement('canvas');
@@ -207,7 +217,7 @@ function Band({
         if (!ctx) return baseMap;
         ctx.drawImage(baseImg, 0, 0, W, H);
 
-        const drawFitted = (img: any, rect: typeof FRONT_UV_RECT, padding = 0.04) => {
+        const drawFitted = (img: TextureImage, rect: typeof FRONT_UV_RECT, padding = 0.04) => {
             const padX = rect.w * W * padding;
             const padY = rect.h * H * padding;
             const rx = rect.x * W + padX;
@@ -228,8 +238,8 @@ function Band({
             ctx.restore();
         };
 
-        if (frontImage && frontTex.image) drawFitted(frontTex.image, FRONT_UV_RECT);
-        if (backImage && backTex.image) drawFitted(backTex.image, BACK_UV_RECT);
+        if (frontImage && frontTex.image) drawFitted(frontTex.image as TextureImage, FRONT_UV_RECT);
+        if (backImage && backTex.image) drawFitted(backTex.image as TextureImage, BACK_UV_RECT);
 
         const composite = new THREE.CanvasTexture(canvas);
         composite.colorSpace = THREE.SRGBColorSpace;
@@ -238,6 +248,12 @@ function Band({
         composite.needsUpdate = true;
         return composite;
     }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map]);
+
+    useEffect(() => {
+        if (cardMap !== materials.base.map) {
+            return () => cardMap.dispose();
+        }
+    }, [cardMap, materials.base.map]);
 
     const [curve] = useState(
         () =>
@@ -265,9 +281,14 @@ function Band({
 
     useEffect(() => {
         if (!dragged) return;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
         const preventScroll = (e: TouchEvent) => e.preventDefault();
         window.addEventListener('touchmove', preventScroll, { passive: false });
-        return () => window.removeEventListener('touchmove', preventScroll);
+        return () => {
+            window.removeEventListener('touchmove', preventScroll);
+            document.body.style.overflow = previousOverflow;
+        };
     }, [dragged]);
 
     useFrame((state, delta) => {
@@ -330,12 +351,10 @@ function Band({
                         onPointerUp={(e: ThreeEvent<PointerEvent>) => {
                             (e.target as Element).releasePointerCapture(e.pointerId);
                             drag(false);
-                            document.body.style.overflow = '';
                         }}
                         onPointerDown={(e: ThreeEvent<PointerEvent>) => {
                             (e.target as Element).setPointerCapture(e.pointerId);
                             drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
-                            document.body.style.overflow = 'hidden';
                         }}
                     >
                         <mesh geometry={nodes.card.geometry}>

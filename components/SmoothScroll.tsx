@@ -1,27 +1,29 @@
 "use client";
 
-import { useEffect } from 'react';
-import Lenis from 'lenis';
+import { useEffect } from "react";
+import type Lenis from "lenis";
+import useDesktopMotion from "../hooks/useDesktopMotion";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
-    useEffect(() => {
-        const lenis = new Lenis({
-            lerp: 0.1, 
-            duration: 1.5,
-            smoothWheel: true,
-        });
+  const animate = useDesktopMotion();
 
-        function raf(time: number) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
+  useEffect(() => {
+    if (!animate) return;
 
-        requestAnimationFrame(raf);
+    let disposed = false;
+    let lenis: Lenis | undefined;
 
-        return () => {
-            lenis.destroy();
-        };
-    }, []);
+    import("lenis").then(({ default: Lenis }) => {
+      if (!disposed) {
+        lenis = new Lenis({ lerp: 0.1, duration: 1.5, smoothWheel: true, autoRaf: true });
+      }
+    });
 
-    return <>{children}</>;
+    return () => {
+      disposed = true;
+      lenis?.destroy();
+    };
+  }, [animate]);
+
+  return <>{children}</>;
 }

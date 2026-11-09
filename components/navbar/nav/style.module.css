@@ -79,52 +79,62 @@
   }
   
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px), (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .menu {
-    /* Hapus ukuran full-screen */
     height: auto;
-    min-height: unset;
-    
-    /* Bikin jadi kotak kecil (misal lebar cuma 70% atau fixed width) */
-    width: 250px; 
-    
-    /* Kasih margin biar nggak nempel ujung banget, 
-       tergantung dari mana tombol burger lu muncul */
-    top: 20px;
-    right: 20px;
-    
-    /* Bikin ujung-ujungnya melengkung manis */
-    border-radius: 16px; 
-    
-    /* EFEK GLASSMORPHISM KHUSUS MOBILE */
-    background: rgba(15, 15, 15, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    max-height: calc(100vh - 5.5rem);
+    max-height: calc(100svh - 5.5rem);
+    width: min(18rem, calc(100% - var(--portfolio-gutter) * 2));
+    top: 4.25rem;
+    right: var(--portfolio-gutter);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid #4b3a57;
+    border-radius: 1rem;
+    background: #19131f;
   }
 
   .menu .body {
-    /* Padding dikurangin banyak biar kotaknya ringkas */
-    padding: 30px 20px;
-    justify-content: flex-start;
+    padding: 1rem;
   }
 
   .menu .body .nav {
-    font-size: 28px; /* Teks menu dikecilin */
-    gap: 15px;
-    margin-top: 10px;
-    align-items: flex-start; /* Opsional: dibikin rata kiri biar lebih rapi di kotak kecil */
+    align-items: stretch;
+    gap: 0;
+    margin-top: 0;
+    font-size: 1.125rem;
   }
 
   .menu .body .nav .header {
-    margin-bottom: 20px;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-color: #49394f;
+    color: var(--portfolio-accent);
+  }
+
+  .compactLink {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
   }
 
   .menu .footer {
-    margin-top: 30px; /* Jarak antara navigasi sama footer (socmed dll) */
-    flex-wrap: wrap; /* Biar kalau footernya kepanjangan dia turun ke bawah */
-    gap: 20px;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #49394f;
   }
-} 
+
+  .menu .footer a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    color: #d0c9d8;
+  }
+
+  .menu .footer a::after {
+    display: none;
+  }
+}

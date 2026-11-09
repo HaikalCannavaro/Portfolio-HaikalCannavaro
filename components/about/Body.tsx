@@ -2,6 +2,7 @@
 
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import useDesktopMotion from "../../hooks/useDesktopMotion";
 
 interface AnimateBodyProps {
   title: string;
@@ -9,7 +10,12 @@ interface AnimateBodyProps {
   delay?: number;
 }
 
-const AnimateBody: React.FC<AnimateBodyProps> = ({ title, className, delay = 0 }) => {
+export default function AnimateBody(props: AnimateBodyProps) {
+  const animate = useDesktopMotion();
+  return animate ? <AnimatedBody {...props} /> : <h3 className={props.className}>{props.title}</h3>;
+}
+
+function AnimatedBody({ title, className, delay = 0 }: AnimateBodyProps) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const ctrls = useAnimation();
   const inView = useInView(ref);
@@ -38,11 +44,10 @@ const AnimateBody: React.FC<AnimateBodyProps> = ({ title, className, delay = 0 }
 
 
   return (
-    <h3 className={className}>
+    <h3 className={className} aria-label={title}>
       <motion.span
         ref={ref}
         aria-hidden="true"
-        role="hidden"
         initial="hidden"
         animate={ctrls}
         variants={bodyAnimation}
@@ -51,6 +56,4 @@ const AnimateBody: React.FC<AnimateBodyProps> = ({ title, className, delay = 0 }
       </motion.span>
     </h3>
   );
-};
-
-export default AnimateBody;
+}

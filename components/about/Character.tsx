@@ -1,7 +1,8 @@
 'use client';
 import React, { useRef } from 'react';
 import styles from '../about/About.module.css';
-import { useScroll, motion, useTransform, UseScrollOptions } from 'framer-motion';
+import { useScroll, motion, useTransform, type MotionValue, type UseScrollOptions } from 'framer-motion';
+import useDesktopMotion from "../../hooks/useDesktopMotion";
 
 interface ParagraphProps {
     value: string;
@@ -11,17 +12,22 @@ interface ParagraphProps {
 
 interface WordProps {
     children: string;
-    progress: any;
+    progress: MotionValue<number>;
     range: [number, number];
 }
 
 interface CharacterProps {
     children: string;
-    progress: any;
+    progress: MotionValue<number>;
     range: [number, number];
 }
 
-const Paragraph: React.FC<ParagraphProps> = ({ 
+export default function Paragraph(props: ParagraphProps) {
+    const animate = useDesktopMotion();
+    return animate ? <AnimatedParagraph {...props} /> : <p className={styles.paragraph}>{props.value}</p>;
+}
+
+const AnimatedParagraph: React.FC<ParagraphProps> = ({
     value, 
     offset = ["start 0.7", "start 0.25"] 
 }) => {
@@ -86,12 +92,10 @@ const Character: React.FC<CharacterProps> = ({ children, progress, range }) => {
 
     return (
         <span>
-            <span className={styles.shadow}>{children}</span>
+            <span className={styles.shadow} aria-hidden="true">{children}</span>
             <motion.span style={{ opacity }}>
                 {children}
             </motion.span>
         </span>
     );
 };
-
-export default Paragraph;

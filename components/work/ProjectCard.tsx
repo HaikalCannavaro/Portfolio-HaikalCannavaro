@@ -1,15 +1,17 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import style from "./ProjectCard.module.css";
 
 // Kalo lo belom pake lucide-react, gue ganti pake SVG biar lo gak usah npm install
 const ArrowIcon = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
 
-interface Props {
+export interface ProjectCardProps {
     title: string;
     storyHref?: string;
     description: string;
@@ -27,7 +29,7 @@ export function ProjectCard({
     tags,
     image,
     video,
-}: Props) {
+}: ProjectCardProps) {
     const [imgError, setImgError] = useState(false);
 
     return (
@@ -38,7 +40,15 @@ export function ProjectCard({
                 {video ? (
                     <video src={video} autoPlay loop muted playsInline className={style.projectMedia} />
                 ) : image && !imgError ? (
-                    <img src={image} alt={title} className={style.projectMedia} onError={() => setImgError(true)} />
+                    <Image
+                        src={image}
+                        alt={title}
+                        fill
+                        loading="lazy"
+                        sizes="(max-width: 480px) 90vw, 450px"
+                        className={style.projectMedia}
+                        onError={() => setImgError(true)}
+                    />
                 ) : (
                     <div className={style.projectMediaPlaceholder} />
                 )}
@@ -47,19 +57,9 @@ export function ProjectCard({
             {/* Konten Text & Badges */}
             <div className={style.projectContent}>
 
-                {/* Header (Judul, Tanggal & Link Story) */}
-                <div className={style.projectHeader}>
-                    <div className={style.projectTitleWrap}>
-                        <h3 className={style.projectTitle}>{title}</h3>
-                        <span className={style.projectDates}>{dates}</span>
-                    </div>
-
-                    {storyHref && (
-                        <a href={storyHref} rel="noopener noreferrer" className={style.projectStoryLink}>
-                            <span>Read project story</span>
-                            <span className={style.projectArrowIcon}><ArrowIcon /></span>
-                        </a>
-                    )}
+                <div className={style.projectTitleWrap}>
+                    <h3 className={style.projectTitle}>{title}</h3>
+                    <span className={style.projectDates}>{dates}</span>
                 </div>
 
                 {/* Deskripsi */}
@@ -76,6 +76,13 @@ export function ProjectCard({
                             </span>
                         ))}
                     </div>
+                )}
+
+                {storyHref && (
+                    <Link href={storyHref} prefetch={false} className={style.projectStoryLink}>
+                        <span>Read project story</span>
+                        <span className={style.projectArrowIcon}><ArrowIcon /></span>
+                    </Link>
                 )}
 
             </div>

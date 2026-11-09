@@ -1,13 +1,18 @@
 // AnimatedBeamDemo.tsx
 "use client";
 import React, { forwardRef, useRef } from "react";
+import Image from "next/image";
 import { AnimatedBeam } from "./AnimatedBeam";
 import styles from "./skills.module.css";
 import AnimateHeading from "../Heading";
 
 const Circle = forwardRef<
 	HTMLDivElement,
-	{ className?: string; children?: React.ReactNode; style?: React.CSSProperties }
+	{
+		className?: string;
+		children?: React.ReactNode;
+		style?: React.CSSProperties & { "--angle": string };
+	}
 >(({ className, children, style }, ref) => {
 	return (
 		<div ref={ref} className={`${styles.circle} ${className || ""}`} style={style}>
@@ -30,7 +35,7 @@ const RenderIcon = ({ iconKey }: { iconKey: keyof typeof Icons }) => {
 	const data = Icons[iconKey]() as { name: string; icon: string; url: string };
 
 	return (
-		<img
+		<Image
 			src={data.icon}
 			alt={data.name}
 			width={45}
@@ -66,7 +71,7 @@ export function AnimatedBeamDemo() {
 
 	return (
 
-		<div id="skills" className={styles.techstackContainer} ref={containerRef}>
+		<div className={styles.techstackContainer} ref={containerRef}>
 			<div className={styles.skillsHeaderContainer}>
 				<AnimateHeading title="Skills" className={styles.skillsTitle} delay={0.5} />
 			</div>
@@ -94,58 +99,58 @@ export function AnimatedBeamDemo() {
 					</Circle>
 
 					{/* ITEM SATELIT YANG MENGELILINGI */}
-					<Circle ref={div1Ref} className={styles.satelliteNode} style={{ '--angle': '0deg' } as any}>
+					<Circle ref={div1Ref} className={styles.satelliteNode} style={{ '--angle': '0deg' }}>
 						<RenderIcon iconKey="html" />
 					</Circle>
-					<Circle ref={div2Ref} className={styles.satelliteNode} style={{ '--angle': '20deg' } as any}>
+					<Circle ref={div2Ref} className={styles.satelliteNode} style={{ '--angle': '20deg' }}>
 						<RenderIcon iconKey="css" />
 					</Circle>
-					<Circle ref={div7Ref} className={styles.satelliteNode} style={{ '--angle': '60deg' } as any}>
+					<Circle ref={div7Ref} className={styles.satelliteNode} style={{ '--angle': '60deg' }}>
 						<RenderIcon iconKey="laravel" />
 					</Circle>
-					<Circle ref={div8Ref} className={styles.satelliteNode} style={{ '--angle': '80deg' } as any}>
+					<Circle ref={div8Ref} className={styles.satelliteNode} style={{ '--angle': '80deg' }}>
 						<RenderIcon iconKey="golang" />
 					</Circle>
-					<Circle ref={div10Ref} className={styles.satelliteNode} style={{ '--angle': '100deg' } as any}>
+					<Circle ref={div10Ref} className={styles.satelliteNode} style={{ '--angle': '100deg' }}>
 						<RenderIcon iconKey="nodejs" />
 					</Circle>
-					<Circle ref={div4Ref} className={styles.satelliteNode} style={{ '--angle': '120deg' } as any}>
+					<Circle ref={div4Ref} className={styles.satelliteNode} style={{ '--angle': '120deg' }}>
 						<RenderIcon iconKey="java" />
 					</Circle>
-					<Circle ref={div5Ref} className={styles.satelliteNode} style={{ '--angle': '140deg' } as any}>
+					<Circle ref={div5Ref} className={styles.satelliteNode} style={{ '--angle': '140deg' }}>
 						<RenderIcon iconKey="cpp" />
 					</Circle>
-					<Circle ref={div6Ref} className={styles.satelliteNode} style={{ '--angle': '160deg' } as any}>
+					<Circle ref={div6Ref} className={styles.satelliteNode} style={{ '--angle': '160deg' }}>
 						<RenderIcon iconKey="csharp" />
 					</Circle>
-					<Circle ref={div9Ref} className={styles.satelliteNode} style={{ '--angle': '180deg' } as any}>
+					<Circle ref={div9Ref} className={styles.satelliteNode} style={{ '--angle': '180deg' }}>
 						<RenderIcon iconKey="flutter" />
 					</Circle>
-					<Circle ref={div11Ref} className={styles.satelliteNode} style={{ '--angle': '200deg' } as any}>
+					<Circle ref={div11Ref} className={styles.satelliteNode} style={{ '--angle': '200deg' }}>
 						<RenderIcon iconKey="javascript" />
 					</Circle>
-					<Circle ref={div12Ref} className={styles.satelliteNode} style={{ '--angle': '220deg' } as any}>
+					<Circle ref={div12Ref} className={styles.satelliteNode} style={{ '--angle': '220deg' }}>
 						<RenderIcon iconKey="figma" />
 					</Circle>
-					<Circle ref={div13Ref} className={styles.satelliteNode} style={{ '--angle': '240deg' } as any}>
+					<Circle ref={div13Ref} className={styles.satelliteNode} style={{ '--angle': '240deg' }}>
 						<RenderIcon iconKey="blender" />
 					</Circle>
-					<Circle ref={div14Ref} className={styles.satelliteNode} style={{ '--angle': '260deg' } as any}>
+					<Circle ref={div14Ref} className={styles.satelliteNode} style={{ '--angle': '260deg' }}>
 						<RenderIcon iconKey="github" />
 					</Circle>
-					<Circle ref={div15Ref} className={styles.satelliteNode} style={{ '--angle': '280deg' } as any}>
+					<Circle ref={div15Ref} className={styles.satelliteNode} style={{ '--angle': '280deg' }}>
 						<RenderIcon iconKey="mysql" />
 					</Circle>
-					<Circle ref={div16Ref} className={styles.satelliteNode} style={{ '--angle': '40deg' } as any}>
+					<Circle ref={div16Ref} className={styles.satelliteNode} style={{ '--angle': '40deg' }}>
 						<RenderIcon iconKey="tailwindcss" />
 					</Circle>
-					<Circle ref={div17Ref} className={styles.satelliteNode} style={{ '--angle': '320deg' } as any}>
+					<Circle ref={div17Ref} className={styles.satelliteNode} style={{ '--angle': '320deg' }}>
 						<RenderIcon iconKey="postman" />
 					</Circle>
-					<Circle ref={div18Ref} className={styles.satelliteNode} style={{ '--angle': '340deg' } as any}>
+					<Circle ref={div18Ref} className={styles.satelliteNode} style={{ '--angle': '340deg' }}>
 						<RenderIcon iconKey="git" />
 					</Circle>
-					<Circle ref={div19Ref} className={styles.satelliteNode} style={{ '--angle': '300deg' } as any}>
+					<Circle ref={div19Ref} className={styles.satelliteNode} style={{ '--angle': '300deg' }}>
 						<RenderIcon iconKey="prisma" />
 					</Circle>
 				</div>

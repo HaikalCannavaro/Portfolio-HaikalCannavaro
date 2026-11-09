@@ -43,6 +43,15 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.title {
+  padding-block: 6rem 3rem;
+  color: #27272a;
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+}
+
 /* Container pembungkus kumpulan Card Project */
 .projectGrid {
   display: grid;
@@ -51,13 +60,6 @@
   width: 100%;
   margin-top: 40px; /* Jarak dari WorkTitle lu ke Card */
   padding-bottom: 30px;
-}
-
-/* Biar pas di layar HP ngga maksa grid-nya ngelewatin batas layar */
-@media screen and (max-width: 600px) {
-  .projectGrid {
-    grid-template-columns: 1fr; /* Jadi cuma 1 kolom atas-bawah */
-  }
 }
 
 
@@ -105,4 +107,67 @@
 /* Panahnya gerak maju pas tombol di-hover */
 .viewMoreBtn:hover .btnArrow {
   transform: translateX(4px);
+}
+
+@media (max-width: 768px), (hover: none), (pointer: coarse) {
+  .workSection {
+    margin-top: 0;
+    min-height: 0;
+    border-top: 1px solid #4a355c;
+    background: linear-gradient(180deg, #1d1427, #100d15 22rem);
+  }
+
+  .wrapper {
+    max-width: 54rem;
+    padding-inline: var(--portfolio-gutter);
+  }
+
+  .workContent {
+    min-height: 0;
+    align-items: stretch;
+  }
+
+  .title {
+    padding-block: 2.75rem 1.25rem;
+    color: #f9fafb;
+    font-size: clamp(2rem, 7.5vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    text-align: left;
+  }
+
+  .projectGrid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    justify-items: center;
+    gap: 1rem;
+    margin-top: 0;
+    padding-bottom: 1rem;
+  }
+
+  .viewMoreContainer {
+    padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .viewMoreBtn {
+    justify-content: center;
+    width: 100%;
+    max-width: 450px;
+    border-color: var(--portfolio-accent);
+    border-radius: 0.75rem;
+    background: var(--portfolio-accent);
+    color: #1b1028;
+    transition: none;
+  }
+
+  .viewMoreBtn:hover {
+    border-color: var(--portfolio-accent);
+    background: var(--portfolio-accent);
+    color: #1b1028;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .viewMoreBtn:hover .btnArrow {
+    transform: none;
+  }
 }
