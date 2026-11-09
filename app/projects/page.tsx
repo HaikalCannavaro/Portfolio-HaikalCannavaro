@@ -8,7 +8,11 @@ export default function ProjectsPage() {
     <main className={styles.mainContainer}>
       <header className={styles.headerSection}>
         <div className={styles.headerWrapper}>
-          <Link href="/#work" prefetch={false} className={styles.backBtn}>
+          <Link href="/#work" prefetch={false} className={`${styles.backBtn} ${styles.desktopBack}`}>
+            <span className={styles.backArrow} aria-hidden="true">←</span>
+            Back to selected work
+          </Link>
+          <Link href="/#m-work" prefetch={false} className={`${styles.backBtn} ${styles.mobileBack}`}>
             <span className={styles.backArrow} aria-hidden="true">←</span>
             Back to selected work
           </Link>

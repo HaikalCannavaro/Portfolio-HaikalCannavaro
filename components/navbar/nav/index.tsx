@@ -7,6 +7,7 @@ import { menuSlide } from '../anim'
 import Link from './link'
 import Curve from './curve';
 import MagneticEffect from "../../providers/MagneticEffect"
+import useMotionAllowed from "../../../hooks/useMotionAllowed"
 import useDesktopMotion from "../../../hooks/useDesktopMotion"
 interface NavItem {
   title: string
@@ -34,6 +35,7 @@ const navItems: NavItem[] = [
 
 export default function Nav({ onNavigate }: { onNavigate: () => void }) {
   const animate = useDesktopMotion()
+  const motionAllowed = useMotionAllowed()
   const pathname = usePathname()
   const [selectedIndicator, setSelectedIndicator] = useState<string>(pathname)
 
@@ -41,10 +43,11 @@ export default function Nav({ onNavigate }: { onNavigate: () => void }) {
     <motion.nav
       id="portfolio-menu"
       aria-label="Main navigation"
-      variants={animate ? menuSlide : undefined}
-      initial={animate ? "initial" : false}
-      animate={animate ? "enter" : undefined}
-      exit={animate ? "exit" : undefined}
+      variants={animate ? menuSlide : { initial: { opacity: 0, y: -12 }, enter: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -12 } }}
+      initial={motionAllowed ? "initial" : false}
+      animate="enter"
+      transition={{ duration: motionAllowed ? 0.22 : 0 }}
+      exit={motionAllowed ? "exit" : undefined}
       className={styles.menu}
     >
       <div className={styles.body}>

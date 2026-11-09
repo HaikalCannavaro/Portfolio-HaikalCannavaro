@@ -1,4 +1,5 @@
 "use client";
+import Reveal from "../motion/Reveal";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,7 +34,7 @@ export function ProjectCard({
     const [imgError, setImgError] = useState(false);
 
     return (
-        <div className={style.projectCardContainer}>
+        <Reveal><div className={style.projectCardContainer}>
 
             {/* Media: Image atau Video */}
             <div className={style.projectMediaWrapper}>
@@ -86,6 +87,6 @@ export function ProjectCard({
                 )}
 
             </div>
-        </div>
+        </div></Reveal>
     );
 }

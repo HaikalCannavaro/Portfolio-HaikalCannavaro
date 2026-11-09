@@ -1,3 +1,4 @@
+import MobilePortfolio from "../components/mobile/MobilePortfolio";
 import About from "../components/about/About";
 import Hero from "../components/hero/Hero";
 import Nav from "../components/navbar/NavMenuButton";
@@ -8,6 +9,8 @@ import styles from "./page.module.css";
 export default function Home() {
   return (
     <>
+      <MobilePortfolio />
+      <div className={styles.desktop}>
       <div className={styles.Nav}>
         <NavHome />
         <Nav />
@@ -22,6 +25,7 @@ export default function Home() {
           <Work />
         </section>
       </main>
+      </div>
     </>
   );
 }

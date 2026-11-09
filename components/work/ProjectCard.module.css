@@ -202,3 +202,14 @@
   }
 }
 
+
+@media (max-width:768px) {
+ .projectCardContainer { background:#fffef8; border:1px solid #22221e; border-radius:2px; font-family:Arial,Helvetica,sans-serif; }
+ .projectMediaWrapper { border-color:#22221e30; }
+ .projectContent { padding:20px; }
+ .projectTitle { color:#22221e; font-size:27px; letter-spacing:-.05em; }
+ .projectDates { color:#62625a; font:10px monospace; }
+ .projectDescription { color:#51514a; }
+ .projectBadge { background:#f2efe6; border-color:#22221e40; color:#22221e; border-radius:30px; font:9px monospace; }
+ .projectStoryLink,.projectStoryLink:hover { color:#284be8; border-color:#22221e30; }
+}

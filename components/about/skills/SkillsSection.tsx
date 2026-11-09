@@ -1,3 +1,4 @@
+import SkillGroup from "./SkillGroup";
 import SkillsMotion from "./SkillsMotion";
 import styles from "./SkillsSection.module.css";
 
@@ -20,15 +21,7 @@ export default function SkillsSection() {
 
           <div className={styles.grid}>
             {skillGroups.map(({ title, skills }, index) => (
-              <div className={styles.group} key={title}>
-                <h3>
-                  <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-                  {title}
-                </h3>
-                <ul>
-                  {skills.map((skill) => <li key={skill}>{skill}</li>)}
-                </ul>
-              </div>
+              <SkillGroup key={title} title={title} skills={skills} index={index} />
             ))}
           </div>
         </div>

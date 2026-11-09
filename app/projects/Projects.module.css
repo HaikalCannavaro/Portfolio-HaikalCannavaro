@@ -155,3 +155,15 @@
         margin-top: 0;
     }
 }
+
+.mobileBack { display:none; }
+@media (max-width:768px) { .desktopBack { display:none; } .mobileBack { display:inline-flex; } }
+
+@media (max-width:768px) {
+  .mainContainer { background:#f2efe6; color:#22221e; font-family:Arial,Helvetica,sans-serif; }
+  .titleText { color:#284be8; font-size:clamp(42px,13vw,70px); letter-spacing:-.065em; }
+  .subtitleText { color:#51514a; }
+  .backBtn,.backBtn:hover { color:#22221e; font:11px monospace; }
+  .headerSection { border-bottom:1px solid #22221e30; margin-bottom:24px; }
+  .projectGrid { gap:25px; }
+}

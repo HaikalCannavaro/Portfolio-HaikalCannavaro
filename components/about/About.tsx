@@ -1,3 +1,4 @@
+import Reveal from "../motion/Reveal";
 import style from '../about/About.module.css'
 import Character from '../about/Character';
 import AnimateHeading from "../about/Heading";
@@ -23,7 +24,7 @@ export default function Home() {
             </section>
 
             {/* SECTION 2: EDUCATION */}
-            <section className={style.educationContainer}>
+            <Reveal><section className={style.educationContainer}>
                 <div className={style.headerWrapper}>
                     <AnimateHeading title="Education" className={style.aboutText} delay={0.5} />
                 </div>
@@ -61,10 +62,10 @@ export default function Home() {
                         </div>
                     </a>
                 </div>
-            </section>
+            </section></Reveal>
 
             {/* SECTION 3: SKILLS (Terpisah dari struktur di atas karena punya file CSS dan animasi sendiri) */}
-            <SkillsSection />
+            <Reveal><SkillsSection /></Reveal>
         </div>
     );
 }

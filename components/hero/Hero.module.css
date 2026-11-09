@@ -162,3 +162,55 @@
     width: clamp(8rem, 37vw, 10.5rem);
   }
 }
+
+.portraitButton {
+  grid-row: 1;
+  grid-column: 2;
+  justify-self: center;
+  border: 0;
+  background: none;
+  color: #d7bcff;
+  font: inherit;
+  cursor: pointer;
+  perspective: 800px;
+  -webkit-tap-highlight-color: transparent;
+}
+.portraitButton .portraitFrame {
+  display: block;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 650ms cubic-bezier(.2,.7,.3,1);
+}
+.portraitButton .portrait { display: block; backface-visibility: hidden; }
+.portraitButton .flipped { transform: rotateY(180deg) rotate(-4deg); }
+.portraitBack {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .7rem;
+  padding: .8rem;
+  border-radius: 1.25rem;
+  background: #281936;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  font-size: .75rem;
+}
+.portraitBack strong { font-size: 1rem; color: #fff; }
+.portraitHint { display: block; margin-top: .9rem; font-size: .6875rem; letter-spacing: .05em; }
+@media (max-width: 680px) {
+  .portraitButton { grid-column: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .heroIntro { animation: arrive 700ms cubic-bezier(.2,.7,.3,1) both; }
+  .portraitButton { animation: arrive 650ms cubic-bezier(.2,.7,.3,1) both; }
+  .actions a { transition: transform 180ms ease, box-shadow 180ms ease; }
+  .actions a:active { transform: scale(.95); }
+  .primaryAction span { animation: nudge 1.6s ease-in-out 3; }
+}
+@keyframes arrive { from { opacity: .3; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes nudge { 50% { transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) {
+  .portraitButton .portraitFrame { transition: none; }
+}

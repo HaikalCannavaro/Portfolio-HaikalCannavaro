@@ -65,3 +65,28 @@
   background: #241c2b;
   font-size: 0.8125rem;
 }
+
+.group h3 { margin: 0; }
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: #f9fafb;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.toggleIcon { margin-left: auto; font-size: 1.25rem !important; }
+.disclosure { display: grid; grid-template-rows: 0fr; visibility: hidden; }
+.disclosure[data-open="true"] { grid-template-rows: 1fr; visibility: visible; }
+.disclosure > div { overflow: hidden; min-height: 0; }
+.disclosure ul { padding-top: .65rem; padding-bottom: .2rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .disclosure { transition: grid-template-rows 300ms ease, visibility 300ms; }
+  .group { transition: border-color 250ms ease; }
+  .group:focus-within { border-color: #d7bcff; }
+}

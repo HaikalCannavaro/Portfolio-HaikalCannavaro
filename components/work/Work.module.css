@@ -171,3 +171,33 @@
     transform: none;
   }
 }
+
+.showcase { width: 100%; min-width: 0; }
+.projectSlide { min-width: 0; }
+.swipeHint, .projectControls { display: none; }
+@media (max-width: 768px) {
+  .swipeHint { display: flex; justify-content: space-between; color: #bdb3c8; font-size: .75rem; margin-bottom: .8rem; }
+  .showcase .projectGrid {
+    position: relative;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    gap: .9rem;
+    align-items: flex-start;
+    justify-items: normal;
+    scrollbar-width: none;
+    padding: .4rem .15rem 1rem;
+  }
+  .projectGrid::-webkit-scrollbar { display: none; }
+  .projectSlide { flex: 0 0 90%; scroll-snap-align: start; scroll-snap-stop: always; }
+  .projectSlide:last-child { margin-right: 10%; }
+  .projectControls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; color: #d7bcff; font-size: .75rem; font-variant-numeric: tabular-nums; }
+  .projectControls > div { display: flex; }
+  .projectControls button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; }
+  .projectControls button span { width: 7px; height: 7px; border-radius: 99px; background: #685873; }
+  .projectControls button[aria-current] span { width: 24px; background: #d7bcff; }
+  @media (prefers-reduced-motion: no-preference) {
+    .projectControls button span { transition: width 200ms ease, background 200ms ease; }
+  }
+}

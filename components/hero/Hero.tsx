@@ -1,4 +1,4 @@
-import Image from "next/image";
+import PortraitCard from "./PortraitCard";
 import HeroMotion from "./HeroMotion";
 import styles from "./Hero.module.css";
 
@@ -20,17 +20,7 @@ export default function Hero() {
               <a className={styles.secondaryAction} href="#about">About me</a>
             </div>
           </div>
-          <div className={styles.portraitFrame}>
-            <div className={styles.portrait}>
-              <Image
-                src="/profileimage/ProfileEdited.jpg"
-                alt=""
-                fill
-                loading="eager"
-                sizes="(max-width: 680px) 160px, 200px"
-              />
-            </div>
-          </div>
+          <PortraitCard />
         </div>
       </HeroMotion>
     </section>
