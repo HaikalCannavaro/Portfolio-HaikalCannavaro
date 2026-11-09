@@ -109,7 +109,7 @@ export default function MobilePortfolio() {
         </section>
         <footer id="m-contact" className={styles.contact}><SectionTitle number="04">LET’S MAKE SOMETHING</SectionTitle><motion.a {...reveal} className={styles.contactTitle} href="mailto:haikalcannavaro64@gmail.com">Have an idea?<br /><em>Let’s talk.</em><span>↗</span></motion.a><div className={styles.socials}><a href="https://github.com/HaikalCannavaro" target="_blank" rel="noopener noreferrer">GITHUB ↗</a><a href="https://www.instagram.com/haikalcnnvr" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a></div><p>HAIKAL CANNAVARO <span>BUILT WITH CURIOSITY.</span></p></footer>
       </main>
-      <nav aria-label="Mobile sections" className={styles.dock}><motion.div className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} /><a href="#m-home" aria-label="Back to top">HC</a><a href="#m-work">Work</a><a href="#m-about">About</a><a href="#m-skills">Skills</a><a href="#m-contact" aria-label="Contact Haikal">↗</a></nav>
+      <nav aria-label="Mobile sections" className={styles.dock}><motion.div className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} /><a href="#m-home" aria-label="Back to top"><HCMonogram /></a><a href="#m-work">Work</a><a href="#m-about">About</a><a href="#m-skills">Skills</a><a href="#m-contact" aria-label="Contact Haikal">↗</a></nav>
     </div>
   );
 }

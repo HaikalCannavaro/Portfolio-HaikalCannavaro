@@ -3,14 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { FacetMark, HCMonogram } from "../brand/BrandMarks";
+import { FacetMark } from "../brand/BrandMarks";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import useDesktopMotion from "../../hooks/useDesktopMotion";
 import { projects } from "../work/projects";
 import styles from "./DesktopPortfolio.module.css";
 import SceneTransition from "./SceneTransition";
-import ThemeToggle from "./ThemeToggle";
+import DesktopNavigation from "./DesktopNavigation";
 
 const AvatarScene = dynamic(() => import("./AvatarScene"), { ssr: false });
 
@@ -46,13 +46,7 @@ export default function DesktopPortfolio() {
   return <div className={styles.desktop} data-motion={animate}>
     <motion.div className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} />
     <a className={styles.skip} href="#d-work">Skip to selected work</a>
-    <header className={styles.header}>
-      <a className={styles.logo} href="#d-home" aria-label="Haikal Cannavaro, home"><HCMonogram /></a>
-      <span className={styles.identity}>HAIKAL CANNAVARO<br /><span>SOFTWARE DEVELOPER</span></span>
-      <nav aria-label="Desktop sections"><a href="#d-work">Work <sup>04</sup></a><a href="#d-about">About</a><a href="#d-skills">Toolbox</a></nav>
-      <ThemeToggle />
-      <a className={styles.hello} href="#d-contact">Let’s talk <span>↗</span></a>
-    </header>
+    <DesktopNavigation />
     <main>
       <section id="d-home" ref={hero} className={styles.hero}>
         <div className={styles.eyebrow}><span><i /> CURIOUS BY NATURE. DEVELOPER BY DESIGN.</span><span>PORTFOLIO — SELECTED WORK</span></div>

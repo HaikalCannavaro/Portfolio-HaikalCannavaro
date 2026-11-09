@@ -113,3 +113,5 @@
 
 
 @media(max-width:768px) { .header > a:first-child svg { width:55px; height:40px; } }
+
+@media(max-width:768px) { .dock a:first-of-type svg { width:32px; height:30px; display:block; } }

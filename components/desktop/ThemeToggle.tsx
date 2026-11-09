@@ -17,13 +17,15 @@ export default function ThemeToggle() {
       sync();
     };
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    window.addEventListener("portfolio-theme-change", sync);
+    return () => { window.removeEventListener("storage", onStorage); window.removeEventListener("portfolio-theme-change", sync); };
   }, []);
 
   return <button className={styles.themeToggle} type="button" aria-label="Dark mode" aria-pressed={dark} title={dark ? "Switch to light mode" : "Switch to dark mode"} onClick={() => {
     const next = !dark;
     document.documentElement.dataset.theme = next ? "dark" : "light";
     setDark(next);
+    window.dispatchEvent(new Event("portfolio-theme-change"));
     // The control still works in private browsing when storage is unavailable.
     try { localStorage.setItem(storageKey, next ? "dark" : "light"); } catch { /* Session-only preference. */ }
   }}><Sun className={styles.sunIcon} size={17} aria-hidden="true" /><Moon className={styles.moonIcon} size={17} aria-hidden="true" /><span className={styles.themeLabel}>{dark ? "Light" : "Dark"}</span></button>;
