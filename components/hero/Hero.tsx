@@ -1,69 +1,38 @@
-"use client";
-
-import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react"; // Tambahkan ini
-import HeroText from "./HeroText";
+import Image from "next/image";
+import HeroMotion from "./HeroMotion";
 import styles from "./Hero.module.css";
-import ParallaxText from "./ParallaxText";
-import useDeviceType from "../../hooks/useDeviceType";
-
-const GlobePulse = dynamic(() => import("../ui/wireframe-dotted-globe").then(m => m.GlobePulse), { ssr: false });
-const Lanyard = dynamic(() => import("../ui/Lanyard"), { ssr: false });
 
 export default function Hero() {
-  const device = useDeviceType();
-  const isMobile = device === 'mobile-small' || device === 'mobile-large';
-
-  const getLanyardConfig = () => {
-    switch (device) {
-      case 'mobile-small':
-        return { position: [0, 8, 18], positionGroup: [0, 8, 0], fov: 45 };
-      case 'mobile-large':
-        return { position: [0, 8, 16], positionGroup: [0, 6.8, 0], fov: 40 };
-      case 'tablet':
-        return { position: [0, 0, 20], positionGroup: [3, 4, 0], fov: 20 };
-      default: // desktop
-        return { position: [0, 0, 20], positionGroup: [4, 4, 0], fov: 20 };
-    }
-  };
-
-
-  const lanyardConfig = getLanyardConfig();
-
   return (
-    <motion.section
-      id="hero"
-      className={styles.heroSection}
-      initial="initial"
-      animate="animate"
-    >
-      <div className={styles.lanyardPortalWrapper}>
-        <Lanyard
-          position={lanyardConfig.position as any}
-          positionGroup={lanyardConfig.positionGroup as any}
-          fov={lanyardConfig.fov}
-          gravity={[0, -40, 0]}
-          frontImage={"/profileimage/ProfileEdited.jpg"}
-          backImage={"/profileimage/ProfileEdited.jpg"}
-          imageFit="cover"
-        />
-      </div>
-
-      <div className={styles.heroContentWrapper}>
-        <HeroText />
-        <div className={styles.parallaxSection}>
-          <ParallaxText direction={500} baseVelocity={-1}>
-            Software Developer
-          </ParallaxText>
+    <section id="hero">
+      <HeroMotion>
+        <div className={styles.compactHero}>
+          <div className={styles.heroIntro}>
+            <p className={styles.eyebrow}>Software Developer</p>
+            <h1>Haikal <span>Cannavaro</span></h1>
+            <p className={styles.summary}>
+              I build web applications and use AI-assisted development to turn ideas into working software.
+            </p>
+            <div className={styles.actions}>
+              <a className={styles.primaryAction} href="#work">
+                View projects <span aria-hidden="true">↓</span>
+              </a>
+              <a className={styles.secondaryAction} href="#about">About me</a>
+            </div>
+          </div>
+          <div className={styles.portraitFrame}>
+            <div className={styles.portrait}>
+              <Image
+                src="/profileimage/ProfileEdited.jpg"
+                alt=""
+                fill
+                loading="eager"
+                sizes="(max-width: 680px) 160px, 200px"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-
-      {isMobile && (
-        <div className={styles.globeWrapper}>
-          <GlobePulse className={styles.globe} />
-        </div>
-      )}
-    </motion.section>
+      </HeroMotion>
+    </section>
   );
 }

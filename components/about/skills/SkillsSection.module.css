@@ -1,0 +1,67 @@
+.compactSkills {
+  max-width: 66rem;
+  margin-inline: auto;
+  padding: 2rem var(--portfolio-gutter) 3rem;
+}
+
+.header {
+  margin-bottom: 1.25rem;
+}
+
+.eyebrow {
+  margin-bottom: 0.25rem;
+  color: var(--portfolio-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header h2 {
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 0.75rem;
+}
+
+.group {
+  padding: 1rem;
+  border: 1px solid #33273b;
+  border-radius: 1rem;
+  background: #141019;
+}
+
+.group h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.9375rem;
+}
+
+.group h3 span {
+  color: var(--portfolio-accent);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.group ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  list-style: none;
+}
+
+.group li {
+  padding: 0.25rem 0.55rem;
+  border: 1px solid #3a3043;
+  border-radius: 0.375rem;
+  color: #e2dce8;
+  background: #241c2b;
+  font-size: 0.8125rem;
+}

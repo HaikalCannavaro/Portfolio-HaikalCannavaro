@@ -2,6 +2,7 @@
 
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import useDesktopMotion from "../../hooks/useDesktopMotion";
 
 interface AnimateHeadingProps {
   title: string;
@@ -9,7 +10,12 @@ interface AnimateHeadingProps {
   delay?: number;
 }
 
-const AnimateHeading: React.FC<AnimateHeadingProps> = ({ title, className, delay = 0 }) => {
+export default function AnimateHeading(props: AnimateHeadingProps) {
+  const animate = useDesktopMotion();
+  return animate ? <AnimatedHeading {...props} /> : <h3 className={props.className}>{props.title}</h3>;
+}
+
+function AnimatedHeading({ title, className, delay = 0 }: AnimateHeadingProps) {
   const ref = useRef<HTMLHeadingElement | null>(null);
   const ctrls = useAnimation();
   const inView = useInView(ref);
@@ -40,12 +46,11 @@ const AnimateHeading: React.FC<AnimateHeadingProps> = ({ title, className, delay
   const words = title.split(' ');
 
   return (
-    <h3 ref={ref} className={className}>
+    <h3 ref={ref} className={className} aria-label={title}>
       {words.map((word, index) => (
         <motion.span
           key={index}
           aria-hidden="true"
-          role="hidden"
           custom={index} // Parameter untuk menentukan delay
           initial="hidden"
           animate={ctrls}
@@ -57,6 +62,4 @@ const AnimateHeading: React.FC<AnimateHeadingProps> = ({ title, className, delay
       ))}
     </h3>
   );
-};
-
-export default AnimateHeading;
+}

@@ -207,26 +207,38 @@
 }
 
 @media screen and (max-width: 768px) {
+  .aboutContainer {
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .educationContainer {
+    margin-bottom: 1.5rem;
+  }
+
   .headerWrapper {
-    margin-left: 5vw;
-    margin-right: 5vw;
-    margin-top: 10vh;
+    margin: 0 var(--portfolio-gutter) 1rem;
   }
   .aboutText {
-    font-size: 32px;
+    margin-top: 0;
+    font-size: 2rem;
+  }
+
+  .headerWrapper::after {
+    margin-top: 0;
   }
 
   .paragraph {
-    margin-left: 5vw;
-    margin-right: 5vw;
-    font-size: 14px;
+    margin: 0 var(--portfolio-gutter);
+    color: #d0c9d8;
+    font-size: 0.9375rem;
+    text-align: left;
   }
 
   .aboutProfile {
-    margin-left: 5vw;
-    margin-right: 5vw;
-    flex-direction: column; 
-    gap: 3vh;
+    margin: 0 var(--portfolio-gutter);
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .schoolContainer {
@@ -235,7 +247,7 @@
   }
 
   .schoolContentWrapper {
-    padding: 24px 20px;
+    padding: 1.125rem;
   }
 
   .schoolText {
@@ -244,11 +256,11 @@
 
   .schoolDesc {
     font-size: 14px; 
-    padding-right: 40px; 
   }
   
   .schoolYear {
     font-size: 12px;
+    color: #a7a0ae;
   }
 
   .schoolLinkBtn {

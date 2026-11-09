@@ -19,3 +19,32 @@
     font-weight: 600; 
     text-transform: uppercase;
 }
+
+@media (max-width: 768px), (hover: none), (pointer: coarse) {
+    .HomeButton {
+        top: 1rem;
+        left: var(--portfolio-gutter);
+        min-height: 44px;
+        padding-inline: 0.75rem;
+        border: 1px solid #4b3a57;
+        border-radius: 0.75rem;
+        background: #201829;
+    }
+
+    .HomeButton:hover .codeIcon {
+        transform: none;
+    }
+
+    .codeIcon {
+        display: flex;
+    }
+
+    .codeIcon svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .HomeText {
+        font-size: 0.75rem;
+    }
+}

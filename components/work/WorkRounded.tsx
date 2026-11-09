@@ -1,42 +1,62 @@
-"use client"
+"use client";
 
-import useIsomorphicLayoutEffect from "../../hooks/UseIsomorphicLayoutEffect";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import useDesktopMotion from "../../hooks/useDesktopMotion";
 import styles from "./WorkRounded.module.css";
 
-export default function WorkRounded() {
-  const el = useRef<HTMLDivElement | null>(null);
+export default function WorkRounded({ titleId }: { titleId: string }) {
+  const animate = useDesktopMotion();
+  const container = useRef<HTMLDivElement>(null);
+  const curve = useRef<HTMLDivElement>(null);
 
-  useIsomorphicLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        `.${styles.workRound}`,
-        { scale: 1 },
-        {
+  useEffect(() => {
+    if (!animate) return;
+
+    const curveContainer = container.current;
+    const curveShape = curve.current;
+    const title = document.getElementById(titleId);
+    if (!curveContainer || !curveShape || !title) return;
+
+    let disposed = false;
+    let revert: (() => void) | undefined;
+
+    Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([{ gsap }, { ScrollTrigger }]) => {
+      if (disposed) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+      curveContainer.hidden = false;
+      const context = gsap.context(() => {
+        gsap.fromTo(curveShape, { scaleY: 1 }, {
           scaleY: 0,
           ease: "none",
           scrollTrigger: {
-            trigger: el.current,
+            trigger: curveContainer,
             scrub: 1,
             start: "center bottom",
             end: "center top",
           },
-        }
-      );
-    }, el);
+        });
+        gsap.fromTo(title, { opacity: 0, y: "1.5rem" }, {
+          opacity: 1,
+          y: 0,
+          duration: 1.5,
+          ease: "power3.out",
+          scrollTrigger: { trigger: title, start: "top 60%" },
+        });
+      });
+      revert = () => context.revert();
+    });
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      disposed = true;
+      revert?.();
+      curveContainer.hidden = true;
+    };
+  }, [animate, titleId]);
 
-  return (
-    <div
-      ref={el}
-      className={styles.container}
-    >
-      <div className={styles.workRound} />
+  return animate && (
+    <div ref={container} className={styles.container} aria-hidden="true" hidden>
+      <div ref={curve} className={styles.workRound} />
     </div>
   );
 }
