@@ -1,0 +1,96 @@
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 116px;
+  padding: 20px;
+  border: 1px solid var(--line, #22221e30);
+  border-radius: 14px;
+  background: var(--paper, #f2efe6);
+  color: var(--ink, #22221e);
+}
+.icon {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #fffef8;
+}
+.icon img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+.label h3 {
+  font:
+    600 20px/1.25 Arial,
+    sans-serif;
+  letter-spacing: -0.025em;
+}
+.label p {
+  font: 10px/1.5 monospace;
+  letter-spacing: 0.09em;
+  opacity: 0.65;
+  margin: 8px 0 0;
+}
+.canvas {
+  display: none;
+  font-family: var(--toolbox-type), Arial, sans-serif;
+}
+@media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+  .interactive {
+    min-height: 140px;
+    padding: 0;
+    justify-content: center;
+    background: transparent;
+    border-color: transparent;
+    border-radius: 0;
+  }
+  .interactive .icon {
+    background: transparent;
+    border-radius: 0;
+  }
+  .interactive[data-morph-ready="true"] .icon,
+  .interactive[data-morph-ready="true"] .label {
+    display: none;
+  }
+  .interactive[data-morph-ready="true"] .canvas {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    aspect-ratio: 2;
+  }
+}
+@media (max-width: 460px) {
+  .card {
+    padding: 16px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .label h3 {
+    font-size: 17px;
+  }
+  .label p {
+    font-size: 9px;
+  }
+  .icon {
+    width: 52px;
+    height: 52px;
+  }
+  .icon img {
+    width: 36px;
+    height: 36px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .interactive .icon,
+  .interactive .label {
+    transition: none;
+  }
+}

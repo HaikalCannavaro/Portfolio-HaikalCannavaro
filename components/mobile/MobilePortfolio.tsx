@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import ToolCard from "../toolbox/ToolCard";
 import { FacetMark, HCMonogram } from "../brand/BrandMarks";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
@@ -105,7 +106,7 @@ export default function MobilePortfolio() {
           <div role="tablist" aria-label="Skill categories" className={styles.tabs}>{groups.map((group, i) => <button id={`skill-tab-${i}`} type="button" role="tab" aria-selected={skill === i} aria-controls="m-skill-panel" tabIndex={skill === i ? 0 : -1} key={group.name}
             onClick={() => setSkill(i)} onKeyDown={event => { if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) { event.preventDefault(); const next = event.key === "Home" ? 0 : event.key === "End" ? groups.length - 1 : (i + (event.key === "ArrowRight" ? 1 : -1) + groups.length) % groups.length; setSkill(next); document.getElementById(`skill-tab-${next}`)?.focus(); } }}>
             {skill === i && <motion.span layoutId="skill-indicator" className={styles.tabIndicator} transition={{ type: "spring", stiffness: animate ? 380 : 10000, damping: animate ? 30 : 1000 }} />}<span>{group.name}</span></button>)}</div>
-          <div role="tabpanel" id="m-skill-panel" aria-labelledby={`skill-tab-${skill}`} className={styles.skillPanel}><p>{groups[skill].summary}</p><AnimatePresence mode="wait" initial={false}><motion.div key={skill} className={styles.skillChips} initial={{ opacity: animate ? 0 : 1, y: animate ? 10 : 0 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: animate ? 0 : 1, y: animate ? -10 : 0 }} transition={{ duration: animate ? .2 : 0 }}>{groups[skill].tools.map((tool, i) => <motion.span key={tool} initial={animate ? { opacity: 0, y: 16, rotate: -3 } : false} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ delay: animate ? i * .045 : 0, duration: animate ? .35 : 0 }}>{tool}</motion.span>)}</motion.div></AnimatePresence></div>
+          <div role="tabpanel" id="m-skill-panel" aria-labelledby={`skill-tab-${skill}`} className={styles.skillPanel}><p>{groups[skill].summary}</p><AnimatePresence mode="wait" initial={false}><motion.div key={skill} className={styles.skillChips} initial={{ opacity: animate ? 0 : 1, y: animate ? 10 : 0 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: animate ? 0 : 1, y: animate ? -10 : 0 }} transition={{ duration: animate ? .2 : 0 }}>{groups[skill].tools.map(tool => <ToolCard key={tool} name={tool} />)}</motion.div></AnimatePresence></div>
         </section>
         <footer id="m-contact" className={styles.contact}><SectionTitle number="04">LET’S MAKE SOMETHING</SectionTitle><motion.a {...reveal} className={styles.contactTitle} href="mailto:haikalcannavaro64@gmail.com">Have an idea?<br /><em>Let’s talk.</em><span>↗</span></motion.a><div className={styles.socials}><a href="https://github.com/HaikalCannavaro" target="_blank" rel="noopener noreferrer">GITHUB ↗</a><a href="https://www.instagram.com/haikalcnnvr" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a></div><p>HAIKAL CANNAVARO <span>BUILT WITH CURIOSITY.</span></p></footer>
       </main>

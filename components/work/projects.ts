@@ -23,6 +23,7 @@ export const projects: readonly ProjectCardProps[] = [
     description: "Built the mobile counterpart for the SIMASU ecosystem. Designed to provide quick access to mosque schedules and administrative tools on the go.",
     tags: ["Flutter", "Dart", "REST API"],
     image: "/image/SIMASU-Mobile.png",
+    storyHref: "/blog/simasu-mobile",
   },
   {
     title: "Gary's Personal Portfolio",
@@ -30,5 +31,6 @@ export const projects: readonly ProjectCardProps[] = [
     description: "Developed a high-performance personal portfolio website focusing on seamless animations, modern UI/UX design, and optimized performance using React and CSS Modules.",
     tags: ["Next.js", "Three.js", "GSAP", "Blender"],
     image: "/image/Gary-Portfolio.png",
+    storyHref: "/blog/gary-portfolio",
   },
 ];

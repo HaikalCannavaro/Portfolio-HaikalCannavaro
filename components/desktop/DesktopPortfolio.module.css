@@ -103,8 +103,8 @@
 .tabs button[aria-selected="true"]::after { content:""; position:absolute; bottom:-1px; height:2px; background:var(--blue); width:100%; left:0; }
 .skillPanel { min-height:200px; }
 .skillPanel > p { font-size:12px; margin:25px 0; opacity:.65; }
-.tools { display:flex; flex-wrap:wrap; gap:10px; }
-.tools span { font-size:17px; padding:12px 17px; border:1px solid var(--line); border-radius:6px; }
+.tools { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+
 .contact { padding:60px 5% 0; background:var(--solid-blue); color:var(--on-solid); }
 .contact .sectionLabel { border-color:#f2efe650; }
 .contactTitle { display:flex; align-items:center; justify-content:space-between; padding:55px 0 60px; font-size:clamp(55px,7.7vw,125px); line-height:1; letter-spacing:-.065em; }
@@ -144,3 +144,18 @@
 @media(min-width:769px) and (max-width:1050px) { .header { gap:18px; } .themeLabel { display:none; } .hello { gap:15px; } }
 
 .logo { display:flex; align-items:center; min-width:68px; padding:6px 0; }
+
+/* Readable secondary type without changing the editorial hierarchy. */
+.projectMeta { font-size:12px; line-height:1.6; flex-wrap:wrap; }
+.projectName { font-size:17px; line-height:1.55; opacity:.8; }
+.tags span { font-size:12px; }
+.sectionLabel { font-size:12px; }
+.sectionHeading > p,.skillPanel > p { font-size:17px; line-height:1.65; }
+.education { grid-template-columns:150px minmax(0,1fr) 20px; }
+.education > span { font-size:12px; opacity:.8; }
+.education h3 { font-size:22px; line-height:1.35; }
+.education p { font-size:16px; line-height:1.55; opacity:.8; }
+.aboutCopy { font-size:17px; }
+.tabs button,.allProjects { font-size:16px; }
+.skillPanel { min-height:480px; }
+@media(min-width:769px) and (max-width:1050px) { .skillsGrid { grid-template-columns:1fr; } .education { grid-template-columns:1fr; gap:8px; } .education > span:last-child { display:none; } }

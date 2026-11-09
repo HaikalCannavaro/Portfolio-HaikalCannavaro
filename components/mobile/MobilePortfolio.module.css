@@ -88,7 +88,7 @@
 .tabIndicator { position:absolute; inset:0; background:var(--ink); border-radius:99px; }
 .skillPanel { min-height:215px; }
 .skillPanel > p { font-size:13px; line-height:1.5; margin-bottom:25px; }
-.skillChips { display:flex; gap:8px; flex-wrap:wrap; align-content:start; }
+.skillChips { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; align-content:start; }
 .skillChips > span { background:var(--paper); border:1px solid var(--ink); padding:12px 17px; border-radius:6px; font-size:17px; letter-spacing:-.03em; }
 .skillChips > span:nth-child(3n) { background:var(--blue); color:var(--paper); border-color:var(--blue); }
 .contact { background:var(--orange); color:var(--paper); padding-bottom:130px; }
@@ -115,3 +115,18 @@
 @media(max-width:768px) { .header > a:first-child svg { width:55px; height:40px; } }
 
 @media(max-width:768px) { .dock a:first-of-type svg { width:32px; height:30px; display:block; } }
+
+@media(max-width:768px) {
+ .intro { font-size:17px; max-width:32rem; }
+ .projectBody > p:not(.projectDate) { font-size:16px; line-height:1.7; }
+ .projectDate { font-size:12px!important; line-height:1.5; }
+ .tags span { font-size:11px; }
+ .story { font-size:16px; }
+ .journey h3 { font-size:24px; line-height:1.25; }
+ .journey p { font-size:16px; line-height:1.6; }
+ .journey span,.sectionLabel { font-size:11px; line-height:1.5; }
+ .skillPanel > p { font-size:16px; }
+ .tabs button { font-size:15px; }
+ .skillPanel { min-height:540px; }
+ .deckControls a { font-size:12px; }
+}
