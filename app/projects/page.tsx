@@ -68,7 +68,7 @@ export default function ProjectsPage() {
           {visible.map(({ project, index }) => (
             <article key={project.title} className={styles.card}>
               <Link
-                href={project.storyHref!}
+                href={`${project.storyHref!}?from=all-projects`}
                 className={styles.visual}
                 aria-label={`Explore ${project.title}`}
               >
@@ -93,7 +93,7 @@ export default function ProjectsPage() {
                 <span>{project.dates}</span>
               </div>
               <h2>
-                <Link href={project.storyHref!}>{project.title}</Link>
+                <Link href={`${project.storyHref!}?from=all-projects`}>{project.title}</Link>
               </h2>
               <p>{project.description}</p>
               <div className={styles.tags}>
@@ -101,7 +101,7 @@ export default function ProjectsPage() {
                   <span key={tag}>{tag}</span>
                 ))}
               </div>
-              <Link className={styles.read} href={project.storyHref!}>
+              <Link className={styles.read} href={`${project.storyHref!}?from=all-projects`}>
                 Explore the story <span aria-hidden="true">↗</span>
               </Link>
             </article>

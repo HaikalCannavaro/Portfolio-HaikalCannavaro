@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ProjectBackLink from "../../../components/projects/ProjectBackLink";
 import ProjectNavigation from "../../../components/projects/ProjectNavigation";
 import styles from "../blog.module.css";
 export default function CaseStudy() {
@@ -8,9 +9,7 @@ export default function CaseStudy() {
       <ProjectNavigation />
       <header className={styles.headerSection}>
         <div className={styles.headerWrapper}>
-          <Link href="/projects" className={styles.backBtn}>
-            ← Back to projects
-          </Link>
+          <ProjectBackLink className={styles.backBtn} />
           <p className={styles.eyebrow}>PROJECT NOTES / 03</p>
           <h1 className={styles.titleText}>SIMASU, on the move.</h1>
           <p className={styles.intro}>

@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../blog.module.css";
+import ProjectBackLink from "../../../components/projects/ProjectBackLink";
 import ProjectNavigation from "../../../components/projects/ProjectNavigation";
 
 export default function FoxLoggerCaseStudy() {
@@ -14,10 +15,7 @@ export default function FoxLoggerCaseStudy() {
       {/* HEADER SECTION */}
       <section className={styles.headerSection}>
         <div className={styles.headerWrapper}>
-          <Link href="/projects" className={styles.backBtn}>
-            <span className={styles.backArrow}>←</span>
-            <span>Back to Projects</span>
-          </Link>
+          <ProjectBackLink className={styles.backBtn} />
 
           <p className={styles.eyebrow}>PROJECT NOTES / 01</p>
           <h1 className={styles.titleText}>

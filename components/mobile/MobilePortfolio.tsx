@@ -17,8 +17,13 @@ const groups = [
 ];
 const ease = [.22, 1, .36, 1] as const;
 
+// SVG keeps the arrow monochrome and independent of platform emoji/font metrics.
+function ArrowUpRight() {
+  return <svg className={styles.arrowIcon} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12" /></svg>;
+}
+
 function SectionTitle({ number, children }: { number: string; children: React.ReactNode }) {
-  return <div className={styles.sectionLabel}><span>{number}</span><span>{children}</span><span aria-hidden="true">↗</span></div>;
+  return <div className={styles.sectionLabel}><span>{number}</span><span>{children}</span><span aria-hidden="true"><ArrowUpRight /></span></div>;
 }
 
 export default function MobilePortfolio() {
@@ -47,7 +52,7 @@ export default function MobilePortfolio() {
 
   return (
     <div className={styles.mobile}>
-      <header className={styles.header}><a href="#m-home" aria-label="Haikal, home"><HCMonogram /></a><span>SOFTWARE DEVELOPER</span><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal">↗</a></header>
+      <header className={styles.header}><a href="#m-home" aria-label="Haikal, home"><HCMonogram /></a><span>SOFTWARE DEVELOPER</span><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal"><ArrowUpRight /></a></header>
       <main>
         <section id="m-home" ref={hero} className={styles.hero}>
           <div className={styles.issue}><span>PORTFOLIO / SELECTED WORK</span><span>01—04</span></div>
@@ -84,11 +89,11 @@ export default function MobilePortfolio() {
                 drag="x" dragConstraints={{ left: 0, right: 0 }} dragElastic={.12} dragSnapToOrigin
                 onDragEnd={(_, info) => { if (Math.abs(info.offset.x) > 45 || Math.abs(info.velocity.x) > 400) changeProject(project + (info.offset.x < 0 ? 1 : -1)); }}>
                 <div className={styles.projectImage}>{selected.image && <Image src={selected.image} alt={selected.title} fill sizes="(max-width: 768px) 90vw, 1px" draggable={false} />}<span>0{project + 1}</span></div>
-                <div className={styles.projectBody}><p className={styles.projectDate}>{selected.dates}</p><h3>{selected.title}</h3><p>{selected.description}</p><div className={styles.tags}>{selected.tags.map(tag => <span key={tag}>{tag}</span>)}</div>{selected.storyHref && <Link href={selected.storyHref} prefetch={false} draggable={false} className={styles.story}>Explore the story <span>↗</span></Link>}</div>
+                <div className={styles.projectBody}><p className={styles.projectDate}>{selected.dates}</p><h3>{selected.title}</h3><p>{selected.description}</p><div className={styles.tags}>{selected.tags.map(tag => <span key={tag}>{tag}</span>)}</div>{selected.storyHref && <Link href={`${selected.storyHref}?from=selected-work`} prefetch={false} draggable={false} className={styles.story}>Explore the story <span><ArrowUpRight /></span></Link>}</div>
               </motion.article>
             </AnimatePresence>
           </motion.div>
-          <div className={styles.deckControls}><button type="button" onClick={() => changeProject(project - 1)} aria-label="Previous project">←</button><Link href="/projects" prefetch={false}>ALL PROJECTS ↗</Link><button type="button" onClick={() => changeProject(project + 1)} aria-label="Next project">→</button></div>
+          <div className={styles.deckControls}><button type="button" onClick={() => changeProject(project - 1)} aria-label="Previous project">←</button><Link href="/projects" prefetch={false}>ALL PROJECTS <ArrowUpRight /></Link><button type="button" onClick={() => changeProject(project + 1)} aria-label="Next project">→</button></div>
         </section>
 
         <section id="m-about" className={styles.about}>
@@ -108,9 +113,9 @@ export default function MobilePortfolio() {
             {skill === i && <motion.span layoutId="skill-indicator" className={styles.tabIndicator} transition={{ type: "spring", stiffness: animate ? 380 : 10000, damping: animate ? 30 : 1000 }} />}<span>{group.name}</span></button>)}</div>
           <div role="tabpanel" id="m-skill-panel" aria-labelledby={`skill-tab-${skill}`} className={styles.skillPanel}><p>{groups[skill].summary}</p><AnimatePresence mode="wait" initial={false}><motion.div key={skill} className={styles.skillChips} initial={{ opacity: animate ? 0 : 1, y: animate ? 10 : 0 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: animate ? 0 : 1, y: animate ? -10 : 0 }} transition={{ duration: animate ? .2 : 0 }}>{groups[skill].tools.map(tool => <ToolCard key={tool} name={tool} />)}</motion.div></AnimatePresence></div>
         </section>
-        <footer id="m-contact" className={styles.contact}><SectionTitle number="04">LET’S MAKE SOMETHING</SectionTitle><motion.a {...reveal} className={styles.contactTitle} href="mailto:haikalcannavaro64@gmail.com">Have an idea?<br /><em>Let’s talk.</em><span>↗</span></motion.a><div className={styles.socials}><a href="https://github.com/HaikalCannavaro" target="_blank" rel="noopener noreferrer">GITHUB ↗</a><a href="https://www.instagram.com/haikalcnnvr" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a></div><p>HAIKAL CANNAVARO <span>BUILT WITH CURIOSITY.</span></p></footer>
+        <footer id="m-contact" className={styles.contact}><SectionTitle number="04">LET’S MAKE SOMETHING</SectionTitle><motion.a {...reveal} className={styles.contactTitle} href="mailto:haikalcannavaro64@gmail.com">Have an idea?<br /><em>Let’s talk.</em><span><ArrowUpRight /></span></motion.a><div className={styles.socials}><a href="https://github.com/HaikalCannavaro" target="_blank" rel="noopener noreferrer">GITHUB <ArrowUpRight /></a><a href="https://www.instagram.com/haikalcnnvr" target="_blank" rel="noopener noreferrer">INSTAGRAM <ArrowUpRight /></a></div><p>HAIKAL CANNAVARO <span>BUILT WITH CURIOSITY.</span></p></footer>
       </main>
-      <nav aria-label="Mobile sections" className={styles.dock}><motion.div className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} /><a href="#m-home" aria-label="Back to top"><HCMonogram /></a><a href="#m-work">Work</a><a href="#m-about">About</a><a href="#m-skills">Skills</a><a href="#m-contact" aria-label="Contact Haikal">↗</a></nav>
+      <nav aria-label="Mobile sections" className={styles.dock}><motion.div className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} /><a href="#m-home" aria-label="Back to top"><HCMonogram /></a><a href="#m-work">Work</a><a href="#m-about">About</a><a href="#m-skills">Skills</a><a href="#m-contact" aria-label="Contact Haikal"><ArrowUpRight /></a></nav>
     </div>
   );
 }

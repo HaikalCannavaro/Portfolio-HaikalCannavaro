@@ -1,6 +1,7 @@
 .mobile { display: none; }
 @media (max-width: 768px) {
 .mobile { --paper:#f2efe6; --ink:#22221e; --blue:#284be8; --orange:#c9462c; display:block; background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; overflow:clip; }
+.arrowIcon { display:inline-block; width:1em; height:1em; flex:none; vertical-align:middle; }
 .mobile * { -webkit-tap-highlight-color:transparent; }
 .mobile button { font:inherit; color:inherit; cursor:pointer; }
 .mobile :focus-visible { outline:3px solid var(--orange); outline-offset:5px; }
@@ -24,7 +25,7 @@
 .cardInner { position:relative; display:block; height:100%; width:100%; transform-style:preserve-3d; }
 .front, .back { position:absolute; inset:0; display:flex; flex-direction:column; padding:9px; backface-visibility:hidden; -webkit-backface-visibility:hidden; background:var(--blue); color:var(--paper); box-shadow:8px 15px 0 #22221e12; }
 .photo { position:relative; flex:1; overflow:hidden; background:#9aafd9; }
-.photo img { object-fit:cover; object-position:center 40%; filter:grayscale(1) contrast(1.08); }
+.photo img { object-fit:cover; object-position:center 40%; filter:contrast(1.08); }
 .photoCaption { display:flex; align-items:center; justify-content:space-between; font:8px monospace; letter-spacing:.08em; padding-top:10px; }
 .photoCaption > span { font-size:18px; }
 .back { transform:rotateY(180deg); padding:20px; justify-content:space-between; text-align:left; }
@@ -100,7 +101,9 @@
 .dock { position:fixed; bottom:calc(18px + env(safe-area-inset-bottom,0px)); left:6%; right:6%; z-index:1001; display:flex; align-items:center; justify-content:space-between; background:#22221ef5; color:var(--paper); border:1px solid #ffffff30; border-radius:99px; padding:7px 12px; box-shadow:0 8px 25px #0003; overflow:hidden; }
 .dock a { position:relative; display:grid; place-items:center; min-height:44px; min-width:44px; font-size:11px; }
 .dock a:first-of-type { font-weight:900; font-size:19px; letter-spacing:-2px; }
-.dock a:last-of-type { background:var(--paper); color:var(--ink); border-radius:50%; font-size:24px; }
+.dock a:last-of-type { background:var(--paper); color:var(--ink); border-radius:50%; font-size:24px; width:44px; height:44px; flex:0 0 44px; padding:0; line-height:1; }
+.dock a:last-of-type .arrowIcon, .header > a:last-child .arrowIcon { display:block; width:24px; height:24px; }
+.socials .arrowIcon { margin-left:6px; }
 .progress { position:absolute; bottom:0; left:0; right:0; height:3px; background:#f3a15a; transform-origin:left; }
 @media (prefers-reduced-motion:no-preference) {
  .heroBottom a, .deckControls button { transition:transform .25s cubic-bezier(.22,1,.36,1),background .25s; }

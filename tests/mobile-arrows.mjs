@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const source = fs.readFileSync(new URL('../components/mobile/MobilePortfolio.tsx', import.meta.url), 'utf8');
+const css = fs.readFileSync(new URL('../components/mobile/MobilePortfolio.module.css', import.meta.url), 'utf8');
+assert(!source.includes('\u2197'), 'Mobile diagonal arrows must not depend on platform emoji/font fallback');
+assert(source.includes('viewBox="0 0 24 24"') && source.includes('stroke="currentColor"'), 'Arrow has stable vector geometry and inherits foreground color');
+assert(source.includes('aria-hidden="true" focusable="false"'), 'Decorative arrows do not duplicate link names or add tab stops');
+assert.match(source, /aria-label="Contact Haikal"><ArrowUpRight \/>/, 'Dock contact retains accessible name and SVG');
+assert.match(source, /aria-label="Email Haikal"><ArrowUpRight \/>/, 'Header contact retains accessible name and SVG');
+assert.match(css, /\.dock a:last-of-type \{[^}]*width:44px; height:44px; flex:0 0 44px; padding:0; line-height:1;/, 'Dock contact stays square without baseline or padding offsets');
+assert.match(css, /\.dock a:last-of-type \.arrowIcon[^}]*display:block; width:24px; height:24px;/, 'Dock icon has explicit block dimensions');
+console.log('PASS: mobile SVG arrows, accessible link names, fixed dock and icon geometry.');

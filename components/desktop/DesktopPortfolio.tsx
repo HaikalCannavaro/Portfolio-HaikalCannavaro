@@ -2,13 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
+import WorkBook from "../work/WorkBook";
 import ToolCard from "../toolbox/ToolCard";
 import { FacetMark } from "../brand/BrandMarks";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import useDesktopMotion from "../../hooks/useDesktopMotion";
-import { projects } from "../work/projects";
 import styles from "./DesktopPortfolio.module.css";
 import SceneTransition from "./SceneTransition";
 import DesktopNavigation from "./DesktopNavigation";
@@ -16,9 +15,6 @@ import DesktopNavigation from "./DesktopNavigation";
 const AvatarScene = dynamic(() => import("./AvatarScene"), { ssr: false });
 
 const ease = [.22, 1, .36, 1] as const;
-const names = ["Intelligence, refined.", "A connected community.", "The mosque, on the move.", "A digital first impression."];
-const categories = ["AI / PROMPT ENGINEERING", "WEB / MANAGEMENT SYSTEM", "MOBILE / FLUTTER", "WEB / CREATIVE DEVELOPMENT"];
-const stories = ["/blog/foxlogger-internship", "/blog/simasu-web", "/blog/simasu-mobile", "/blog/gary-portfolio"];
 const groups = [
   { title: "Interfaces", note: "The part you see. The details you feel.", tools: ["HTML", "CSS", "JavaScript", "Tailwind CSS", "Figma"] },
   { title: "Systems", note: "The logic that makes everything work.", tools: ["Node.js", "Laravel", "MySQL", "Prisma", "Go", "Java", "Postman"] },
@@ -70,11 +66,7 @@ export default function DesktopPortfolio() {
       <section id="d-work" className={styles.work}>
         <div className={styles.sectionLabel}><span>01 / SELECTED WORK</span><span>A FEW THINGS I’VE BEEN BUILDING</span></div>
         <div className={styles.sectionHeading}><motion.h2 {...reveal}>Small details.<br /><em>Real impact.</em></motion.h2><p>From community platforms to AI agents.<br />Different challenges, the same curiosity.</p></div>
-        <div className={styles.projects}>{projects.map((project, i) => <motion.article key={project.title} {...reveal} className={styles.project}>
-          <Link prefetch={false} href={stories[i]} className={styles.projectVisual} aria-label={`Read about ${project.title}`}>
-            <div className={styles.projectImage}>{project.image && <Image src={project.image} alt={project.title} fill sizes="(min-width: 769px) 45vw, 1px" />}</div><span className={styles.projectNumber}>0{i + 1}</span><span className={styles.projectArrow} aria-hidden="true">↗</span>
-          </Link><div className={styles.projectMeta}><span>{categories[i]}</span><span>{project.dates}</span></div><h3><Link href={stories[i]} prefetch={false}>{names[i]}</Link></h3><p className={styles.projectName}>{project.title}</p><div className={styles.tags}>{project.tags.slice(0, 4).map(tag => <span key={tag}>{tag}</span>)}</div>
-        </motion.article>)}</div>
+        <WorkBook />
         <Link className={styles.allProjects} href="/projects" prefetch={false}>View the full collection <span>↗</span></Link>
       </section>
       <SceneTransition chapter="02" title="Behind the code." subtitle="Meet the curious mind." tone="dark" />

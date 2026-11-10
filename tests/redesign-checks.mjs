@@ -8,7 +8,7 @@ for (const slug of slugs) {
   const page = read(`app/blog/${slug}/page.tsx`);
   assert(page.includes('ProjectNavigation'), `${slug}: shared navigation`);
   assert(page.includes('<h1'), `${slug}: page heading`);
-  assert(page.includes('href="/projects"'), `${slug}: deterministic collection return`);
+  assert(page.includes('<ProjectBackLink className={styles.backBtn} />'), `${slug}: source-aware return`);
   assert(!page.includes('router.back()'), `${slug}: direct entry safety`);
   assert(!page.includes('Content goes here'), `${slug}: no placeholder`);
   for (const [,asset] of page.matchAll(/src="(\/image\/[^\"]+)"/g)) assert(fs.existsSync(path.join(root,'public',asset)), `${slug}: image exists`);
