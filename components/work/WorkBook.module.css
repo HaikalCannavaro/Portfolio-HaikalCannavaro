@@ -25,7 +25,7 @@
 .pageBlockLeft i{right:auto;left:0;transform:rotateY(90deg);transform-origin:left}
 .pageBlockLeft b,.pageBlockRight b{position:absolute;bottom:0;left:0;right:0;height:28px;transform:rotateX(90deg);transform-origin:bottom;background:repeating-linear-gradient(0deg,#c5b99f 0 .5px,#eee6ce .7px 1.5px,#d4c9af 1.7px 2px);box-shadow:inset 0 6px 8px #927e5733}
 .pageBlockLeft>span,.pageBlockRight>span{position:absolute;top:0;left:0;right:0;height:28px;transform:rotateX(-90deg);transform-origin:top;background:repeating-linear-gradient(0deg,#c7baa0 0 .7px,#e6dcc4 .8px 1.6px)}
-.pageEdges{display:none}.ribbon{position:absolute;width:15px;height:95px;top:calc(100% - 30px);left:51%;background:linear-gradient(90deg,#743b2c,#b87854 50%,#6b3325);transform:translateZ(-28px) rotateZ(-7deg);clip-path:polygon(0 0,100% 0,100% 100%,50% 90%,0 100%);filter:drop-shadow(3px 5px 3px #0005)}
+.pageEdges{display:none}
 .leftPage{padding:26px 30px 22px 28px;background-color:var(--book-paper);background-image:linear-gradient(90deg,#fff5,transparent 12%,transparent 78%,#a0927330 92%,#67583d55 99%,#d8c9ac 100%),url('/image/book-grain.svg');border-radius:2px 8px 10px 2px;box-shadow:inset 0 1px 1px #fff8,inset -1px 0 2px #5b4c3533}
 .editorial{padding-top:25px}.chapter{margin-bottom:24px}.chapter strong{font-size:60px}.chapter svg{width:32px;height:32px;color:#66684b}.editorial h3{font-family:Georgia,serif;font-weight:400;font-size:clamp(28px,3vw,43px);line-height:1.05;letter-spacing:-.055em}.editorial p{font:11px/1.8 Georgia,serif;opacity:.85}.tags{margin:19px 0;gap:8px}.tags span{border:0;border-radius:0;padding:0;font:7px monospace;color:#6c6656}.story{margin-top:10px;font:italic 12px Georgia,serif;gap:30px;border-color:#302e2555}.pageHeader,.pageFooter{font-size:7px;color:#766e5c}.pageHeader{padding-bottom:17px}.discipline{font-size:7px;letter-spacing:.1em}
 .artPage{--art:#dedcc8;--art-ink:#393c30;background-color:var(--book-paper);background-image:linear-gradient(90deg,#6c583a55,#a2906a25 6%,#fff3 15%,transparent 35%,#c9b89417 93%,#88704b20),url('/image/book-grain.svg');color:var(--book-ink);border-radius:8px 2px 2px 10px;padding:26px 25px 22px 30px;box-shadow:inset 1px 0 2px #5b4c3555,inset 0 1px 1px #fff8}
@@ -48,6 +48,68 @@
 /* Keep backing geometry in its own paint layer. A shared preserve-3d scene
    allowed the backing to occlude paper when Chrome clipped it on scroll. */
 .book{transform-style:flat}
-.backBoard,.binding,.pageBlockLeft,.pageBlockRight,.ribbon{z-index:0}
+.backBoard,.binding,.pageBlockLeft,.pageBlockRight,
 .spread{z-index:2;isolation:isolate}
 .cover{z-index:3}
+
+/* Keep the same hinge mounted for both directions, with a gradual endpaper reveal. */
+.coverLighting{position:absolute;inset:0;background:linear-gradient(90deg,#081b12,transparent 80%);pointer-events:none;transform:translateZ(7.2px);backface-visibility:hidden}
+.closeBook{display:inline-flex;align-items:center;justify-content:center;gap:18px;min-height:44px;padding:10px 18px;border:1px solid currentColor;border-radius:999px;font:italic 12px Georgia,serif}
+.closeBook:disabled{opacity:.4;cursor:wait}
+.closeBook:hover:not(:disabled){background:#8b80691a}
+.closeRow{display:flex;justify-content:center;margin:20px 0 10px}
+@media(prefers-reduced-motion:no-preference){.book{transition:transform 1.5s cubic-bezier(.42,0,.24,1)}}
+
+/* Back-cover boundary mirrors the physical hinge instead of looping chapters. */
+.cover[data-side=back] .coverFront{transform:rotateY(180deg) translateZ(7px)}
+.cover[data-side=back] .coverBack{transform:translateZ(0px)}
+.cover[data-side=back] .coverLighting{transform:rotateY(180deg) translateZ(7.2px)}
+.book[data-open=false][data-cover-side=back]{transform:translateX(24%) rotateX(24deg) rotateY(22deg) rotateZ(-3deg)}
+.book[data-open=false][data-cover-side=back] .backBoard{left:-10px;right:calc(50% - 7px)}
+.book[data-open=false][data-cover-side=back] .pageBlockLeft{visibility:visible}
+.book[data-open=false][data-cover-side=back] .pageBlockRight,.book[data-open=false][data-cover-side=back] .binding{visibility:hidden}
+.coverHint{text-align:center;font:9px monospace;letter-spacing:.07em;margin:0 0 24px}
+.cover{cursor:grab}
+@media(prefers-reduced-motion:reduce){.book[data-open=false][data-cover-side=back]{transform:translateX(24%) rotateX(16deg) rotateY(18deg) rotateZ(-2deg)!important}}
+
+/* A physical reading order: inside cover, introduction, projects, afterword. */
+.insideCover{width:100%;height:100%;min-height:550px;background-color:#d9d2bd;background-image:linear-gradient(90deg,#a2916e55,transparent 15%,#fff2 85%,#9c8c6c55),url('/image/book-grain.svg');border:7px solid var(--cloth);box-shadow:inset 0 0 15px #6d5c3629;border-radius:3px}
+.bookNote{height:100%;width:100%;min-height:550px}
+.rightPage>.bookNote{background-image:linear-gradient(90deg,#6c583a55,#a2906a25 6%,#fff3 15%,transparent 35%,#c9b89417 93%,#88704b20),url('/image/book-grain.svg');border-radius:8px 2px 2px 10px}
+.noteBody{flex:1;padding:55px 0 35px}.noteBody h3{font:400 clamp(29px,3.3vw,45px)/1.08 Georgia,serif;letter-spacing:-.05em;margin:23px 0}.noteBody h3 em{font-weight:400}.noteBody p{font:12px/1.8 Georgia,serif;max-width:340px}.contentsList{list-style:none;margin:26px 0;padding:0;font:10px Georgia,serif}.contentsList li{display:flex;justify-content:space-between;gap:15px;padding:8px 0;border-bottom:1px solid #302e2520}.contentsList li span:last-child{font:8px monospace}.noteBody .noteHint{font-style:italic;font-size:10px;margin-top:28px;color:#766e5c}
+.tabs{gap:18px}.tabs button{font-size:10px}.tabs button span{margin-right:5px}
+@media(max-width:1050px){.tabs{gap:12px}.tabs button{font-size:9px}.bookNote,.insideCover{min-height:535px}.noteBody{padding:40px 0 26px}.noteBody p{font-size:11px}.noteBody h3{font-size:32px}}
+
+/* Back-facing rest pose: hinge, binding and board share the right edge. */
+.cover[data-side=back]{left:calc(50% + 7px)}
+.cover[data-side=back] .coverFront{padding-left:35px;padding-right:46px;border-radius:6px 3px 3px 6px;background-image:linear-gradient(270deg,#0d211b77,#ffffff04 3%,#0b1d1666 4%,#6f877b44 5%,#11261b99 6%,transparent 10%,#ffffff08 80%,#ffffff18 99%,#0003),repeating-linear-gradient(0deg,#ffffff05 0 .5px,#0000000a .6px 1.5px),repeating-linear-gradient(90deg,transparent 0 1px,#c3d2c608 1px 2px),url('/image/book-grain.svg')}
+.cover[data-side=back] .coverFront:after{inset:17px 28px 17px 18px}
+.book[data-open=false][data-cover-side=back]{transform:translateX(24%) rotateX(24deg) rotateY(22deg) rotateZ(7deg)}
+.book[data-open=false][data-cover-side=back] .binding{visibility:visible;left:calc(50% + 7px);transform:rotateY(-90deg);border-radius:0 5px 5px 0}
+@media(max-width:1050px){.cover[data-side=back] .coverFront{padding-left:28px;padding-right:38px}}
+@media(prefers-reduced-motion:reduce){.book[data-open=false][data-cover-side=back]{transform:translateX(24%) rotateX(16deg) rotateY(18deg) rotateZ(5deg)!important}}
+
+/* Interior boards are cloth-covered hardback, not numbered paper leaves. */
+.insideCover,.coverBack{background-color:var(--cloth);background-image:linear-gradient(90deg,#10261f55,transparent 12%,#ffffff07 80%,#0b201b66),repeating-linear-gradient(0deg,#ffffff05 0 .5px,#0000000a .6px 1.5px),repeating-linear-gradient(90deg,transparent 0 1px,#c3d2c608 1px 2px),url('/image/book-grain.svg');border:7px solid #1e332b;box-shadow:inset 0 0 0 1px #ffffff12,inset 0 0 22px #06191050}
+
+/* Shared dimensions and one signed pose guarantee mirrored resting silhouettes. */
+.spread{height:580px;min-height:580px;grid-template-rows:minmax(0,1fr)}
+.bookNote,.insideCover{min-height:0}
+.book[data-open=false],.book[data-open=false][data-cover-side=back]{--rest-side:-1;transform:translateX(calc(var(--rest-side) * 24%)) rotateX(24deg) rotateY(calc(var(--rest-side) * 22deg)) rotateZ(calc(var(--rest-side) * 7deg))}
+.book[data-open=false][data-cover-side=back]{--rest-side:1}
+.coverImprint{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#c7b98b;opacity:.65;pointer-events:none;text-shadow:0 1px 1px #071c17}
+.insideCover{position:relative}
+.imprintLabel,.coverBack .imprintLabel{font:7px monospace;letter-spacing:.25em;margin-bottom:45px}
+.imprintSeal{position:relative;width:180px;height:180px;display:grid;place-items:center}
+.imprintOrbit{position:absolute;inset:0;border:1px solid #c7b98b55;border-radius:50%}
+.imprintOrbit:nth-child(2){inset:15px;border-style:dotted;transform:rotate(-15deg)}
+.imprintSeal svg,.coverBack .imprintSeal svg{position:absolute;width:142px;height:142px;opacity:.35}
+.imprintInitials,.coverBack .imprintInitials{font:italic 34px Georgia,serif;letter-spacing:-.1em;padding-right:5px}
+.imprintSignature,.coverBack .imprintSignature{margin-top:45px;text-align:center;font:9px Georgia,serif;letter-spacing:.18em}
+.imprintSignature>span,.coverBack .imprintSignature>span{display:block;font:6px monospace;letter-spacing:.2em;margin-top:12px}
+@media(max-width:900px){.spread{height:620px;min-height:620px}.imprintSeal{width:150px;height:150px}}
+@media(prefers-reduced-motion:reduce){.book[data-open=false],.book[data-open=false][data-cover-side=back]{transform:translateX(calc(var(--rest-side) * 24%)) rotateX(16deg) rotateY(calc(var(--rest-side) * 18deg)) rotateZ(calc(var(--rest-side) * 5deg))!important}}
+
+/* The reversed back board occupies negative local Z: mirror its edge faces too. */
+.cover[data-side=back] .coverForeEdge{transform:rotateY(-90deg)}
+.cover[data-side=back] .coverTailEdge{transform:rotateX(90deg)}
