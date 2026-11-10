@@ -13,6 +13,17 @@ for (const slug of slugs) {
   assert(!page.includes('Content goes here'), `${slug}: no placeholder`);
   for (const [,asset] of page.matchAll(/src="(\/image\/[^\"]+)"/g)) assert(fs.existsSync(path.join(root,'public',asset)), `${slug}: image exists`);
   for (const [,chapter] of page.matchAll(/href="#(chapter-\d+)"/g)) assert(page.includes(`id="${chapter}"`), `${slug}: chapter anchor ${chapter}`);
+  const chapters = [...page.matchAll(/<h2 id="chapter-(\d+)"[^>]*>\s*([^<]+)<\/h2>/g)];
+  const links = [...page.matchAll(/<a href="#chapter-(\d+)">\s*([^<]+)<\/a>/g)];
+  assert(chapters.length > 0, `${slug}: numbered sections exist`);
+  assert.equal(links.length, chapters.length, `${slug}: every section has a chapter link`);
+  for (const [index, [, number, title]] of chapters.entries()) {
+    assert.equal(Number(number), index + 1, `${slug}: sequential chapter IDs`);
+    assert(title.trim().startsWith(`${number}/ `), `${slug}: section uses N/ numbering`);
+    const link = links.find(([, chapter]) => chapter === number);
+    assert(link, `${slug}: matching chapter link`);
+    assert.equal(link[2].trim(), title.trim(), `${slug}: navigation matches section title`);
+  }
   assert(read('components/work/projects.ts').includes(`/blog/${slug}`), `${slug}: reachable story`);
 }
 const logos = ['html5','css3','javascript','tailwindcss','figma','nodejs','laravel','mysql','prisma','go','java','postman','flutter','blender','cplusplus','csharp','git','github'];

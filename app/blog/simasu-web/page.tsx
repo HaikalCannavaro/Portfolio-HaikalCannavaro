@@ -38,11 +38,11 @@ export default function SimasuWebCaseStudy() {
       <article className={styles.articleContent}>
         <nav className={styles.chapterNav} aria-label="On this page">
           <span>IN THIS STORY</span>
-          <a href="#chapter-1">1. Project Overview</a>
-          <a href="#chapter-2">2. The Challenge</a>
-          <a href="#chapter-3">3. Approach & Architecture</a>
-          <a href="#chapter-4">4. Technical Execution & DevOps</a>
-          <a href="#chapter-5">5. Outcomes & Lessons Learned</a>
+          <a href="#chapter-1">1/ Project Overview</a>
+          <a href="#chapter-2">2/ The Challenge</a>
+          <a href="#chapter-3">3/ Approach & Architecture</a>
+          <a href="#chapter-4">4/ Technical Execution & DevOps</a>
+          <a href="#chapter-5">5/ Outcomes & Lessons Learned</a>
         </nav>
 
         {/* GAMBAR HERO */}
@@ -60,7 +60,7 @@ export default function SimasuWebCaseStudy() {
         {/* 1. PROJECT OVERVIEW */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-1" className={styles.sectionTitle}>
-            1. Project Overview
+            1/ Project Overview
           </h2>
           <p className={styles.paragraph}>
             <strong>Sistem Informasi Masjid Syamsul Ulum (SIMASU)</strong> is a
@@ -79,7 +79,7 @@ export default function SimasuWebCaseStudy() {
         {/* 2. THE PROBLEM */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-2" className={styles.sectionTitle}>
-            2. The Challenge
+            2/ The Challenge
           </h2>
           <p className={styles.paragraph}>
             Mosque administrators faced significant bottlenecks due to
@@ -98,7 +98,7 @@ export default function SimasuWebCaseStudy() {
         {/* 3. APPROACH & ARCHITECTURE */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-3" className={styles.sectionTitle}>
-            3. Approach & Architecture
+            3/ Approach & Architecture
           </h2>
           <p className={styles.paragraph}>
             To solve the cross-platform requirement, I decided to adopt a{" "}
@@ -124,7 +124,7 @@ export default function SimasuWebCaseStudy() {
         {/* 4. TECHNICAL EXECUTION & DEVOPS */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-4" className={styles.sectionTitle}>
-            4. Technical Execution & DevOps
+            4/ Technical Execution & DevOps
           </h2>
           <p className={styles.paragraph}>
             A major part of this project was ensuring smooth collaboration and
@@ -144,7 +144,7 @@ export default function SimasuWebCaseStudy() {
         {/* 5. CONCLUSION */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-5" className={styles.sectionTitle}>
-            5. Outcomes & Lessons Learned
+            5/ Outcomes & Lessons Learned
           </h2>
           <p className={styles.paragraph}>
             SIMASU successfully modernized the administrative workflow of the

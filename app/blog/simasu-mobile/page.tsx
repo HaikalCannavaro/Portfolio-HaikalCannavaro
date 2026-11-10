@@ -27,9 +27,9 @@ export default function CaseStudy() {
       <article className={styles.articleContent}>
         <nav className={styles.chapterNav} aria-label="On this page">
           <span>IN THIS STORY</span>
-          <a href="#chapter-1">01 / The project</a>
-          <a href="#chapter-2">02 / The approach</a>
-          <a href="#chapter-3">03 / A connected ecosystem</a>
+          <a href="#chapter-1">1/ The project</a>
+          <a href="#chapter-2">2/ The approach</a>
+          <a href="#chapter-3">3/ A connected ecosystem</a>
         </nav>
         <div className={styles.heroImageWrapper}>
           <Image
@@ -43,7 +43,7 @@ export default function CaseStudy() {
         </div>
         <section className={styles.contentBlock}>
           <h2 id="chapter-1" className={styles.sectionTitle}>
-            01 / The project
+            1/ The project
           </h2>
           <p className={styles.paragraph}>
             Built the mobile counterpart for SIMASU, bringing mosque schedules
@@ -53,7 +53,7 @@ export default function CaseStudy() {
         </section>
         <section className={styles.contentBlock}>
           <h2 id="chapter-2" className={styles.sectionTitle}>
-            02 / The approach
+            2/ The approach
           </h2>
           <p className={styles.paragraph}>
             The application uses Flutter and Dart for its mobile interface and
@@ -62,7 +62,7 @@ export default function CaseStudy() {
         </section>
         <section className={styles.contentBlock}>
           <h2 id="chapter-3" className={styles.sectionTitle}>
-            03 / A connected ecosystem
+            3/ A connected ecosystem
           </h2>
           <p className={styles.paragraph}>
             The web and mobile projects explore two ways of accessing the same

@@ -29,9 +29,9 @@ export default function CaseStudy() {
       <article className={styles.articleContent}>
         <nav className={styles.chapterNav} aria-label="On this page">
           <span>IN THIS STORY</span>
-          <a href="#chapter-1">01 / The project</a>
-          <a href="#chapter-2">02 / The toolkit</a>
-          <a href="#chapter-3">03 / The experience</a>
+          <a href="#chapter-1">1/ The project</a>
+          <a href="#chapter-2">2/ The toolkit</a>
+          <a href="#chapter-3">3/ The experience</a>
         </nav>
         <div className={styles.heroImageWrapper}>
           <Image
@@ -45,7 +45,7 @@ export default function CaseStudy() {
         </div>
         <section className={styles.contentBlock}>
           <h2 id="chapter-1" className={styles.sectionTitle}>
-            01 / The project
+            1/ The project
           </h2>
           <p className={styles.paragraph}>
             Developed a personal portfolio website focused on modern UI/UX
@@ -54,7 +54,7 @@ export default function CaseStudy() {
         </section>
         <section className={styles.contentBlock}>
           <h2 id="chapter-2" className={styles.sectionTitle}>
-            02 / The toolkit
+            2/ The toolkit
           </h2>
           <p className={styles.paragraph}>
             The project brings together Next.js, Three.js, GSAP, and Blender,
@@ -63,7 +63,7 @@ export default function CaseStudy() {
         </section>
         <section className={styles.contentBlock}>
           <h2 id="chapter-3" className={styles.sectionTitle}>
-            03 / The experience
+            3/ The experience
           </h2>
           <p className={styles.paragraph}>
             The focus is a cohesive personal presentation: a clear interface,

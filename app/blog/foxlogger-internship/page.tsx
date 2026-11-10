@@ -38,12 +38,12 @@ export default function FoxLoggerCaseStudy() {
       <article className={styles.articleContent}>
         <nav className={styles.chapterNav} aria-label="On this page">
           <span>IN THIS STORY</span>
-          <a href="#chapter-1">1. Role Overview</a>
+          <a href="#chapter-1">1/ Role Overview</a>
           <a href="#chapter-2">
-            2. The Challenge: Hallucinations & Intent Accuracy
+            2/ The Challenge: Hallucinations & Intent Accuracy
           </a>
-          <a href="#chapter-3">3. Approach: Semantic Routing & SDLC</a>
-          <a href="#chapter-4">4. Outcomes & Impact</a>
+          <a href="#chapter-3">3/ Approach: Semantic Routing & SDLC</a>
+          <a href="#chapter-4">4/ Outcomes & Impact</a>
         </nav>
 
         {/* GAMBAR HERO */}
@@ -62,7 +62,7 @@ export default function FoxLoggerCaseStudy() {
         {/* 1. ROLE OVERVIEW */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-1" className={styles.sectionTitle}>
-            1. Role Overview
+            1/ Role Overview
           </h2>
           <p className={styles.paragraph}>
             During my internship at <strong>FoxLogger</strong>, I was entrusted
@@ -77,7 +77,7 @@ export default function FoxLoggerCaseStudy() {
         {/* 2. THE PROBLEM */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-2" className={styles.sectionTitle}>
-            2. The Challenge: Hallucinations & Intent Accuracy
+            2/ The Challenge: Hallucinations & Intent Accuracy
           </h2>
           <p className={styles.paragraph}>
             When dealing with Enterprise AI Agents, one of the biggest hurdles
@@ -98,7 +98,7 @@ export default function FoxLoggerCaseStudy() {
         {/* 3. APPROACH & METHODOLOGY */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-3" className={styles.sectionTitle}>
-            3. Approach: Semantic Routing & SDLC
+            3/ Approach: Semantic Routing & SDLC
           </h2>
           <p className={styles.paragraph}>
             To solve this, I applied a systematic Software Development Life
@@ -130,7 +130,7 @@ export default function FoxLoggerCaseStudy() {
         {/* 4. OUTCOMES */}
         <div className={styles.contentBlock}>
           <h2 id="chapter-4" className={styles.sectionTitle}>
-            4. Outcomes & Impact
+            4/ Outcomes & Impact
           </h2>
           <p className={styles.paragraph}>
             Through rigorous &quot;try, prompt, and fix&quot; cycles, the AI
