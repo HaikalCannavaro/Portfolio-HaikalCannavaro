@@ -34,7 +34,7 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  font: 12px/1.6 monospace;
+  font: 12px/1.6 var(--font-meta);
 }
 .eyebrow a {
   min-height: 44px;
@@ -53,7 +53,7 @@
   color: var(--blue);
 }
 .headerSection h1 > span {
-  font: 16px monospace;
+  font: 16px var(--font-meta);
   vertical-align: top;
   display: inline-block;
   margin: 18px 0 0 24px;
@@ -71,7 +71,7 @@
   line-height: 1.65;
 }
 .headerBottom > span {
-  font: 12px/1.8 monospace;
+  font: 12px/1.8 var(--font-meta);
   text-align: right;
 }
 .filters {
@@ -101,7 +101,7 @@
 }
 .filters button span {
   margin-left: 10px;
-  font: 11px monospace;
+  font: 11px var(--font-meta);
 }
 .filters button[aria-pressed="true"] {
   background: var(--ink);
@@ -109,7 +109,7 @@
   border-color: var(--ink);
 }
 .filters > p {
-  font: 12px monospace;
+  font: 12px var(--font-meta);
   white-space: nowrap;
 }
 .projectGrid {
@@ -146,7 +146,7 @@
   top: 20px;
   left: 22px;
   color: #22221e;
-  font: 12px monospace;
+  font: 12px var(--font-meta);
 }
 .arrow {
   position: absolute;
@@ -167,7 +167,7 @@
   justify-content: space-between;
   gap: 10px;
   margin: 24px 0 14px;
-  font: 12px/1.5 monospace;
+  font: 12px/1.5 var(--font-meta);
 }
 .card h2 {
   font-size: clamp(26px, 2.5vw, 38px);
@@ -187,7 +187,7 @@
   gap: 7px;
 }
 .tags > span {
-  font: 12px/1.5 monospace;
+  font: 12px/1.5 var(--font-meta);
   border: 1px solid var(--line);
   padding: 6px 10px;
   border-radius: 20px;
@@ -273,4 +273,9 @@
   .visual:hover img {
     transform: none;
   }
+}
+
+.headerBottom p,
+.card > p {
+  font-family: var(--font-copy);
 }

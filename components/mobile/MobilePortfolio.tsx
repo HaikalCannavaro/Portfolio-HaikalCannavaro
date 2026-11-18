@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import ToolCard from "../toolbox/ToolCard";
 import { FacetMark, HCMonogram } from "../brand/BrandMarks";
+import GlitchWord from "../brand/GlitchWord";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import useMotionAllowed from "../../hooks/useMotionAllowed";
@@ -56,8 +57,10 @@ export default function MobilePortfolio() {
       <main>
         <section id="m-home" ref={hero} className={styles.hero}>
           <div className={styles.issue}><span>PORTFOLIO / SELECTED WORK</span><span>01—04</span></div>
-          <motion.h1 style={animate ? { x: titleX } : undefined}>
-            {["HAIKAL", "CANNAVARO"].map((word, i) => <span className={styles.titleMask} key={word}><motion.span initial={false} animate={{ y: 0 }} className={animate ? styles.titleEnter : undefined} style={{ animationDelay: `${i * 120}ms` }}>{word}</motion.span></span>)}
+          <motion.h1 aria-label="Haikal Cannavaro" style={animate ? { x: titleX } : undefined}>
+            {["HAIKAL", "CANNAVARO"].map(word => (
+              <span className={styles.titleLine} key={word}><GlitchWord>{word}</GlitchWord></span>
+            ))}
           </motion.h1>
           <div className={styles.portraitStage}>
             <span className={styles.orbit} aria-hidden="true" /><span className={styles.orbitSmall} aria-hidden="true" />

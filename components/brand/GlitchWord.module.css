@@ -1,0 +1,46 @@
+.word {
+  position: relative;
+  display: inline-block;
+}
+
+.echo {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .echo {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .echo::before,
+  .echo::after {
+    content: attr(data-word);
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: signal 420ms steps(1, end) 90ms 1;
+  }
+
+  .echo::before {
+    --shift: clamp(1.5px, 0.027em, 5px);
+    color: var(--blue);
+    clip-path: inset(22% 0 60%);
+  }
+
+  .echo::after {
+    --shift: clamp(-6px, -0.032em, -1.5px);
+    color: #c9462c;
+    clip-path: inset(57% 0 23%);
+  }
+
+  @keyframes signal {
+    0% { opacity: 0.85; transform: translateX(var(--shift)); }
+    37% { opacity: 0.8; transform: translateX(calc(-1 * var(--shift))); }
+    66% { opacity: 0.5; transform: translateX(var(--shift)); }
+    85%, 100% { opacity: 0; transform: none; }
+  }
+}

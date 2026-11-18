@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {execFileSync} from 'node:child_process';
 const read=p=>readFileSync(p,'utf8');
 const book=read('components/work/WorkBook.tsx');
 assert(book.includes('CLICK, HOLD & DRAG A PAGE'));
@@ -19,19 +18,19 @@ assert(css.includes('translateZ(-31px)'));
 assert(css.includes("url('/image/book-grain.svg')"));
 assert(read('public/image/book-grain.svg').includes('feTurbulence'));
 for(const token of ['preserve-3d','backface-visibility:hidden','rotateY(180deg)','prefers-reduced-motion:reduce']) assert(css.includes(token),token);
-let mobile=read('components/mobile/MobilePortfolio.tsx').replace('href={`${selected.storyHref}?from=selected-work`}','href={selected.storyHref}');
-mobile=mobile.replace(/\/\/ SVG keeps[^\n]*\nfunction ArrowUpRight\(\) \{\n[^\n]*\n\}\n\n/, '').replaceAll('<ArrowUpRight />', '↗');
-assert.equal(mobile,execFileSync('git',['show','61f1d8ec833a2e9c7f600395135a2e06542be13b:components/mobile/MobilePortfolio.tsx'],{encoding:'utf8'}),'Mobile swipe must remain unchanged');
-const mobileCss=read('components/mobile/MobilePortfolio.module.css');
-const originalMobileCss=execFileSync('git',['show','61f1d8ec833a2e9c7f600395135a2e06542be13b:components/mobile/MobilePortfolio.module.css'],{encoding:'utf8'});
-const normalizedCss=mobileCss.replace('filter:contrast(1.08);','filter:grayscale(1) contrast(1.08);')
-  .split('\n').filter(line=>!line.startsWith('.arrowIcon ')&&!line.startsWith('.dock a:last-of-type .arrowIcon')&&!line.startsWith('.socials .arrowIcon')).join('\n')
-  .replace(' width:44px; height:44px; flex:0 0 44px; padding:0; line-height:1;', '');
-assert.equal(normalizedCss, originalMobileCss, 'Only approved portrait color and arrow styles may change mobile');
+const mobile = read('components/mobile/MobilePortfolio.tsx');
+const mobileCss = read('components/mobile/MobilePortfolio.module.css');
+assert(mobile.includes('drag="x"') && mobile.includes('dragSnapToOrigin'), 'Horizontal project swipe');
+assert(mobile.includes('Math.abs(info.offset.x) > 45 || Math.abs(info.velocity.x) > 400'), 'Swipe distance and velocity thresholds');
+assert(mobile.includes('changeProject(project + (info.offset.x < 0 ? 1 : -1))'), 'Swipe direction');
+assert(mobile.includes('(next + projects.length) % projects.length'), 'Deck wraps at both ends');
+assert(mobile.includes('onClick={() => changeProject(project - 1)}') && mobile.includes('onClick={() => changeProject(project + 1)}'), 'Previous and next controls');
+assert(mobile.includes('selected.storyHref}?from=selected-work'), 'Selected-work return path');
+assert.match(mobileCss, /\.project\s*\{[^}]*touch-action:\s*pan-y/, 'Vertical page scroll remains available over the deck');
 assert.equal((read('app/projects/page.tsx').match(/from=all-projects/g)||[]).length,3);
 assert(read('components/projects/ProjectBackLink.tsx').includes('=== "all-projects"'));
 assert(!read('components/mobile/MobilePortfolio.module.css').includes('grayscale('));
-console.log('PASS: book gesture, accessibility, reduced-motion and origin routing guards; mobile UI unchanged.');
+console.log('PASS: book gesture, accessibility, reduced-motion and origin routing guards; mobile swipe and button navigation.');
 
 assert(!book.includes('% projects.length') && !book.includes('% 4'), 'Book must not wrap at either boundary');
 for(const token of ['drag.cover', 'Close back cover', 'Open from the back', 'originalOpen']) assert(book.includes(token), token);

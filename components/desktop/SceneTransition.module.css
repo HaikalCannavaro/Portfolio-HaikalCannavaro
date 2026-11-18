@@ -4,11 +4,11 @@
 .frame { position:sticky; top:20vh; height:52vh; min-height:340px; overflow:hidden; isolation:isolate; transform-origin:center; }
 .scene { position:absolute; inset:0; background:var(--base); color:var(--foreground); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:35px 5%; }
 .reveal { background:var(--wash); color:var(--reverse); }
-.label,.foot { position:absolute; left:5%; right:5%; font:10px/1.5 monospace; letter-spacing:.1em; }
+.label,.foot { position:absolute; left:5%; right:5%; font:10px/1.5 var(--font-meta); letter-spacing:.1em; }
 .label { top:28px; }
 .foot { bottom:25px; display:flex; justify-content:space-between; border-top:1px solid currentColor; padding-top:15px; }
 .title { font-size:clamp(80px,13vw,205px); font-weight:900; line-height:.95; letter-spacing:-.075em; white-space:nowrap; }
-.subtitle { font:italic clamp(30px,4vw,64px)/1.2 Georgia,serif; letter-spacing:-.045em; margin-top:12px; }
+.subtitle { font:italic clamp(30px,4vw,64px)/1.2 var(--font-copy); letter-spacing:-.045em; margin-top:12px; }
 .star { position:absolute; right:8%; top:12%; color:#c9462c; font:clamp(48px,7vw,110px)/1 Arial,sans-serif; mix-blend-mode:screen; pointer-events:none; }
 /* Motion is progressive enhancement. Touch/reduced-motion gets no extra scroll distance. */
 .track[data-enabled="false"] { display:none; }

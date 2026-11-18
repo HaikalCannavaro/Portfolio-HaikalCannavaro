@@ -17,7 +17,7 @@
   height: 44px;
 }
 .nav > span {
-  font: 12px/1.6 monospace;
+  font: 12px/1.6 var(--font-meta);
 }
 .nav small {
   font-size: 11px;
