@@ -21,8 +21,8 @@
     content: attr(data-word);
     position: absolute;
     inset: 0;
-    opacity: 0;
-    animation: signal 420ms steps(1, end) 90ms 1;
+    opacity: 0.72;
+    animation: signal 1.6s steps(1, end) infinite;
   }
 
   .echo::before {
@@ -34,13 +34,15 @@
   .echo::after {
     --shift: clamp(-6px, -0.032em, -1.5px);
     color: #c9462c;
+    animation-duration: 2.1s;
+    animation-delay: -0.7s;
     clip-path: inset(57% 0 23%);
   }
 
   @keyframes signal {
-    0% { opacity: 0.85; transform: translateX(var(--shift)); }
-    37% { opacity: 0.8; transform: translateX(calc(-1 * var(--shift))); }
-    66% { opacity: 0.5; transform: translateX(var(--shift)); }
-    85%, 100% { opacity: 0; transform: none; }
+    0%, 100% { transform: translateX(var(--shift)); }
+    35% { transform: translateX(calc(-1 * var(--shift))); }
+    60% { transform: translateX(calc(0.5 * var(--shift))); }
+    82% { transform: translateX(calc(-0.5 * var(--shift))); }
   }
 }
