@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import WorkBook from "../work/WorkBook";
 import ToolCard from "../toolbox/ToolCard";
 import { FacetMark } from "../brand/BrandMarks";
+import GlitchWord from "../brand/GlitchWord";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import useDesktopMotion from "../../hooks/useDesktopMotion";
@@ -47,7 +48,10 @@ export default function DesktopPortfolio() {
     <main>
       <section id="d-home" ref={hero} className={styles.hero}>
         <div className={styles.eyebrow}><span><i /> CURIOUS BY NATURE. DEVELOPER BY DESIGN.</span><span>PORTFOLIO — SELECTED WORK</span></div>
-        <motion.h1 style={animate ? { x: titleX } : undefined}><span>HAIKAL</span><span>CANNAVARO<span className={styles.titleDot} aria-hidden="true"><FacetMark /></span></span></motion.h1>
+        <motion.h1 aria-label="Haikal Cannavaro" style={animate ? { x: titleX } : undefined}>
+          <span><GlitchWord>HAIKAL</GlitchWord></span>
+          <span><GlitchWord>CANNAVARO</GlitchWord><span className={styles.titleDot} aria-hidden="true"><FacetMark /></span></span>
+        </motion.h1>
         <div className={styles.heroGrid}>
           <div className={styles.heroIntro}><span className={styles.micro}>IDEAS IN. IMPACT OUT.</span><p>I turn curious ideas into<br /><em>working digital experiences.</em></p><a className={styles.roundLink} href="#d-work"><span>Explore my work</span><b>↓</b></a></div>
           <div className={styles.heroCaption}><span>SOFTWARE ENGINEERING STUDENT</span><p>Thoughtful interfaces.<br />Purposeful systems.<br />Always something new to build.</p></div>

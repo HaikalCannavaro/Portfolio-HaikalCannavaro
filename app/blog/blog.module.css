@@ -41,7 +41,7 @@
 }
 .eyebrow {
   color: var(--blue);
-  font: 12px/1.6 monospace;
+  font: 12px/1.6 var(--font-meta);
   letter-spacing: 0.05em;
   margin-bottom: 20px;
 }
@@ -66,13 +66,13 @@
   gap: 10px;
 }
 .metaPill {
-  font: 13px/1.5 monospace;
+  font: 13px/1.5 var(--font-meta);
   border: 1px solid var(--line);
   border-radius: 40px;
   padding: 8px 13px;
 }
 .metaDate {
-  font: 13px/1.6 monospace;
+  font: 13px/1.6 var(--font-meta);
   padding: 8px 0;
   margin-left: 10px;
 }
@@ -97,7 +97,7 @@
   padding: 0 0 30px;
 }
 .chapterNav > span {
-  font: 12px monospace;
+  font: 12px var(--font-meta);
   color: var(--blue);
   margin: 6px 0 18px;
 }
@@ -248,4 +248,10 @@
   .collectionLink {
     width: 100%;
   }
+}
+
+.intro,
+.paragraph,
+.bulletList {
+  font-family: var(--font-copy);
 }
