@@ -7,19 +7,45 @@
   display: block;
 }
 
+.alternate,
 .echo {
   display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .word {
+    animation: word-cycle 4s step-end infinite;
+  }
+
+  .switching .text {
+    opacity: calc(1 - var(--alternate-visible, 0));
+  }
+
+  .alternate,
   .echo {
-    /* Scale the cuts from the reference's 48px heading to each hero line. */
-    --reference-pixel: calc(1em / 48);
     display: block;
     position: absolute;
     inset: 0;
     pointer-events: none;
     user-select: none;
+  }
+
+  .alternate {
+    opacity: var(--alternate-visible, 0);
+  }
+
+  .echo {
+    /* Scale the cuts from the reference's 48px heading to each hero line. */
+    --reference-pixel: calc(1em / 48);
+    opacity: calc(var(--glitch-forward, 0) + var(--glitch-back, 0));
+  }
+
+  .echo[data-transition="forward"] {
+    opacity: var(--glitch-forward, 0);
+  }
+
+  .echo[data-transition="back"] {
+    opacity: var(--glitch-back, 0);
   }
 
   .echo::before,
@@ -47,6 +73,33 @@
     animation-duration: 6s;
     left: -4px;
     text-shadow: 1px 0 #00d8ff;
+  }
+
+  /* Each word holds for 1.6s before the next 0.4s transition. */
+  @keyframes word-cycle {
+    0%, 100% {
+      --alternate-visible: 0;
+      --glitch-forward: 0;
+      --glitch-back: 0;
+    }
+
+    40% {
+      --alternate-visible: 0;
+      --glitch-forward: 1;
+      --glitch-back: 0;
+    }
+
+    50% {
+      --alternate-visible: 1;
+      --glitch-forward: 0;
+      --glitch-back: 0;
+    }
+
+    90% {
+      --alternate-visible: 1;
+      --glitch-forward: 0;
+      --glitch-back: 1;
+    }
   }
 
   @keyframes glitch-animation {
