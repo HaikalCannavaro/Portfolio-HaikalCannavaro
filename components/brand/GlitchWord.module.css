@@ -16,6 +16,10 @@
     user-select: none;
   }
 
+  @media (max-width: 768px) {
+    .word { --glitch-max-shift: 2px; }
+  }
+
   .echo::before,
   .echo::after {
     content: attr(data-word);
@@ -26,13 +30,13 @@
   }
 
   .echo::before {
-    --shift: clamp(1.5px, 0.027em, 5px);
+    --shift: clamp(1.5px, 0.027em, var(--glitch-max-shift, 5px));
     color: var(--blue);
     clip-path: inset(22% 0 60%);
   }
 
   .echo::after {
-    --shift: clamp(-6px, -0.032em, -1.5px);
+    --shift: clamp(calc(-1 * var(--glitch-max-shift, 6px)), -0.032em, -1.5px);
     color: #c9462c;
     animation-duration: 2.1s;
     animation-delay: -0.7s;

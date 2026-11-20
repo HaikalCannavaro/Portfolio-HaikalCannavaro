@@ -1,16 +1,25 @@
 import "./globals.css";
 import localFont from "next/font/local";
 import SmoothScroll from '../components/SmoothScroll'; 
+const hero = localFont({
+  src: "./fonts/PixelifySans.woff2",
+  weight: "400 700",
+  display: "swap",
+  variable: "--font-hero",
+  adjustFontFallback: false,
+  fallback: ["Arial", "sans-serif"],
+});
+
 const copy = localFont({
-  src: "./fonts/GeistVF.woff",
-  weight: "100 900",
+  src: "./fonts/BricolageGrotesque.woff2",
+  weight: "200 800",
   display: "swap",
   variable: "--font-copy",
 });
 
 const meta = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  weight: "100 900",
+  src: "./fonts/IBMPlexMono.woff2",
+  weight: "400",
   display: "swap",
   variable: "--font-meta",
   adjustFontFallback: false,
@@ -28,7 +37,7 @@ interface RootLayoutProps {
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <html lang="en" className={`${copy.variable} ${meta.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${hero.variable} ${copy.variable} ${meta.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{document.documentElement.dataset.theme=localStorage.getItem('haikal-portfolio-theme')==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})();` }} />
         <link

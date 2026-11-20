@@ -13,7 +13,7 @@
 .header > a:last-child { display:grid; place-items:center; width:44px; height:44px; border:1px solid #22221e55; border-radius:50%; font-size:27px; }
 .hero { padding:25px 6% 30px; position:relative; }
 .issue { display:flex; justify-content:space-between; font:9px var(--font-meta); letter-spacing:.04em; margin-bottom:25px; }
-.hero h1 { position:relative; z-index:2; font-size:clamp(34px,12vw,90px); font-weight:900; line-height:.89; letter-spacing:-.075em; }
+.hero h1 { position:relative; z-index:2; font-family:var(--font-hero); font-size:clamp(34px,13.5vw,96px); font-weight:700; line-height:.9; letter-spacing:-.025em; }
 .titleLine { display:block; }
 .titleLine > span { display:block; padding-bottom:.1em; }
 .titleLine:first-child { font-size:1.58em; color:var(--blue); }
