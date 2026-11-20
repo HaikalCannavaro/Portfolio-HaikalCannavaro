@@ -49,7 +49,7 @@ export default function DesktopPortfolio() {
       <section id="d-home" ref={hero} className={styles.hero}>
         <div className={styles.eyebrow}><span><i /> CURIOUS BY NATURE. DEVELOPER BY DESIGN.</span><span>PORTFOLIO — SELECTED WORK</span></div>
         <motion.h1 aria-label="Haikal Cannavaro" style={animate ? { x: titleX } : undefined}>
-          <span><GlitchWord>HAIKAL</GlitchWord></span>
+          <span><GlitchWord dataText="Hello!">HAIKAL</GlitchWord></span>
           <span><GlitchWord>CANNAVARO</GlitchWord><span className={styles.titleDot} aria-hidden="true"><FacetMark /></span></span>
         </motion.h1>
         <div className={styles.heroGrid}>

@@ -11,100 +11,77 @@
   display: none;
 }
 
-@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-  .word {
-    --glitch-distance: clamp(4px, 0.075em, 15px);
-    --glitch-lift: clamp(1px, 0.02em, 4px);
-    animation: tear 2.45s step-end infinite;
-  }
-
-  @media (max-width: 768px) {
+@supports (clip-path: inset(0)) {
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
     .word {
-      --glitch-distance: clamp(3px, 0.085em, 7px);
-      --glitch-lift: clamp(1px, 0.02em, 2px);
-    }
-  }
-
-  .text {
-    opacity: calc(1 - var(--glitching, 0));
-  }
-
-  .echo {
-    position: absolute;
-    inset: 0;
-    display: block;
-    opacity: var(--glitching, 0);
-    pointer-events: none;
-    user-select: none;
-  }
-
-  .echo::before,
-  .echo::after,
-  .middle {
-    position: absolute;
-    inset: 0;
-  }
-
-  .echo::before,
-  .echo::after {
-    content: attr(data-word);
-  }
-
-  .middle::before {
-    content: attr(data-slice);
-  }
-
-  .echo::before {
-    clip-path: inset(-0.15em -0.15em calc(100% - var(--upper-cut, 36%)) -0.15em);
-    transform: translateX(calc(var(--glitch-distance) * var(--top-shift, 0)));
-  }
-
-  .middle {
-    clip-path: inset(var(--upper-cut, 36%) -0.15em calc(100% - var(--lower-cut, 60%)) -0.15em);
-    transform: translate(
-      calc(var(--glitch-distance) * var(--middle-shift, 0)),
-      calc(var(--glitch-lift) * var(--middle-lift, 0))
-    );
-  }
-
-  .echo::after {
-    clip-path: inset(var(--lower-cut, 60%) -0.15em -0.15em -0.15em);
-    transform: translateX(calc(var(--glitch-distance) * var(--bottom-shift, 0)));
-  }
-
-  @keyframes tear {
-    0%, 14%, 55%, 80%, 100% {
-      --glitching: 0;
+      --glitch-offset: clamp(2px, 0.036em, 8px);
+      --glitch-fringe: clamp(1px, 0.012em, 2px);
     }
 
-    4%, 50% {
-      --glitching: 1;
-      --upper-cut: 32%;
-      --lower-cut: 58%;
-      --top-shift: 0.35;
-      --middle-shift: -1;
-      --middle-lift: 1;
-      --bottom-shift: 0.12;
+    @media (max-width: 768px) {
+      .word {
+        --glitch-offset: clamp(1px, 0.048em, 4px);
+        --glitch-fringe: 1px;
+      }
     }
 
-    7%, 52%, 76% {
-      --glitching: 1;
-      --upper-cut: 46%;
-      --lower-cut: 65%;
-      --top-shift: -0.65;
-      --middle-shift: 1;
-      --middle-lift: -1;
-      --bottom-shift: -0.3;
+    .echo {
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      user-select: none;
     }
 
-    10%, 47% {
-      --glitching: 1;
-      --upper-cut: 24%;
-      --lower-cut: 47%;
-      --top-shift: 0;
-      --middle-shift: -0.55;
-      --middle-lift: 0;
-      --bottom-shift: 0.3;
+    .echo::before,
+    .echo::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      background: var(--paper);
+      animation-timing-function: step-end;
+      animation-iteration-count: infinite;
+    }
+
+    .echo::before {
+      text-indent: calc(-1 * var(--glitch-offset));
+      text-shadow: var(--glitch-fringe) 0 #14bdcf;
+      animation-name: cyanSlice;
+      animation-duration: 3.6s;
+    }
+
+    .echo::after {
+      text-indent: var(--glitch-offset);
+      text-shadow: calc(-1 * var(--glitch-fringe)) 0 #ef8a25;
+      animation-name: orangeSlice;
+      animation-duration: 4.7s;
+      animation-delay: -0.8s;
+    }
+
+    @keyframes cyanSlice {
+      0%, 100% { clip-path: inset(15% 0 75%); }
+      7%, 65% { clip-path: inset(54% 0 36%); }
+      14%, 82% { clip-path: inset(34% 0 55%); }
+      21% { clip-path: inset(70% 0 18%); }
+      28%, 76% { clip-path: inset(24% 0 65%); }
+      34%, 89% { clip-path: inset(44% 0 41%); }
+      41% { clip-path: inset(7% 0 7%); }
+      45%, 95% { clip-path: inset(63% 0 25%); }
+      52% { clip-path: inset(13% 0 71%); }
+      58% { clip-path: inset(74% 0 13%); }
+    }
+
+    @keyframes orangeSlice {
+      0%, 100% { clip-path: inset(64% 0 24%); }
+      8%, 65% { clip-path: inset(36% 0 54%); }
+      15%, 78% { clip-path: inset(20% 0 68%); }
+      22% { clip-path: inset(54% 0 34%); }
+      29%, 85% { clip-path: inset(72% 0 16%); }
+      37%, 93% { clip-path: inset(28% 0 60%); }
+      44% { clip-path: inset(45% 0 41%); }
+      51% { clip-path: inset(11% 0 77%); }
+      58% { clip-path: inset(58% 0 24%); }
+      72% { clip-path: inset(41% 0 46%); }
     }
   }
 }
