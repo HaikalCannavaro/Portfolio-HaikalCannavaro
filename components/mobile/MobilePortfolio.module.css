@@ -13,10 +13,10 @@
 .header > a:last-child { display:grid; place-items:center; width:44px; height:44px; border:1px solid #22221e55; border-radius:50%; font-size:27px; }
 .hero { padding:25px 6% 30px; position:relative; }
 .issue { display:flex; justify-content:space-between; font:9px var(--font-meta); letter-spacing:.04em; margin-bottom:25px; }
-.hero h1 { position:relative; z-index:2; font-family:var(--font-hero); font-size:clamp(34px,13.5vw,96px); font-weight:700; line-height:.9; letter-spacing:-.025em; }
+.hero h1 { position:relative; z-index:2; font-family:var(--font-hero); font-size:clamp(24px,9.5vw,73px); font-weight:700; line-height:1; letter-spacing:0; }
 .titleLine { display:block; }
 .titleLine > span { display:block; padding-bottom:.1em; }
-.titleLine:first-child { font-size:1.58em; color:var(--blue); }
+.titleLine:first-child { font-size:1.5em; color:var(--blue); }
 .portraitStage { height:clamp(320px,91vw,500px); position:relative; display:grid; place-items:center; margin-top:5px; isolation:isolate; }
 .orbit, .orbitSmall { position:absolute; border:1px solid #22221e26; width:105%; height:64%; border-radius:50%; transform:rotate(-28deg); z-index:-1; }
 .orbitSmall { transform:rotate(30deg); height:80%; width:75%; }
@@ -108,7 +108,7 @@
  .heroBottom a, .deckControls button { transition:transform .25s cubic-bezier(.22,1,.36,1),background .25s; }
  .heroBottom a:active, .deckControls button:active { transform:scale(.88); }
 }
-@media (min-width:540px) { .hero h1 { font-size:11.6vw; } .portraitStage { height:490px; } .projectImage { aspect-ratio:16/9; } .projectBody > p:not(.projectDate) { font-size:15px; } }
+@media (min-width:540px) { .portraitStage { height:490px; } .projectImage { aspect-ratio:16/9; } .projectBody > p:not(.projectDate) { font-size:15px; } }
 }
 
 

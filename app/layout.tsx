@@ -2,8 +2,8 @@ import "./globals.css";
 import localFont from "next/font/local";
 import SmoothScroll from '../components/SmoothScroll'; 
 const hero = localFont({
-  src: "./fonts/PixelifySans.woff2",
-  weight: "400 700",
+  src: "./fonts/PressStart2P.woff2",
+  weight: "400",
   display: "swap",
   variable: "--font-hero",
   adjustFontFallback: false,

@@ -23,7 +23,7 @@
 .hero { padding:35px 5% 0; }
 .eyebrow,.heroFoot,.sectionLabel { display:flex; justify-content:space-between; font:10px/1.5 monospace; letter-spacing:.06em; }
 .eyebrow i { display:inline-block; width:6px; height:6px; background:var(--blue); border-radius:50%; margin-right:7px; }
-.hero h1 { margin:35px 0 0; font-family:var(--font-hero); letter-spacing:-.025em; font-weight:700; line-height:.88; font-size:clamp(90px,14vw,235px); position:relative; z-index:2; pointer-events:none; }
+.hero h1 { margin:35px 0 0; font-family:var(--font-hero); letter-spacing:0; font-weight:700; line-height:1; font-size:clamp(76px,10.3vw,172px); position:relative; z-index:2; pointer-events:none; }
 .hero h1 > span { display:block; width:max-content; }
 .hero h1 > span:first-child { color:var(--blue); }
 .hero h1 > span:nth-child(2) { font-size:.87em; margin-top:.08em; }
@@ -116,7 +116,7 @@
 .signoff { display:flex; justify-content:space-between; padding:23px 0; font:8px var(--font-meta); opacity:.55; border-top:1px solid #f2efe630; }
 @keyframes marquee { to { transform:translateX(-50%); } }
 @media(min-width:1600px) { .header,.hero,.work,.about,.skills,.contact { padding-left:max(5%,calc((100% - 1480px)/2)); padding-right:max(5%,calc((100% - 1480px)/2)); } .header { margin:0; } .heroGrid { min-height:350px; } }
-@media(min-width:769px) and (max-width:1050px) { .identity { display:none; } .header nav { gap:25px; } .heroGrid { gap:20px; grid-template-columns:1.1fr .8fr 1fr; min-height:290px; } .heroCaption { display:none; } .heroIntro { grid-column:span 2; } .portraitStage { height:290px; } .portrait { right:0; } .hero h1 { font-size:14vw; } .heroIntro > p { font-size:24px; } .star { left:-65px; top:20px; font-size:90px; } .turnNote { white-space:nowrap; right:0; font-size:7px; } .projectVisual { padding:40px 24px; } .projectMeta { flex-direction:column; } .aboutGrid { grid-template-columns:.65fr 2fr; gap:25px; } .aboutCopy { gap:20px; } .skillsGrid { gap:30px; } .tabs { gap:12px; } .tabs button { font-size:11px; } .contactBottom { flex-wrap:wrap; } }
+@media(min-width:769px) and (max-width:1050px) { .identity { display:none; } .header nav { gap:25px; } .heroGrid { gap:20px; grid-template-columns:1.1fr .8fr 1fr; min-height:290px; } .heroCaption { display:none; } .heroIntro { grid-column:span 2; } .portraitStage { height:290px; } .portrait { right:0; } .heroIntro > p { font-size:24px; } .star { left:-65px; top:20px; font-size:90px; } .turnNote { white-space:nowrap; right:0; font-size:7px; } .projectVisual { padding:40px 24px; } .projectMeta { flex-direction:column; } .aboutGrid { grid-template-columns:.65fr 2fr; gap:25px; } .aboutCopy { gap:20px; } .skillsGrid { gap:30px; } .tabs { gap:12px; } .tabs button { font-size:11px; } .contactBottom { flex-wrap:wrap; } }
 @media(prefers-reduced-motion:reduce) { .desktop *, .desktop *::before,.desktop *::after { animation:none!important; transition:none!important; } }
 /* The user's own 3D model replaces the desktop photo card only. */
 .avatarStage { position:absolute; width:clamp(280px,29vw,430px); height:clamp(360px,35vw,500px); right:-10%; bottom:5px; z-index:3; }
