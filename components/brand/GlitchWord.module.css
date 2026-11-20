@@ -3,50 +3,108 @@
   display: inline-block;
 }
 
+.text {
+  display: block;
+}
+
 .echo {
   display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .word {
+    --glitch-distance: clamp(4px, 0.075em, 15px);
+    --glitch-lift: clamp(1px, 0.02em, 4px);
+    animation: tear 2.45s step-end infinite;
+  }
+
+  @media (max-width: 768px) {
+    .word {
+      --glitch-distance: clamp(3px, 0.085em, 7px);
+      --glitch-lift: clamp(1px, 0.02em, 2px);
+    }
+  }
+
+  .text {
+    opacity: calc(1 - var(--glitching, 0));
+  }
+
   .echo {
-    display: block;
     position: absolute;
     inset: 0;
+    display: block;
+    opacity: var(--glitching, 0);
     pointer-events: none;
     user-select: none;
   }
 
-  @media (max-width: 768px) {
-    .word { --glitch-max-shift: 2px; }
+  .echo::before,
+  .echo::after,
+  .middle {
+    position: absolute;
+    inset: 0;
   }
 
   .echo::before,
   .echo::after {
     content: attr(data-word);
-    position: absolute;
-    inset: 0;
-    opacity: 0.72;
-    animation: signal 1.6s steps(1, end) infinite;
+  }
+
+  .middle::before {
+    content: attr(data-slice);
   }
 
   .echo::before {
-    --shift: clamp(1.5px, 0.027em, var(--glitch-max-shift, 5px));
-    color: var(--blue);
-    clip-path: inset(22% 0 60%);
+    clip-path: inset(-0.15em -0.15em calc(100% - var(--upper-cut, 36%)) -0.15em);
+    transform: translateX(calc(var(--glitch-distance) * var(--top-shift, 0)));
+  }
+
+  .middle {
+    clip-path: inset(var(--upper-cut, 36%) -0.15em calc(100% - var(--lower-cut, 60%)) -0.15em);
+    transform: translate(
+      calc(var(--glitch-distance) * var(--middle-shift, 0)),
+      calc(var(--glitch-lift) * var(--middle-lift, 0))
+    );
   }
 
   .echo::after {
-    --shift: clamp(calc(-1 * var(--glitch-max-shift, 6px)), -0.032em, -1.5px);
-    color: #c9462c;
-    animation-duration: 2.1s;
-    animation-delay: -0.7s;
-    clip-path: inset(57% 0 23%);
+    clip-path: inset(var(--lower-cut, 60%) -0.15em -0.15em -0.15em);
+    transform: translateX(calc(var(--glitch-distance) * var(--bottom-shift, 0)));
   }
 
-  @keyframes signal {
-    0%, 100% { transform: translateX(var(--shift)); }
-    35% { transform: translateX(calc(-1 * var(--shift))); }
-    60% { transform: translateX(calc(0.5 * var(--shift))); }
-    82% { transform: translateX(calc(-0.5 * var(--shift))); }
+  @keyframes tear {
+    0%, 14%, 55%, 80%, 100% {
+      --glitching: 0;
+    }
+
+    4%, 50% {
+      --glitching: 1;
+      --upper-cut: 32%;
+      --lower-cut: 58%;
+      --top-shift: 0.35;
+      --middle-shift: -1;
+      --middle-lift: 1;
+      --bottom-shift: 0.12;
+    }
+
+    7%, 52%, 76% {
+      --glitching: 1;
+      --upper-cut: 46%;
+      --lower-cut: 65%;
+      --top-shift: -0.65;
+      --middle-shift: 1;
+      --middle-lift: -1;
+      --bottom-shift: -0.3;
+    }
+
+    10%, 47% {
+      --glitching: 1;
+      --upper-cut: 24%;
+      --lower-cut: 47%;
+      --top-shift: 0;
+      --middle-shift: -0.55;
+      --middle-lift: 0;
+      --bottom-shift: 0.3;
+    }
   }
 }
