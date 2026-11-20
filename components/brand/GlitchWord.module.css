@@ -11,77 +11,89 @@
   display: none;
 }
 
-@supports (clip-path: inset(0)) {
-  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-    .word {
-      --glitch-offset: clamp(2px, 0.036em, 8px);
-      --glitch-fringe: clamp(1px, 0.012em, 2px);
-    }
+@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .echo {
+    /* Scale the cuts from the reference's 48px heading to each hero line. */
+    --reference-pixel: calc(1em / 48);
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+  }
 
-    @media (max-width: 768px) {
-      .word {
-        --glitch-offset: clamp(1px, 0.048em, 4px);
-        --glitch-fringe: 1px;
-      }
-    }
+  .echo::before,
+  .echo::after {
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: alternate-reverse;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    clip: rect(0, 900px, 0, 0);
+    content: attr(data-text);
+    background: var(--paper);
+  }
 
-    .echo {
-      display: block;
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      user-select: none;
-    }
+  .echo::after {
+    animation-name: glitch-animation;
+    animation-duration: 4s;
+    left: 4px;
+    text-shadow: -1px 0 #ffa800;
+  }
 
-    .echo::before,
-    .echo::after {
-      content: attr(data-text);
-      position: absolute;
-      inset: 0;
-      background: var(--paper);
-      animation-timing-function: step-end;
-      animation-iteration-count: infinite;
-    }
+  .echo::before {
+    animation-name: glitch-animation-2;
+    animation-duration: 6s;
+    left: -4px;
+    text-shadow: 1px 0 #00d8ff;
+  }
 
-    .echo::before {
-      text-indent: calc(-1 * var(--glitch-offset));
-      text-shadow: var(--glitch-fringe) 0 #14bdcf;
-      animation-name: cyanSlice;
-      animation-duration: 3.6s;
-    }
+  @keyframes glitch-animation {
+    0% { clip: rect(calc(42 * var(--reference-pixel)), 9999px, calc(44 * var(--reference-pixel)), 0); }
+    5% { clip: rect(calc(12 * var(--reference-pixel)), 9999px, calc(59 * var(--reference-pixel)), 0); }
+    10% { clip: rect(calc(48 * var(--reference-pixel)), 9999px, calc(29 * var(--reference-pixel)), 0); }
+    15% { clip: rect(calc(42 * var(--reference-pixel)), 9999px, calc(73 * var(--reference-pixel)), 0); }
+    20% { clip: rect(calc(63 * var(--reference-pixel)), 9999px, calc(27 * var(--reference-pixel)), 0); }
+    25% { clip: rect(calc(34 * var(--reference-pixel)), 9999px, calc(55 * var(--reference-pixel)), 0); }
+    30% { clip: rect(calc(86 * var(--reference-pixel)), 9999px, calc(73 * var(--reference-pixel)), 0); }
+    35% { clip: rect(calc(20 * var(--reference-pixel)), 9999px, calc(20 * var(--reference-pixel)), 0); }
+    40% { clip: rect(calc(26 * var(--reference-pixel)), 9999px, calc(60 * var(--reference-pixel)), 0); }
+    45% { clip: rect(calc(25 * var(--reference-pixel)), 9999px, calc(66 * var(--reference-pixel)), 0); }
+    50% { clip: rect(calc(57 * var(--reference-pixel)), 9999px, calc(98 * var(--reference-pixel)), 0); }
+    55% { clip: rect(calc(5 * var(--reference-pixel)), 9999px, calc(46 * var(--reference-pixel)), 0); }
+    60% { clip: rect(calc(82 * var(--reference-pixel)), 9999px, calc(31 * var(--reference-pixel)), 0); }
+    65% { clip: rect(calc(54 * var(--reference-pixel)), 9999px, calc(27 * var(--reference-pixel)), 0); }
+    70% { clip: rect(calc(28 * var(--reference-pixel)), 9999px, calc(99 * var(--reference-pixel)), 0); }
+    75% { clip: rect(calc(45 * var(--reference-pixel)), 9999px, calc(69 * var(--reference-pixel)), 0); }
+    80% { clip: rect(calc(23 * var(--reference-pixel)), 9999px, calc(85 * var(--reference-pixel)), 0); }
+    85% { clip: rect(calc(54 * var(--reference-pixel)), 9999px, calc(84 * var(--reference-pixel)), 0); }
+    90% { clip: rect(calc(45 * var(--reference-pixel)), 9999px, calc(47 * var(--reference-pixel)), 0); }
+    95% { clip: rect(calc(37 * var(--reference-pixel)), 9999px, calc(20 * var(--reference-pixel)), 0); }
+    100% { clip: rect(calc(4 * var(--reference-pixel)), 9999px, calc(91 * var(--reference-pixel)), 0); }
+  }
 
-    .echo::after {
-      text-indent: var(--glitch-offset);
-      text-shadow: calc(-1 * var(--glitch-fringe)) 0 #ef8a25;
-      animation-name: orangeSlice;
-      animation-duration: 4.7s;
-      animation-delay: -0.8s;
-    }
-
-    @keyframes cyanSlice {
-      0%, 100% { clip-path: inset(15% 0 75%); }
-      7%, 65% { clip-path: inset(54% 0 36%); }
-      14%, 82% { clip-path: inset(34% 0 55%); }
-      21% { clip-path: inset(70% 0 18%); }
-      28%, 76% { clip-path: inset(24% 0 65%); }
-      34%, 89% { clip-path: inset(44% 0 41%); }
-      41% { clip-path: inset(7% 0 7%); }
-      45%, 95% { clip-path: inset(63% 0 25%); }
-      52% { clip-path: inset(13% 0 71%); }
-      58% { clip-path: inset(74% 0 13%); }
-    }
-
-    @keyframes orangeSlice {
-      0%, 100% { clip-path: inset(64% 0 24%); }
-      8%, 65% { clip-path: inset(36% 0 54%); }
-      15%, 78% { clip-path: inset(20% 0 68%); }
-      22% { clip-path: inset(54% 0 34%); }
-      29%, 85% { clip-path: inset(72% 0 16%); }
-      37%, 93% { clip-path: inset(28% 0 60%); }
-      44% { clip-path: inset(45% 0 41%); }
-      51% { clip-path: inset(11% 0 77%); }
-      58% { clip-path: inset(58% 0 24%); }
-      72% { clip-path: inset(41% 0 46%); }
-    }
+  @keyframes glitch-animation-2 {
+    0% { clip: rect(calc(65 * var(--reference-pixel)), 9999px, calc(100 * var(--reference-pixel)), 0); }
+    5% { clip: rect(calc(52 * var(--reference-pixel)), 9999px, calc(74 * var(--reference-pixel)), 0); }
+    10% { clip: rect(calc(79 * var(--reference-pixel)), 9999px, calc(85 * var(--reference-pixel)), 0); }
+    15% { clip: rect(calc(75 * var(--reference-pixel)), 9999px, calc(5 * var(--reference-pixel)), 0); }
+    20% { clip: rect(calc(67 * var(--reference-pixel)), 9999px, calc(61 * var(--reference-pixel)), 0); }
+    25% { clip: rect(calc(14 * var(--reference-pixel)), 9999px, calc(79 * var(--reference-pixel)), 0); }
+    30% { clip: rect(calc(1 * var(--reference-pixel)), 9999px, calc(66 * var(--reference-pixel)), 0); }
+    35% { clip: rect(calc(86 * var(--reference-pixel)), 9999px, calc(30 * var(--reference-pixel)), 0); }
+    40% { clip: rect(calc(23 * var(--reference-pixel)), 9999px, calc(98 * var(--reference-pixel)), 0); }
+    45% { clip: rect(calc(85 * var(--reference-pixel)), 9999px, calc(72 * var(--reference-pixel)), 0); }
+    50% { clip: rect(calc(71 * var(--reference-pixel)), 9999px, calc(75 * var(--reference-pixel)), 0); }
+    55% { clip: rect(calc(2 * var(--reference-pixel)), 9999px, calc(48 * var(--reference-pixel)), 0); }
+    60% { clip: rect(calc(30 * var(--reference-pixel)), 9999px, calc(16 * var(--reference-pixel)), 0); }
+    65% { clip: rect(calc(59 * var(--reference-pixel)), 9999px, calc(50 * var(--reference-pixel)), 0); }
+    70% { clip: rect(calc(41 * var(--reference-pixel)), 9999px, calc(62 * var(--reference-pixel)), 0); }
+    75% { clip: rect(calc(2 * var(--reference-pixel)), 9999px, calc(82 * var(--reference-pixel)), 0); }
+    80% { clip: rect(calc(47 * var(--reference-pixel)), 9999px, calc(73 * var(--reference-pixel)), 0); }
+    85% { clip: rect(calc(3 * var(--reference-pixel)), 9999px, calc(27 * var(--reference-pixel)), 0); }
+    90% { clip: rect(calc(26 * var(--reference-pixel)), 9999px, calc(55 * var(--reference-pixel)), 0); }
+    95% { clip: rect(calc(42 * var(--reference-pixel)), 9999px, calc(97 * var(--reference-pixel)), 0); }
+    100% { clip: rect(calc(38 * var(--reference-pixel)), 9999px, calc(49 * var(--reference-pixel)), 0); }
   }
 }
