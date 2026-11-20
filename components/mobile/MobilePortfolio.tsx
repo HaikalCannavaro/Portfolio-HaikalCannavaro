@@ -58,9 +58,8 @@ export default function MobilePortfolio() {
         <section id="m-home" ref={hero} className={styles.hero}>
           <div className={styles.issue}><span>PORTFOLIO / SELECTED WORK</span><span>01—04</span></div>
           <motion.h1 aria-label="Haikal Cannavaro" style={animate ? { x: titleX } : undefined}>
-            {["HAIKAL", "CANNAVARO"].map(word => (
-              <span className={styles.titleLine} key={word}><GlitchWord>{word}</GlitchWord></span>
-            ))}
+            <span className={styles.titleLine}><GlitchWord dataText="Hello!">HAIKAL</GlitchWord></span>
+            <span className={styles.titleLine}><GlitchWord>CANNAVARO</GlitchWord></span>
           </motion.h1>
           <div className={styles.portraitStage}>
             <span className={styles.orbit} aria-hidden="true" /><span className={styles.orbitSmall} aria-hidden="true" />
