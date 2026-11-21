@@ -1,6 +1,8 @@
 import "./globals.css";
 import localFont from "next/font/local";
-import SmoothScroll from '../components/SmoothScroll'; 
+import SmoothScroll from '../components/SmoothScroll';
+import SplashScreen from '../components/brand/SplashScreen';
+
 const hero = localFont({
   src: "./fonts/PressStart2P.woff2",
   weight: "400",
@@ -39,13 +41,14 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en" className={`${hero.variable} ${copy.variable} ${meta.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{document.documentElement.dataset.theme=localStorage.getItem('haikal-portfolio-theme')==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{document.documentElement.dataset.theme=localStorage.getItem('haikal-portfolio-theme')==='dark'?'dark':'light';if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&sessionStorage.getItem('hc-portfolio-splash-seen')!=='1'){document.documentElement.dataset.splash='pending';}}catch(e){document.documentElement.dataset.theme='light';}})();` }} />
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
       </head>
       <body>
+        <SplashScreen />
         <SmoothScroll>
           {children}
         </SmoothScroll>
