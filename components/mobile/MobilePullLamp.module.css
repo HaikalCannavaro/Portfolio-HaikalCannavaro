@@ -1,0 +1,179 @@
+.lampRail {
+  position: fixed;
+  top: 0;
+  right: calc(6% + 54px);
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.canopy {
+  position: relative;
+  width: 24px;
+  height: 9px;
+  border-radius: 0 0 9px 9px;
+  background: #22221e;
+  border: 1px solid #f2efe645;
+  border-top: 0;
+  box-shadow: 0 2px 6px #00000026;
+  display: grid;
+  place-items: end center;
+}
+
+.lampRail[data-dark="true"] .canopy {
+  background: #2b2f28;
+  border-color: #a9b5ff55;
+}
+
+.canopyRing {
+  width: 6px;
+  height: 4px;
+  border: 1.5px solid #c9a76a;
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+  transform: translateY(2px);
+}
+
+.pendulum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lampRail[data-dragging="true"] .pendulum {
+  transition: none;
+}
+
+.cord {
+  display: block;
+  width: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #b69254 0 3px,
+    #7e6132 3px 5px
+  );
+  border-radius: 99px;
+  transition: height 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lampRail[data-dragging="true"] .cord {
+  transition: none;
+}
+
+.lampRail[data-bounce="true"] .cord {
+  transition: height 0.14s ease-out;
+}
+
+.pullHandle {
+  pointer-events: auto;
+  touch-action: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 6px 4px;
+  margin-top: -1px;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pullHandle:active {
+  cursor: grabbing;
+}
+
+.pullHandle:focus-visible {
+  outline: 3px solid #c9462c;
+  outline-offset: 2px;
+  border-radius: 14px;
+}
+
+.socket {
+  width: 12px;
+  height: 8px;
+  border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(90deg, #8e6c37, #d6b472 45%, #7d5d2d);
+  border: 1px solid #22221e80;
+}
+
+.bulb {
+  position: relative;
+  width: 22px;
+  height: 24px;
+  margin-top: -1px;
+  border-radius: 45% 45% 50% 50% / 38% 38% 62% 62%;
+  border: 1.5px solid #22221e;
+  background: radial-gradient(circle at 38% 32%, #fffdf2 0%, #f8d477 52%, #e09c3a 100%);
+  box-shadow: 0 0 14px #f5b84188, inset 0 -3px 5px #c97f1d55;
+  display: grid;
+  place-items: center;
+  transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.lampRail[data-dark="true"] .bulb {
+  border-color: #a9b5ffaa;
+  background: radial-gradient(circle at 38% 30%, #41485e 0%, #242834 65%, #171916 100%);
+  box-shadow: 0 3px 10px #00000066, inset 0 1px 4px #a9b5ff44;
+}
+
+.lampRail[data-armed="true"] .bulb {
+  transform: scale(1.12);
+  box-shadow: 0 0 18px #c9462c99, 0 0 8px #f5b841aa;
+}
+
+.filament {
+  width: 7px;
+  height: 8px;
+  border: 1.5px solid #9c5b10;
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+  transform: translateY(-2px);
+}
+
+.lampRail[data-dark="true"] .filament {
+  border-color: #a9b5ff99;
+}
+
+.hint {
+  margin-top: 4px;
+  padding: 2px 6px;
+  border-radius: 99px;
+  font: 10px/1.2 var(--font-meta), monospace;
+  letter-spacing: 0.06em;
+  background: #22221ee6;
+  color: #f2efe6;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.lampRail[data-dragging="true"] .hint,
+.pullHandle:focus-visible .hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lampRail[data-armed="true"] .hint {
+  background: #c9462c;
+  color: #f2efe6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pendulum,
+  .cord,
+  .bulb,
+  .hint {
+    transition: none !important;
+  }
+}

@@ -1,15 +1,21 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --portfolio-accent: #d7bcff;
+  --background: #f2efe6;
+  --foreground: #22221e;
+  --portfolio-accent: #284be8;
   --portfolio-gutter: clamp(1.125rem, 5vw, 2rem);
+  --grain-opacity: 0.032;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ededed;
-  }
+html[data-theme="dark"] {
+  --background: #171916;
+  --foreground: #f2efe6;
+  --portfolio-accent: #a9b5ff;
+  --grain-opacity: 0.045;
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
 }
 
 html,
@@ -17,6 +23,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   overflow-x: clip;
+  background-color: var(--background);
 }
 
 html {
@@ -25,11 +32,30 @@ html {
 }
 
 body {
-  color: #f9fafb;
-  background: #000000;
-  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  position: relative;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-copy), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  background-image: url("/image/book-grain.svg");
+  background-repeat: repeat;
+  background-size: 240px 240px;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: multiply;
+}
+
+html[data-theme="dark"] body::after {
+  mix-blend-mode: soft-light;
 }
 
 * {
@@ -52,15 +78,10 @@ a {
   html {
     scroll-behavior: auto;
   }
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+  body {
+    transition: none;
   }
 }
-
-
 
 html[data-splash="pending"] body {
   overflow: hidden;

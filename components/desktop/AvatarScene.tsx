@@ -2,7 +2,7 @@
 
 import { Component, Suspense, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { ContactShadows, OrbitControls, useGLTF } from "@react-three/drei";
 import { useInView } from "framer-motion";
 import type { Group } from "three";
 import useDesktopMotion from "../../hooks/useDesktopMotion";
@@ -70,8 +70,17 @@ export default function AvatarScene() {
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img className={styles.avatarPoster} src="/models/haikal-avatar-poster.png" alt="Haikal’s 3D self-portrait in a maroon hoodie" style={{ opacity: ready && !failed ? 0 : 1 }} />
     {!failed && visible && <SceneBoundary onError={() => setFailed(true)}><Canvas key={reset} className={styles.avatarCanvas} dpr={[1, 1.5]} camera={{ position: [0, .35, 5], fov: 36 }} frameloop={moving ? "always" : "demand"} gl={{ antialias: true, alpha: true }} onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); }} fallback={<span className={styles.sceneFallback}>3D preview unavailable. Showing portrait.</span>}>
-      <ambientLight intensity={1.5} /><directionalLight position={[-3, 4, 5]} intensity={2.1} /><directionalLight position={[3, 1, 2]} intensity={.7} />
-      <Suspense fallback={null}><Avatar animate={moving} gaze={gaze} onReady={readyCallback} /></Suspense>
+      <ambientLight intensity={1.25} />
+      <hemisphereLight args={["#f7f3ea", "#2a2b26", 0.55]} />
+      <directionalLight position={[-3, 4, 5]} intensity={2.05} color="#fff7ec" />
+      <directionalLight position={[3, 1.5, 2]} intensity={0.65} color="#e7eeff" />
+      {/* Subtle cobalt and warm rim lights separate the maroon hoodie silhouette in light and dark modes. */}
+      <directionalLight position={[2.8, 2.6, -4.2]} intensity={1.75} color="#6384ff" />
+      <directionalLight position={[-3.2, 1.2, -3.5]} intensity={0.85} color="#ffcf9e" />
+      <Suspense fallback={null}>
+        <Avatar animate={moving} gaze={gaze} onReady={readyCallback} />
+        <ContactShadows position={[0, -1.28, 0]} opacity={0.38} scale={4.2} blur={2.3} far={2.6} resolution={256} color="#171916" frames={1} />
+      </Suspense>
       <OrbitControls onStart={() => { dragging.current = true; gaze.current = { x: 0, y: 0 }; }} onEnd={() => { dragging.current = false; }} enableZoom={false} enablePan={false} enableDamping={moving} minPolarAngle={Math.PI / 2.8} maxPolarAngle={Math.PI / 1.7} target={[0, .05, 0]} rotateSpeed={.65} />
     </Canvas></SceneBoundary>}
     <div className={styles.avatarControls}><span>{failed ? "STATIC PORTRAIT" : !ready ? "PORTRAIT PREVIEW" : (moving ? "CURSOR FOLLOW · DRAG TO EXPLORE" : "DRAG TO EXPLORE")}</span><button type="button" onClick={() => { gaze.current = { x: 0, y: 0 }; dragging.current = false; setReady(false); setReset(v => v + 1); }} disabled={failed || !ready} aria-label="Reset 3D portrait view">↺</button><button type="button" disabled={failed || !ready} onClick={() => setPaused(v => !v)} aria-pressed={paused} aria-label={paused ? "Resume portrait motion" : "Pause portrait motion"}>{paused ? "Play" : "Pause"}</button></div>

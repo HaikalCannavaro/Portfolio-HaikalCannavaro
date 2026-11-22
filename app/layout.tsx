@@ -42,10 +42,6 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
     <html lang="en" className={`${hero.variable} ${copy.variable} ${meta.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{document.documentElement.dataset.theme=localStorage.getItem('haikal-portfolio-theme')==='dark'?'dark':'light';if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&sessionStorage.getItem('hc-portfolio-splash-seen')!=='1'){document.documentElement.dataset.splash='pending';}}catch(e){document.documentElement.dataset.theme='light';}})();` }} />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
       </head>
       <body>
         <SplashScreen />
