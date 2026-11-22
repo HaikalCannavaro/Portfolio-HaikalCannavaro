@@ -1,0 +1,357 @@
+.overlay {
+  --splash-bg: #f2efe6;
+  --splash-ink: #22221e;
+  --splash-accent: #284be8;
+  --splash-line: rgba(34, 34, 30, 0.18);
+  --splash-glow: rgba(40, 75, 232, 0.12);
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  color: var(--splash-ink);
+  overflow: hidden;
+  user-select: none;
+  pointer-events: auto;
+}
+
+:global(html[data-theme="dark"]) .overlay {
+  --splash-bg: #171916;
+  --splash-ink: #f2efe6;
+  --splash-accent: #a9b5ff;
+  --splash-line: rgba(242, 239, 230, 0.2);
+  --splash-glow: rgba(169, 181, 255, 0.14);
+}
+
+.curtainTop,
+.curtainBottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.5%;
+  background: var(--splash-bg);
+  will-change: transform;
+}
+
+.curtainTop {
+  top: 0;
+  border-bottom: 1px solid var(--splash-line);
+}
+
+.curtainBottom {
+  bottom: 0;
+  border-top: 1px solid var(--splash-line);
+}
+
+.watermark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-copy), Arial, Helvetica, sans-serif;
+  font-size: clamp(180px, 34vw, 440px);
+  font-weight: 800;
+  letter-spacing: -0.07em;
+  color: var(--splash-ink);
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(20px, 3vw, 36px) clamp(20px, 5vw, 64px);
+}
+
+.topBar,
+.bottomBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-meta), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.topWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rule {
+  width: 100%;
+  height: 1px;
+  background: var(--splash-line);
+  transform-origin: left center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--splash-accent);
+  display: inline-block;
+  animation: pulseDot 1.4s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.45);
+    opacity: 0.45;
+  }
+}
+
+.skipButton {
+  background: transparent;
+  border: 1px solid var(--splash-line);
+  color: var(--splash-ink);
+  font-family: var(--font-meta), monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.skipButton:hover,
+.skipButton:focus-visible {
+  background: var(--splash-ink);
+  color: var(--splash-bg);
+  border-color: var(--splash-ink);
+  outline: none;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  position: relative;
+}
+
+.emblemStage {
+  position: relative;
+  width: 184px;
+  height: 184px;
+  display: grid;
+  place-items: center;
+}
+
+.halo {
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--splash-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.orbitOuter {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed var(--splash-line);
+  border-radius: 50%;
+}
+
+.orbitInner {
+  position: absolute;
+  inset: 18px;
+  border: 1px solid var(--splash-line);
+  border-radius: 50%;
+}
+
+.orbitAccentTop,
+.orbitAccentBottom {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--splash-accent);
+  font-size: 14px;
+  line-height: 1;
+  background: var(--splash-bg);
+  padding: 0 4px;
+}
+
+.orbitAccentTop {
+  top: -7px;
+}
+
+.orbitAccentBottom {
+  bottom: -7px;
+}
+
+.emblem {
+  color: var(--splash-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, clip-path, opacity;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.nameRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.28em;
+  font-family: var(--font-copy), Arial, Helvetica, sans-serif;
+  font-size: clamp(26px, 4.4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.maskLine {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.nameAccent {
+  color: var(--splash-accent);
+}
+
+.tagline {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: clamp(15px, 1.8vw, 20px);
+  opacity: 0.85;
+  letter-spacing: -0.01em;
+}
+
+.actionSlot {
+  min-height: 54px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statusText {
+  font-family: var(--font-meta), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--splash-accent);
+}
+
+.enterButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 16px 13px 26px;
+  border-radius: 999px;
+  border: 1px solid var(--splash-ink);
+  background: var(--splash-ink);
+  color: var(--splash-bg);
+  font-family: var(--font-meta), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.enterButton:hover,
+.enterButton:focus-visible {
+  background: var(--splash-accent);
+  border-color: var(--splash-accent);
+  color: #f2efe6;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+:global(html[data-theme="dark"]) .enterButton:hover,
+:global(html[data-theme="dark"]) .enterButton:focus-visible {
+  color: #171916;
+}
+
+.enterArrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.enterButton:hover .enterArrow,
+.enterButton:focus-visible .enterArrow {
+  transform: translate(2px, -2px);
+}
+
+.bottomWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 2px;
+  background: var(--splash-line);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  width: 100%;
+  background: var(--splash-accent);
+  transform-origin: left center;
+}
+
+.counter {
+  font-variant-numeric: tabular-nums;
+  color: var(--splash-accent);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .emblemStage {
+    width: 148px;
+    height: 148px;
+  }
+
+  .orbitInner {
+    inset: 14px;
+  }
+
+  .topBar,
+  .bottomBar {
+    font-size: 10px;
+  }
+
+  .enterButton {
+    font-size: 11px;
+    padding: 11px 14px 11px 22px;
+  }
+}

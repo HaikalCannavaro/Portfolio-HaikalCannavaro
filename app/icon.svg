@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="64" height="64">
+  <style>
+    .mark { fill: #22221e; }
+    @media (prefers-color-scheme: dark) {
+      .mark { fill: #f2efe6; }
+    }
+  </style>
+  <defs>
+    <mask id="hc-tab-cut">
+      <rect width="80" height="80" fill="white" />
+      <path d="M10 58 70 33 68 37 10 62Z" fill="black" />
+    </mask>
+  </defs>
+  <g class="mark" mask="url(#hc-tab-cut)" transform="translate(0 4)">
+    <path d="M8 58 25 12Q28 6 34 9l2 1-13 28 22-13-7 14-22 22Q6 66 8 58Z" />
+    <path d="M71 17C64 5 50 7 43 18L27 49C22 62 38 65 52 60L68 48 51 51C42 55 36 52 40 44L49 26C53 18 59 17 71 17Z" />
+  </g>
+</svg>

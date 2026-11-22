@@ -61,3 +61,19 @@ a {
 }
 
 
+
+html[data-splash="pending"] body {
+  overflow: hidden;
+}
+
+html[data-splash="pending"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #f2efe6;
+}
+
+html[data-theme="dark"][data-splash="pending"] body::before {
+  background: #171916;
+}
