@@ -9,6 +9,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import useMotionAllowed from "../../hooks/useMotionAllowed";
 import { projects } from "../work/projects";
+import MobilePullLamp from "./MobilePullLamp";
 import styles from "./MobilePortfolio.module.css";
 
 const groups = [
@@ -53,6 +54,7 @@ export default function MobilePortfolio() {
 
   return (
     <div className={styles.mobile}>
+      <MobilePullLamp />
       <header className={styles.header}><a href="#m-home" aria-label="Haikal, home"><HCMonogram /></a><span>SOFTWARE DEVELOPER</span><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal"><ArrowUpRight /></a></header>
       <main>
         <section id="m-home" ref={hero} className={styles.hero}>

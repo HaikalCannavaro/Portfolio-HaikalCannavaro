@@ -26,12 +26,12 @@
 }
 .label h3 {
   font:
-    600 20px/1.25 Arial,
+    600 20px/1.25 var(--font-copy), Arial,
     sans-serif;
   letter-spacing: -0.025em;
 }
 .label p {
-  font: 10px/1.5 monospace;
+  font: 11px/1.5 var(--font-meta), monospace;
   letter-spacing: 0.09em;
   opacity: 0.65;
   margin: 8px 0 0;
@@ -76,7 +76,7 @@
     font-size: 17px;
   }
   .label p {
-    font-size: 9px;
+    font-size: 11px;
   }
   .icon {
     width: 52px;
