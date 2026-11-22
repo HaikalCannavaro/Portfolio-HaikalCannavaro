@@ -263,14 +263,14 @@ export default function MobilePullLamp() {
 
       // 4. Stop rAF automatically once the cord has settled at rest
       if (!target) {
-        let energy = 0;
-        for (let i = 1; i <= lastIdx; i++) {
-          const n = nodes[i];
-          const restY = ANCHOR.y + i * SEG_LEN;
-          energy += Math.abs(n.x - n.px) + Math.abs(n.y - n.py);
-          energy += (Math.abs(n.x - ANCHOR.x) + Math.abs(n.y - restY)) * 0.06;
-        }
-        if (energy < 0.08) {
+        // Gravity and the finite constraint iterations leave a small vertical stretch at equilibrium.
+        const settled = nodes.every((node, index) => {
+          const restY = ANCHOR.y + index * SEG_LEN;
+          return Math.hypot(node.x - node.px, node.y - node.py) < 0.08 &&
+            Math.abs(node.x - ANCHOR.x) < 0.75 &&
+            Math.abs(node.y - restY) < 5;
+        });
+        if (settled) {
           nodesRef.current = createRestNodes();
           renderRope();
           stopLoop();
