@@ -1,7 +1,7 @@
 .lampRail {
   position: fixed;
   top: 0;
-  right: calc(6% + 36px);
+  right: calc(6% + 26px);
   z-index: 1002;
   pointer-events: none;
   user-select: none;
@@ -23,8 +23,8 @@
 
 .lampSvg {
   display: block;
-  width: 96px;
-  height: 128px;
+  width: 112px;
+  height: 152px;
   overflow: visible;
   pointer-events: none;
 }
@@ -57,7 +57,7 @@
 }
 
 .lampRail[data-dark="true"] .cordLine {
-  stroke: #a9b5ff88;
+  stroke: #a9b5ff99;
 }
 
 .lampRail[data-armed="true"] .cordLine {

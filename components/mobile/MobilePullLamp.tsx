@@ -6,18 +6,75 @@ import styles from "./MobilePullLamp.module.css";
 
 const STORAGE_KEY = "haikal-portfolio-theme";
 
-// SVG geometry & spring physics tuned for a weighted, natural pull-cord
-// (true 1:1 2D pointer tracking + damped harmonic spring settling with ~2 bounces).
-const VIEWBOX_W = 120;
-const VIEWBOX_H = 160;
-const ANCHOR = { x: 60, y: 10 };
-const KNOT = { x: 60, y: 74 };
+// Multi-node Verlet rope + damped elastic tension so the cord genuinely bends,
+// sags when slack, whips on release, and swings like a real weighted pull-cord.
+const VIEWBOX_W = 140;
+const VIEWBOX_H = 190;
+const ANCHOR = { x: 70, y: 10 };
+const REST_LEN = 82;
+const KNOT = { x: 70, y: ANCHOR.y + REST_LEN };
 
-const MIN_LEN = 26;
-const MAX_LEN = 128;
+const NODE_COUNT = 8;
+const SEG_LEN = REST_LEN / (NODE_COUNT - 1);
+const MIN_LEN = 20;
+const MAX_LEN = 152;
 const TRAVEL_THRESHOLD = 42;
-const SPRING_STIFFNESS = 32;
-const SPRING_DAMPING = 3.4;
+
+const GRAVITY = 1550; // SVG units / s^2
+const ROPE_DAMPING = 0.965; // Per-frame velocity damping for organic ~2-3 swings
+const STRETCH_SPRING = 36; // Elastic snap-back when pulled past REST_LEN
+const STRETCH_DAMPING = 3.2;
+const CONSTRAINT_ITERS = 7;
+
+interface RopeNode {
+  x: number;
+  y: number;
+  px: number;
+  py: number;
+}
+
+function createRestNodes(): RopeNode[] {
+  return Array.from({ length: NODE_COUNT }, (_, i) => {
+    const y = ANCHOR.y + i * SEG_LEN;
+    return { x: ANCHOR.x, y, px: ANCHOR.x, py: y };
+  });
+}
+
+function buildSmoothPath(nodes: RopeNode[]): string {
+  if (nodes.length < 2) return "";
+  let d = `M ${nodes[0].x.toFixed(2)} ${nodes[0].y.toFixed(2)}`;
+  for (let i = 1; i < nodes.length - 1; i++) {
+    const mx = (nodes[i].x + nodes[i + 1].x) * 0.5;
+    const my = (nodes[i].y + nodes[i + 1].y) * 0.5;
+    d += ` Q ${nodes[i].x.toFixed(2)} ${nodes[i].y.toFixed(2)} ${mx.toFixed(2)} ${my.toFixed(2)}`;
+  }
+  const last = nodes[nodes.length - 1];
+  d += ` L ${last.x.toFixed(2)} ${last.y.toFixed(2)}`;
+  return d;
+}
+
+function playSwitchClick() {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(720, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(190, ctx.currentTime + 0.032);
+    gain.gain.setValueAtTime(0.09, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.036);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.04);
+    osc.onended = () => { ctx.close().catch(() => {}); };
+  } catch {
+    /* Ignore audio context restrictions. */
+  }
+}
 
 export default function MobilePullLamp() {
   const animate = useMotionAllowed();
@@ -26,17 +83,25 @@ export default function MobilePullLamp() {
   const [isArmed, setIsArmed] = useState(false);
 
   const svgRef = useRef<SVGSVGElement>(null);
-  const cordLineRef = useRef<SVGLineElement>(null);
+  const cordPathRef = useRef<SVGPathElement>(null);
   const beadGroupRef = useRef<SVGGElement>(null);
 
-  const posRef = useRef({ x: KNOT.x, y: KNOT.y });
-  const velRef = useRef({ vx: 0, vy: 0 });
+  const nodesRef = useRef<RopeNode[]>(createRestNodes());
+  const dragTargetRef = useRef<{ x: number; y: number } | null>(null);
+  const pointerVelRef = useRef<{ vx: number; vy: number; lastX: number; lastY: number; lastT: number }>({
+    vx: 0,
+    vy: 0,
+    lastX: KNOT.x,
+    lastY: KNOT.y,
+    lastT: 0,
+  });
   const draggingRef = useRef(false);
   const armedRef = useRef(false);
   const svgOriginRef = useRef({ x: 0, y: 0 });
   const scaleRef = useRef({ scaleX: 1, scaleY: 1 });
   const startClientRef = useRef({ x: 0, y: 0 });
   const rafRef = useRef<number | null>(null);
+  const lastFrameRef = useRef<number | null>(null);
   const darkRef = useRef(false);
 
   useEffect(() => {
@@ -74,74 +139,150 @@ export default function MobilePullLamp() {
     return () => document.removeEventListener("touchmove", blockScroll);
   }, [isDragging]);
 
-  const applyPos = useCallback((x: number, y: number) => {
-    posRef.current = { x, y };
-    if (cordLineRef.current) {
-      cordLineRef.current.setAttribute("x2", x.toFixed(2));
-      cordLineRef.current.setAttribute("y2", y.toFixed(2));
+  const renderRope = useCallback(() => {
+    const nodes = nodesRef.current;
+    if (cordPathRef.current) {
+      cordPathRef.current.setAttribute("d", buildSmoothPath(nodes));
     }
     if (beadGroupRef.current) {
-      const angleDeg = (-Math.atan2(x - ANCHOR.x, Math.max(8, y - ANCHOR.y)) * 180) / Math.PI;
+      const tip = nodes[nodes.length - 1];
+      const prev = nodes[nodes.length - 2];
+      const angleDeg = (-Math.atan2(tip.x - prev.x, Math.max(4, tip.y - prev.y)) * 180) / Math.PI;
       beadGroupRef.current.setAttribute(
         "transform",
-        `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${(angleDeg * 0.85).toFixed(2)})`
+        `translate(${tip.x.toFixed(2)} ${tip.y.toFixed(2)}) rotate(${Math.max(-55, Math.min(55, angleDeg)).toFixed(2)})`
       );
     }
   }, []);
 
-  const stopSpring = useCallback(() => {
+  const stopLoop = useCallback(() => {
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     }
+    lastFrameRef.current = null;
   }, []);
 
-  const springToRest = useCallback(() => {
-    stopSpring();
+  const startPhysicsLoop = useCallback(() => {
     if (!animate) {
-      applyPos(KNOT.x, KNOT.y);
-      velRef.current = { vx: 0, vy: 0 };
+      nodesRef.current = createRestNodes();
+      renderRope();
       return;
     }
-
-    let lastTime: number | null = null;
+    if (rafRef.current !== null) return;
+    lastFrameRef.current = null;
 
     const step = (now: number) => {
-      if (lastTime === null) lastTime = now;
-      const dt = Math.min((now - lastTime) / 1000, 0.032);
-      lastTime = now;
+      if (lastFrameRef.current === null) lastFrameRef.current = now;
+      const dt = Math.min((now - lastFrameRef.current) / 1000, 0.025);
+      lastFrameRef.current = now;
+      const dtSq = dt * dt;
 
-      const dx = posRef.current.x - KNOT.x;
-      const dy = posRef.current.y - KNOT.y;
-      const { vx, vy } = velRef.current;
+      const nodes = nodesRef.current;
+      const lastIdx = nodes.length - 1;
+      const target = dragTargetRef.current;
 
-      const ax = -SPRING_STIFFNESS * dx - SPRING_DAMPING * vx;
-      const ay = -SPRING_STIFFNESS * dy - SPRING_DAMPING * vy;
-      const newVx = vx + ax * dt;
-      const newVy = vy + ay * dt;
-      const newX = posRef.current.x + newVx * dt;
-      const newY = posRef.current.y + newVy * dt;
+      // 1. Verlet integration for all free nodes
+      for (let i = 1; i <= lastIdx; i++) {
+        if (target && i === lastIdx) continue;
+        const n = nodes[i];
+        const vx = (n.x - n.px) * ROPE_DAMPING;
+        const vy = (n.y - n.py) * ROPE_DAMPING;
+        n.px = n.x;
+        n.py = n.y;
+        // Bottom bead is heavier so it leads the swing naturally
+        const gravityScale = i === lastIdx ? 1.25 : 1.0;
+        n.x += vx;
+        n.y += vy + GRAVITY * gravityScale * dtSq;
+      }
 
-      velRef.current = { vx: newVx, vy: newVy };
-      applyPos(newX, newY);
+      // 2. When released from an over-stretched pull, apply damped elastic recoil toward REST_LEN
+      if (!target) {
+        const tip = nodes[lastIdx];
+        const dx = tip.x - ANCHOR.x;
+        const dy = tip.y - ANCHOR.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        if (dist > REST_LEN) {
+          const excess = dist - REST_LEN;
+          const nx = dx / dist;
+          const ny = dy / dist;
+          const vx = (tip.x - tip.px) / Math.max(dt, 0.008);
+          const vy = (tip.y - tip.py) / Math.max(dt, 0.008);
+          const radialVel = vx * nx + vy * ny;
+          const recoil = (-STRETCH_SPRING * excess - STRETCH_DAMPING * radialVel) * dtSq;
+          tip.x += nx * recoil;
+          tip.y += ny * recoil;
+        }
+      }
 
-      if (
-        Math.abs(newX - KNOT.x) < 0.35 &&
-        Math.abs(newY - KNOT.y) < 0.35 &&
-        Math.abs(newVx) < 2.5 &&
-        Math.abs(newVy) < 2.5
-      ) {
-        applyPos(KNOT.x, KNOT.y);
-        velRef.current = { vx: 0, vy: 0 };
-        rafRef.current = null;
-        return;
+      // 3. Pin ends and solve flexible rope distance constraints
+      for (let iter = 0; iter < CONSTRAINT_ITERS; iter++) {
+        nodes[0].x = ANCHOR.x;
+        nodes[0].y = ANCHOR.y;
+
+        if (target) {
+          nodes[lastIdx].x = target.x;
+          nodes[lastIdx].y = target.y;
+        }
+
+        // Dynamic segment length when user stretches cord past REST_LEN so it pulls taut smoothly
+        const tipDist = Math.hypot(nodes[lastIdx].x - ANCHOR.x, nodes[lastIdx].y - ANCHOR.y);
+        const activeSegLen = target && tipDist > REST_LEN ? tipDist / (NODE_COUNT - 1) : SEG_LEN;
+
+        for (let i = 0; i < lastIdx; i++) {
+          const a = nodes[i];
+          const b = nodes[i + 1];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy) || 0.0001;
+          // Allow slight compression when slack so the cord visibly bows instead of acting like a rod
+          if (dist > activeSegLen || iter === 0) {
+            const diff = (dist - activeSegLen) / dist;
+            const aPinned = i === 0;
+            const bPinned = Boolean(target) && i + 1 === lastIdx;
+            if (aPinned && !bPinned) {
+              b.x -= dx * diff;
+              b.y -= dy * diff;
+            } else if (!aPinned && bPinned) {
+              a.x += dx * diff;
+              a.y += dy * diff;
+            } else if (!aPinned && !bPinned) {
+              // Heavier bottom node resists displacement more than lightweight string nodes
+              const weightA = i + 1 === lastIdx ? 0.72 : 0.5;
+              const weightB = 1 - weightA;
+              a.x += dx * diff * weightA;
+              a.y += dy * diff * weightA;
+              b.x -= dx * diff * weightB;
+              b.y -= dy * diff * weightB;
+            }
+          }
+        }
+      }
+
+      renderRope();
+
+      // 4. Stop rAF automatically once the cord has settled at rest
+      if (!target) {
+        let energy = 0;
+        for (let i = 1; i <= lastIdx; i++) {
+          const n = nodes[i];
+          const restY = ANCHOR.y + i * SEG_LEN;
+          energy += Math.abs(n.x - n.px) + Math.abs(n.y - n.py);
+          energy += (Math.abs(n.x - ANCHOR.x) + Math.abs(n.y - restY)) * 0.06;
+        }
+        if (energy < 0.08) {
+          nodesRef.current = createRestNodes();
+          renderRope();
+          stopLoop();
+          return;
+        }
       }
 
       rafRef.current = requestAnimationFrame(step);
     };
 
     rafRef.current = requestAnimationFrame(step);
-  }, [animate, applyPos, stopSpring]);
+  }, [animate, renderRope, stopLoop]);
 
   const toggleTheme = useCallback(() => {
     const nextDark = !darkRef.current;
@@ -149,6 +290,7 @@ export default function MobilePullLamp() {
     document.documentElement.dataset.theme = nextDark ? "dark" : "light";
     setDark(nextDark);
     window.dispatchEvent(new Event("portfolio-theme-change"));
+    playSwitchClick();
     try {
       localStorage.setItem(STORAGE_KEY, nextDark ? "dark" : "light");
     } catch {
@@ -169,12 +311,10 @@ export default function MobilePullLamp() {
       const svgEl = svgRef.current;
       if (!svgEl) return;
 
-      stopSpring();
       draggingRef.current = true;
       armedRef.current = false;
       setIsDragging(true);
       setIsArmed(false);
-      velRef.current = { vx: 0, vy: 0 };
 
       const rect = svgEl.getBoundingClientRect();
       svgOriginRef.current = { x: rect.left, y: rect.top };
@@ -184,56 +324,67 @@ export default function MobilePullLamp() {
       };
       startClientRef.current = { x: e.clientX, y: e.clientY };
 
+      const tip = nodesRef.current[NODE_COUNT - 1];
+      dragTargetRef.current = { x: tip.x, y: tip.y };
+      pointerVelRef.current = { vx: 0, vy: 0, lastX: tip.x, lastY: tip.y, lastT: performance.now() };
+
       e.currentTarget.setPointerCapture?.(e.pointerId);
       e.preventDefault();
+      startPhysicsLoop();
     },
-    [stopSpring]
+    [startPhysicsLoop]
   );
 
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent<SVGCircleElement>) => {
-      if (!draggingRef.current) return;
+  const handlePointerMove = useCallback((e: React.PointerEvent<SVGCircleElement>) => {
+    if (!draggingRef.current) return;
 
-      const { x: ox, y: oy } = svgOriginRef.current;
-      const { scaleX, scaleY } = scaleRef.current;
+    const { x: ox, y: oy } = svgOriginRef.current;
+    const { scaleX, scaleY } = scaleRef.current;
 
-      const svgX = (e.clientX - ox) / scaleX;
-      const svgY = (e.clientY - oy) / scaleY;
+    const svgX = (e.clientX - ox) / scaleX;
+    const svgY = (e.clientY - oy) / scaleY;
 
-      let dx = svgX - ANCHOR.x;
-      let dy = svgY - ANCHOR.y;
-      const dist = Math.hypot(dx, dy) || 1;
-      const clampedLen = Math.min(MAX_LEN, Math.max(MIN_LEN, dist));
-      const ratio = clampedLen / dist;
-      dx *= ratio;
-      dy *= ratio;
+    let dx = svgX - ANCHOR.x;
+    let dy = svgY - ANCHOR.y;
+    const dist = Math.hypot(dx, dy) || 1;
+    const clampedLen = Math.min(MAX_LEN, Math.max(MIN_LEN, dist));
+    const ratio = clampedLen / dist;
+    dx *= ratio;
+    dy *= ratio;
 
-      // Keep the cord hanging below the ceiling mount.
-      const nextX = ANCHOR.x + dx;
-      const nextY = Math.max(ANCHOR.y + 12, ANCHOR.y + dy);
-      applyPos(nextX, nextY);
+    const nextX = ANCHOR.x + dx;
+    const nextY = Math.max(ANCHOR.y + 10, ANCHOR.y + dy);
 
-      const traveled = Math.hypot(
-        e.clientX - startClientRef.current.x,
-        e.clientY - startClientRef.current.y
-      );
-      const nowArmed = traveled > TRAVEL_THRESHOLD;
-      if (nowArmed !== armedRef.current) {
-        armedRef.current = nowArmed;
-        setIsArmed(nowArmed);
-        if (nowArmed && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
-          try {
-            navigator.vibrate(8);
-          } catch {
-            /* Ignore unsupported haptics. */
-          }
+    const now = performance.now();
+    const pv = pointerVelRef.current;
+    const dt = Math.max(0.008, (now - pv.lastT) / 1000);
+    pv.vx = Math.max(-450, Math.min(450, (nextX - pv.lastX) / dt));
+    pv.vy = Math.max(-450, Math.min(450, (nextY - pv.lastY) / dt));
+    pv.lastX = nextX;
+    pv.lastY = nextY;
+    pv.lastT = now;
+
+    dragTargetRef.current = { x: nextX, y: nextY };
+
+    const traveled = Math.hypot(
+      e.clientX - startClientRef.current.x,
+      e.clientY - startClientRef.current.y
+    );
+    const nowArmed = traveled > TRAVEL_THRESHOLD;
+    if (nowArmed !== armedRef.current) {
+      armedRef.current = nowArmed;
+      setIsArmed(nowArmed);
+      if (nowArmed && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+        try {
+          navigator.vibrate(8);
+        } catch {
+          /* Ignore unsupported haptics. */
         }
       }
+    }
 
-      e.preventDefault();
-    },
-    [applyPos]
-  );
+    e.preventDefault();
+  }, []);
 
   const handlePointerEnd = useCallback(
     (e: PointerEvent | React.PointerEvent<SVGCircleElement>) => {
@@ -251,6 +402,19 @@ export default function MobilePullLamp() {
         }
       }
 
+      // Impart a gentle fraction of release velocity + elastic snap-up impulse to the tip
+      const nodes = nodesRef.current;
+      const tip = nodes[NODE_COUNT - 1];
+      const pv = pointerVelRef.current;
+      const dist = Math.hypot(tip.x - ANCHOR.x, tip.y - ANCHOR.y);
+      const stretchKick = dist > REST_LEN ? (dist - REST_LEN) * 0.22 : 0;
+      const nx = (tip.x - ANCHOR.x) / (dist || 1);
+      const ny = (tip.y - ANCHOR.y) / (dist || 1);
+
+      tip.px = tip.x - pv.vx * 0.008 + nx * stretchKick;
+      tip.py = tip.y - pv.vy * 0.008 + ny * stretchKick;
+      dragTargetRef.current = null;
+
       const traveled = Math.hypot(
         e.clientX - startClientRef.current.x,
         e.clientY - startClientRef.current.y
@@ -258,12 +422,12 @@ export default function MobilePullLamp() {
       if (traveled > TRAVEL_THRESHOLD) {
         toggleTheme();
       }
-      springToRest();
+      startPhysicsLoop();
     },
-    [springToRest, toggleTheme]
+    [startPhysicsLoop, toggleTheme]
   );
 
-  // Android WebView safety net so release & spring-back always fire even if pointer capture drops.
+  // Android WebView safety net so release & rope physics always fire even if pointer capture drops.
   useEffect(() => {
     if (!isDragging) return undefined;
     window.addEventListener("pointerup", handlePointerEnd);
@@ -281,13 +445,18 @@ export default function MobilePullLamp() {
         toggleTheme();
         if (animate) {
           const side = Math.random() > 0.5 ? 1 : -1;
-          applyPos(KNOT.x + side * 24, KNOT.y + 18);
-          springToRest();
+          const nodes = nodesRef.current;
+          nodes[NODE_COUNT - 1].px -= side * 14;
+          nodes[NODE_COUNT - 1].py -= 8;
+          nodes[NODE_COUNT - 3].px -= side * 7;
+          startPhysicsLoop();
         }
       }
     },
-    [animate, applyPos, springToRest, toggleTheme]
+    [animate, startPhysicsLoop, toggleTheme]
   );
+
+  const initialPath = buildSmoothPath(createRestNodes());
 
   return (
     <div
@@ -325,31 +494,30 @@ export default function MobilePullLamp() {
 
         {/* Ceiling bracket */}
         <g className={styles.canopy} aria-hidden="true">
-          <path d="M44 0h32v5c0 3.5-3 6-6.5 6h-19C47 11 44 8.5 44 5V0z" className={styles.canopyBody} />
+          <path d="M54 0h32v5c0 3.5-3 6-6.5 6h-19C57 11 54 8.5 54 5V0z" className={styles.canopyBody} />
           <circle cx={ANCHOR.x} cy={ANCHOR.y + 1} r="3" className={styles.canopyRing} />
         </g>
 
-        {/* Dynamic pull-cord + weighted pendant (updated directly via refs at 60fps) */}
+        {/* Flexible multi-node rope path + weighted pendant (60fps ref-driven) */}
         <g className={styles.cordGroup} aria-hidden="true">
-          <line
-            ref={cordLineRef}
+          <path
+            ref={cordPathRef}
             className={styles.cordLine}
-            x1={ANCHOR.x}
-            y1={ANCHOR.y}
-            x2={KNOT.x}
-            y2={KNOT.y}
-            strokeWidth="3.5"
+            d={initialPath}
+            strokeWidth="3.2"
             strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
           />
           <g ref={beadGroupRef} transform={`translate(${KNOT.x} ${KNOT.y})`}>
-            <circle className={styles.bulbHalo} cx="0" cy="11" r="22" fill="url(#mobile-lamp-glow)" />
-            <rect className={styles.socket} x="-6" y="-3" width="12" height="7" rx="2.5" />
+            <circle className={styles.bulbHalo} cx="0" cy="10" r="22" fill="url(#mobile-lamp-glow)" />
+            <rect className={styles.socket} x="-5.5" y="-3" width="11" height="6.5" rx="2.5" />
             <path
               className={styles.bulbBody}
-              d="M-9.5 4.5C-9.5 3.5 -6 2.5 0 2.5C6 2.5 9.5 3.5 9.5 4.5C11 9.5 11.5 14.5 9.5 19.5C7.6 24 4.2 26 0 26C-4.2 26 -7.6 24 -9.5 19.5C-11.5 14.5 -11 9.5 -9.5 4.5Z"
+              d="M-8.5 4C-8.5 3 -5.5 2 0 2C5.5 2 8.5 3 8.5 4C10 8.8 10.4 13.5 8.5 18C6.8 22.2 3.8 24 0 24C-3.8 24 -6.8 22.2 -8.5 18C-10.4 13.5 -10 8.8 -8.5 4Z"
               fill={dark ? "url(#mobile-lamp-bulb-off)" : "url(#mobile-lamp-bulb-on)"}
             />
-            <path className={styles.filament} d="M-3.5 9.5c0 4 1.6 6 3.5 6s3.5-2 3.5-6" strokeWidth="1.6" strokeLinecap="round" />
+            <path className={styles.filament} d="M-3 8.8c0 3.6 1.4 5.4 3 5.4s3-1.8 3-5.4" strokeWidth="1.5" strokeLinecap="round" />
           </g>
         </g>
 
@@ -357,8 +525,8 @@ export default function MobilePullLamp() {
         <circle
           className={styles.hitArea}
           cx={KNOT.x}
-          cy={KNOT.y + 8}
-          r="34"
+          cy={KNOT.y + 10}
+          r="36"
           fill="#c4c4c4"
           fillOpacity="0.01"
           role="switch"
