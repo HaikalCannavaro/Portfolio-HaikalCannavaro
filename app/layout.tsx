@@ -1,6 +1,5 @@
 import "./globals.css";
 import localFont from "next/font/local";
-import SmoothScroll from '../components/SmoothScroll';
 import SplashScreen from '../components/brand/SplashScreen';
 
 const hero = localFont({
@@ -41,13 +40,17 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en" className={`${hero.variable} ${copy.variable} ${meta.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{document.documentElement.dataset.theme=localStorage.getItem('haikal-portfolio-theme')==='dark'?'dark':'light';if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&sessionStorage.getItem('hc-portfolio-splash-seen')!=='1'){document.documentElement.dataset.splash='pending';}}catch(e){document.documentElement.dataset.theme='light';}})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function () {
+          var root = document.documentElement;
+          var seen = false;
+          try { root.dataset.theme = localStorage.getItem('haikal-portfolio-theme') === 'dark' ? 'dark' : 'light'; }
+          catch { root.dataset.theme = 'light'; }
+          try { seen = sessionStorage.getItem('hc-portfolio-splash-seen') === '1'; } catch {}
+          if (!seen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) root.dataset.splash = 'pending';
+        })();` }} />
       </head>
       <body>
-        <SplashScreen />
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <SplashScreen>{children}</SplashScreen>
       </body>
     </html>
   );

@@ -36,7 +36,8 @@ export default function DesktopPortfolio() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 110, damping: 30 });
   const { scrollYProgress: heroProgress } = useScroll({ target: hero, offset: ["start start", "end start"] });
-  const portraitY = useTransform(heroProgress, [0, 1], [0, 110]);
+  const portraitY = useTransform(heroProgress, [0, 0.55, 1], [0, 105, 135]);
+  const ribbonY = useTransform(heroProgress, [0, 0.16, 0.55, 1], [0, 0, -84, 0]);
   const titleX = useTransform(heroProgress, [0, 1], [0, -100]);
   const starRotate = useTransform(scrollYProgress, [0, 1], [0, 220]);
   const reveal = { initial: false as const, animate: animate ? { opacity: .35, y: 28 } : { opacity: 1, y: 0 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: animate ? .8 : 0, ease }, viewport: { once: true, amount: .12 } };
@@ -65,7 +66,9 @@ export default function DesktopPortfolio() {
         </div>
         <div className={styles.heroFoot}><span>WEB / MOBILE / AI</span><span>SCROLL TO EXPLORE ↓</span></div>
       </section>
-      <div className={styles.ticker} aria-hidden="true"><div>{[0, 1].map(i => <span key={i}>CODE WITH CURIOSITY <b><FacetMark /></b> BUILD WITH INTENT <b><FacetMark /></b> MAKE IT MATTER <b><FacetMark /></b> </span>)}</div></div>
+      <motion.div className={styles.ticker} aria-hidden="true" style={animate ? { y: ribbonY } : undefined}>
+        <div>{[0, 1].map(i => <span key={i}>CODE WITH CURIOSITY <b><FacetMark /></b> BUILD WITH INTENT <b><FacetMark /></b> MAKE IT MATTER <b><FacetMark /></b> </span>)}</div>
+      </motion.div>
       <SceneTransition chapter="01" title="Selected work." subtitle="Ideas become experiences." tone="blue" />
       <section id="d-work" className={styles.work}>
         <div className={styles.sectionLabel}><span>01 / SELECTED WORK</span><span>A FEW THINGS I’VE BEEN BUILDING</span></div>

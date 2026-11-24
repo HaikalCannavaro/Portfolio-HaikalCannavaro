@@ -83,8 +83,20 @@ a {
   }
 }
 
-html[data-splash="pending"] body {
+html[data-splash],
+html[data-splash] body {
   overflow: hidden;
+  overscroll-behavior: none;
+  scroll-behavior: auto;
+}
+
+html[data-splash] body {
+  position: fixed;
+  inset: 0;
+}
+
+html[data-splash="pending"] #portfolio-content {
+  visibility: hidden;
 }
 
 html[data-splash="pending"] body::before {

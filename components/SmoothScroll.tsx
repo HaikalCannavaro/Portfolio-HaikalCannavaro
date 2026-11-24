@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import type Lenis from "lenis";
 import useDesktopMotion from "../hooks/useDesktopMotion";
 
-export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+export default function SmoothScroll({ enabled, children }: { enabled: boolean; children: React.ReactNode }) {
   const animate = useDesktopMotion();
 
   useEffect(() => {
-    if (!animate) return;
+    if (!enabled || !animate) return;
 
     let disposed = false;
     let lenis: Lenis | undefined;
@@ -23,7 +23,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       disposed = true;
       lenis?.destroy();
     };
-  }, [animate]);
+  }, [enabled, animate]);
 
   return <>{children}</>;
 }

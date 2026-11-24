@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import SmoothScroll from "../SmoothScroll";
 import { FacetMark, HCMonogram } from "./BrandMarks";
 import styles from "./SplashScreen.module.css";
 
@@ -15,42 +16,35 @@ const STATUS_STEPS = [
   "Finalizing details...",
 ] as const;
 
-export default function SplashScreen() {
-  const [visible, setVisible] = useState(false);
-  const [percent, setPercent] = useState(0);
-  const enterButtonRef = useRef<HTMLButtonElement>(null);
+type Phase = "checking" | "visible" | "leaving" | "idle";
 
-  const dismiss = useCallback(() => {
-    setVisible(false);
+export default function SplashScreen({ children }: { children: React.ReactNode }) {
+  const [phase, setPhase] = useState<Phase>("checking");
+  const [percent, setPercent] = useState(0);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const enterButtonRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const locked = phase === "visible" || phase === "leaving";
+
+  const dismiss = useCallback(() => setPhase("leaving"), []);
+
+  const finishEntry = () => {
     delete document.documentElement.dataset.splash;
-    try {
-      window.sessionStorage.setItem(SESSION_KEY, "1");
-    } catch {
-      // Ignore storage access errors in restricted browsing modes.
-    }
-  }, []);
+    const anchor = document.getElementById(window.location.hash.slice(1));
+    if (anchor && anchor.getClientRects().length) anchor.scrollIntoView({ behavior: "instant" });
+    else window.scrollTo({ top: 0, behavior: "instant" });
+    try { window.sessionStorage.setItem(SESSION_KEY, "1"); } catch {}
+    setPhase("idle");
+    requestAnimationFrame(() => contentRef.current?.focus({ preventScroll: true }));
+  };
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
-      delete document.documentElement.dataset.splash;
+    // The head script makes this decision before the browser paints or restores scroll.
+    if (document.documentElement.dataset.splash !== "pending") {
+      setPhase("idle");
       return;
     }
-
-    let alreadySeen = false;
-    try {
-      alreadySeen = window.sessionStorage.getItem(SESSION_KEY) === "1";
-    } catch {
-      alreadySeen = false;
-    }
-
-    if (alreadySeen) {
-      delete document.documentElement.dataset.splash;
-      return;
-    }
-
-    setVisible(true);
-    delete document.documentElement.dataset.splash;
+    setPhase("visible");
 
     const start = performance.now();
     let rafId = 0;
@@ -62,7 +56,7 @@ export default function SplashScreen() {
           ? 4 * linear * linear * linear
           : 1 - Math.pow(-2 * linear + 2, 3) / 2;
 
-      setPercent(Math.round(eased * 100));
+      setPercent(linear === 1 ? 100 : Math.min(99, Math.round(eased * 100)));
 
       if (linear < 1) {
         rafId = window.requestAnimationFrame(tick);
@@ -79,35 +73,41 @@ export default function SplashScreen() {
   const isComplete = percent >= 100;
 
   useEffect(() => {
-    if (!visible) return;
-
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") dismiss();
-      if (isComplete && event.key === "Enter") dismiss();
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [visible, isComplete, dismiss]);
+    if (phase === "visible") {
+      document.documentElement.dataset.splash = "active";
+      dialogRef.current?.focus({ preventScroll: true });
+    }
+  }, [phase]);
 
   useEffect(() => {
-    if (visible && isComplete) {
-      enterButtonRef.current?.focus();
-    }
-  }, [visible, isComplete]);
+    if (!locked) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Tab") {
+        event.preventDefault();
+        (enterButtonRef.current ?? dialogRef.current)?.focus({ preventScroll: true });
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        if (phase === "visible" && isComplete && !event.repeat) dismiss();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [locked, phase, isComplete, dismiss]);
+
+  const focusEnter = useCallback((button: HTMLButtonElement | null) => {
+    enterButtonRef.current = button;
+    button?.focus({ preventScroll: true });
+  }, []);
 
   const statusIndex = percent < 36 ? 0 : percent < 80 ? 1 : 2;
 
   return (
-    <AnimatePresence>
-      {visible && (
+    <>
+    <AnimatePresence onExitComplete={finishEntry}>
+      {phase === "visible" && (
         <motion.div
+          ref={dialogRef}
+          tabIndex={-1}
           className={styles.overlay}
           role="dialog"
           aria-modal="true"
@@ -160,26 +160,8 @@ export default function SplashScreen() {
                   <i className={styles.dot} aria-hidden="true" />
                   HAIKAL CANNAVARO — EDITION 2026
                 </motion.span>
-                {!isComplete ? (
-                  <motion.button
-                    type="button"
-                    className={styles.skipButton}
-                    onClick={dismiss}
-                    aria-label="Skip intro splash screen"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.25, ease: EASE }}
-                  >
-                    Skip ↗
-                  </motion.button>
-                ) : (
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.6 }}
-                    transition={{ duration: 0.35 }}
-                  >
-                    READY
-                  </motion.span>
+                {isComplete && (
+                  <motion.span initial={{ opacity: 0 }} animate={{ opacity: 0.6 }}>READY</motion.span>
                 )}
               </div>
               <motion.div
@@ -318,7 +300,7 @@ export default function SplashScreen() {
                       </motion.span>
                     ) : (
                       <motion.button
-                        ref={enterButtonRef}
+                        ref={focusEnter}
                         key="enter-btn"
                         type="button"
                         className={styles.enterButton}
@@ -357,5 +339,9 @@ export default function SplashScreen() {
         </motion.div>
       )}
     </AnimatePresence>
+    <div ref={contentRef} id="portfolio-content" tabIndex={-1} inert={locked}>
+      <SmoothScroll enabled={phase === "idle"}>{children}</SmoothScroll>
+    </div>
+    </>
   );
 }

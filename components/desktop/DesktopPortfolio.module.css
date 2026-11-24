@@ -55,7 +55,7 @@
 .star { position:absolute; font-size:110px; color:#c9462c; left:-55px; top:-20px; line-height:1; }
 .turnNote { position:absolute; bottom:18px; right:10%; font:11px var(--font-meta),monospace; }
 .heroFoot { border-top:1px solid var(--line); padding:20px 0; font-size:11px; }
-.ticker { background:var(--solid-blue); color:var(--on-solid); overflow:hidden; padding:23px 0; }
+.ticker { position:relative; z-index:4; pointer-events:none; background:var(--solid-blue); color:var(--on-solid); overflow:hidden; padding:23px 0; }
 .ticker > div { display:flex; width:max-content; }
 .ticker span { font-size:clamp(20px,2.7vw,40px); font-weight:700; letter-spacing:-.04em; white-space:nowrap; }
 .ticker b { font-size:1.2em; margin:0 28px; font-weight:400; vertical-align:middle; }
