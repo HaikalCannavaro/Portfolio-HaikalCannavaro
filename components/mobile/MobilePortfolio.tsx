@@ -53,8 +53,9 @@ export default function MobilePortfolio() {
   }
 
   return (
-    <div className={styles.mobile}>
+    <>
       <MobilePullLamp />
+      <div className={styles.mobile}>
       <header className={styles.header}><a href="#m-home" aria-label="Haikal, home"><HCMonogram /></a><span>SOFTWARE DEVELOPER</span><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal"><ArrowUpRight /></a></header>
       <main>
         <section id="m-home" ref={hero} className={styles.hero}>
@@ -120,6 +121,7 @@ export default function MobilePortfolio() {
         <footer id="m-contact" className={styles.contact}><SectionTitle number="04">LET’S MAKE SOMETHING</SectionTitle><motion.a {...reveal} className={styles.contactTitle} href="mailto:haikalcannavaro64@gmail.com">Have an idea?<br /><em>Let’s talk.</em><span><ArrowUpRight /></span></motion.a><div className={styles.socials}><a href="https://github.com/HaikalCannavaro" target="_blank" rel="noopener noreferrer">GITHUB <ArrowUpRight /></a><a href="https://www.instagram.com/haikalcnnvr" target="_blank" rel="noopener noreferrer">INSTAGRAM <ArrowUpRight /></a></div><p>HAIKAL CANNAVARO <span>BUILT WITH CURIOSITY.</span></p></footer>
       </main>
       <nav aria-label="Mobile sections" className={styles.dock}><motion.div className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} /><a href="#m-home" aria-label="Back to top"><HCMonogram /></a><a href="#m-work">Work</a><a href="#m-about">About</a><a href="#m-skills">Skills</a><a href="#m-contact" aria-label="Contact Haikal"><ArrowUpRight /></a></nav>
-    </div>
+      </div>
+    </>
   );
 }

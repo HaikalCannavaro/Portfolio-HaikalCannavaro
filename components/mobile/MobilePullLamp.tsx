@@ -10,8 +10,8 @@ const STORAGE_KEY = "haikal-portfolio-theme";
 // sags when slack, whips on release, and swings like a real weighted pull-cord.
 const VIEWBOX_W = 140;
 const VIEWBOX_H = 190;
-const ANCHOR = { x: 70, y: 10 };
-const REST_LEN = 82;
+const ANCHOR = { x: VIEWBOX_W / 2, y: 0 };
+const REST_LEN = 34;
 const KNOT = { x: 70, y: ANCHOR.y + REST_LEN };
 
 const NODE_COUNT = 8;
@@ -19,6 +19,7 @@ const SEG_LEN = REST_LEN / (NODE_COUNT - 1);
 const MIN_LEN = 20;
 const MAX_LEN = 152;
 const TRAVEL_THRESHOLD = 42;
+const TAP_SLOP = 8;
 
 const GRAVITY = 1550; // SVG units / s^2
 const ROPE_DAMPING = 0.965; // Per-frame velocity damping for organic ~2-3 swings
@@ -95,9 +96,10 @@ export default function MobilePullLamp() {
     lastY: KNOT.y,
     lastT: 0,
   });
-  const draggingRef = useRef(false);
+  const activePointerRef = useRef<number | null>(null);
+  const maxTravelRef = useRef(0);
+  const grabTipRef = useRef({ ...KNOT });
   const armedRef = useRef(false);
-  const svgOriginRef = useRef({ x: 0, y: 0 });
   const scaleRef = useRef({ scaleX: 1, scaleY: 1 });
   const startClientRef = useRef({ x: 0, y: 0 });
   const rafRef = useRef<number | null>(null);
@@ -165,7 +167,14 @@ export default function MobilePullLamp() {
 
   const startPhysicsLoop = useCallback(() => {
     if (!animate) {
-      nodesRef.current = createRestNodes();
+      stopLoop();
+      const target = dragTargetRef.current ?? KNOT;
+      const nodes = nodesRef.current;
+      nodes.forEach((node, i) => {
+        const t = i / (nodes.length - 1);
+        node.x = node.px = ANCHOR.x + (target.x - ANCHOR.x) * t;
+        node.y = node.py = ANCHOR.y + (target.y - ANCHOR.y) * t;
+      });
       renderRope();
       return;
     }
@@ -305,19 +314,29 @@ export default function MobilePullLamp() {
     }
   }, []);
 
+  const tapSwitch = useCallback(() => {
+    toggleTheme();
+    if (!animate) return;
+    const tip = nodesRef.current[NODE_COUNT - 1];
+    tip.y += 11;
+    tip.py = tip.y - 2;
+    renderRope();
+    startPhysicsLoop();
+  }, [animate, renderRope, startPhysicsLoop, toggleTheme]);
+
   const handlePointerDown = useCallback(
     (e: React.PointerEvent<SVGCircleElement>) => {
-      if (e.button !== 0 && e.pointerType === "mouse") return;
+      if (!e.isPrimary || e.button !== 0 || activePointerRef.current !== null) return;
       const svgEl = svgRef.current;
       if (!svgEl) return;
 
-      draggingRef.current = true;
+      activePointerRef.current = e.pointerId;
+      maxTravelRef.current = 0;
       armedRef.current = false;
       setIsDragging(true);
       setIsArmed(false);
 
       const rect = svgEl.getBoundingClientRect();
-      svgOriginRef.current = { x: rect.left, y: rect.top };
       scaleRef.current = {
         scaleX: rect.width / VIEWBOX_W,
         scaleY: rect.height / VIEWBOX_H,
@@ -325,7 +344,8 @@ export default function MobilePullLamp() {
       startClientRef.current = { x: e.clientX, y: e.clientY };
 
       const tip = nodesRef.current[NODE_COUNT - 1];
-      dragTargetRef.current = { x: tip.x, y: tip.y };
+      grabTipRef.current = { x: tip.x, y: tip.y };
+      dragTargetRef.current = { ...grabTipRef.current };
       pointerVelRef.current = { vx: 0, vy: 0, lastX: tip.x, lastY: tip.y, lastT: performance.now() };
 
       e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -336,16 +356,13 @@ export default function MobilePullLamp() {
   );
 
   const handlePointerMove = useCallback((e: React.PointerEvent<SVGCircleElement>) => {
-    if (!draggingRef.current) return;
+    if (activePointerRef.current !== e.pointerId) return;
 
-    const { x: ox, y: oy } = svgOriginRef.current;
+    const movedX = e.clientX - startClientRef.current.x;
+    const movedY = e.clientY - startClientRef.current.y;
     const { scaleX, scaleY } = scaleRef.current;
-
-    const svgX = (e.clientX - ox) / scaleX;
-    const svgY = (e.clientY - oy) / scaleY;
-
-    let dx = svgX - ANCHOR.x;
-    let dy = svgY - ANCHOR.y;
+    let dx = grabTipRef.current.x + movedX / scaleX - ANCHOR.x;
+    let dy = grabTipRef.current.y + movedY / scaleY - ANCHOR.y;
     const dist = Math.hypot(dx, dy) || 1;
     const clampedLen = Math.min(MAX_LEN, Math.max(MIN_LEN, dist));
     const ratio = clampedLen / dist;
@@ -366,10 +383,9 @@ export default function MobilePullLamp() {
 
     dragTargetRef.current = { x: nextX, y: nextY };
 
-    const traveled = Math.hypot(
-      e.clientX - startClientRef.current.x,
-      e.clientY - startClientRef.current.y
-    );
+    if (!animate) startPhysicsLoop();
+    const traveled = Math.hypot(movedX, movedY);
+    maxTravelRef.current = Math.max(maxTravelRef.current, traveled);
     const nowArmed = traveled > TRAVEL_THRESHOLD;
     if (nowArmed !== armedRef.current) {
       armedRef.current = nowArmed;
@@ -384,12 +400,12 @@ export default function MobilePullLamp() {
     }
 
     e.preventDefault();
-  }, []);
+  }, [animate, startPhysicsLoop]);
 
   const handlePointerEnd = useCallback(
     (e: PointerEvent | React.PointerEvent<SVGCircleElement>) => {
-      if (!draggingRef.current) return;
-      draggingRef.current = false;
+      if (activePointerRef.current !== e.pointerId) return;
+      activePointerRef.current = null;
       armedRef.current = false;
       setIsDragging(false);
       setIsArmed(false);
@@ -419,12 +435,16 @@ export default function MobilePullLamp() {
         e.clientX - startClientRef.current.x,
         e.clientY - startClientRef.current.y
       );
-      if (traveled > TRAVEL_THRESHOLD) {
-        toggleTheme();
+      if (e.type === "pointerup") {
+        if (Math.max(traveled, maxTravelRef.current) <= TAP_SLOP) {
+          tapSwitch();
+        } else if (traveled > TRAVEL_THRESHOLD) {
+          toggleTheme();
+        }
       }
       startPhysicsLoop();
     },
-    [startPhysicsLoop, toggleTheme]
+    [startPhysicsLoop, tapSwitch, toggleTheme]
   );
 
   // Android WebView safety net so release & rope physics always fire even if pointer capture drops.
@@ -442,18 +462,10 @@ export default function MobilePullLamp() {
     (e: React.KeyboardEvent<SVGCircleElement>) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        toggleTheme();
-        if (animate) {
-          const side = Math.random() > 0.5 ? 1 : -1;
-          const nodes = nodesRef.current;
-          nodes[NODE_COUNT - 1].px -= side * 14;
-          nodes[NODE_COUNT - 1].py -= 8;
-          nodes[NODE_COUNT - 3].px -= side * 7;
-          startPhysicsLoop();
-        }
+        if (!e.repeat) tapSwitch();
       }
     },
-    [animate, startPhysicsLoop, toggleTheme]
+    [tapSwitch]
   );
 
   const initialPath = buildSmoothPath(createRestNodes());
@@ -465,9 +477,7 @@ export default function MobilePullLamp() {
       data-dragging={isDragging}
       data-armed={isArmed}
     >
-      <p className={styles.srOnly} aria-live="polite">
-        {dark ? "Dark mode enabled" : "Light mode enabled"}
-      </p>
+      <span id="mobile-lamp-instructions" className={styles.srOnly}>Tap or pull to change the theme.</span>
       <svg
         ref={svgRef}
         className={styles.lampSvg}
@@ -475,71 +485,42 @@ export default function MobilePullLamp() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <defs>
-          <radialGradient id="mobile-lamp-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#f8d477" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#f8d477" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="mobile-lamp-bulb-on" cx="38%" cy="32%" r="68%">
-            <stop offset="0%" stopColor="#fffdf2" />
-            <stop offset="55%" stopColor="#f8d477" />
-            <stop offset="100%" stopColor="#dc9635" />
-          </radialGradient>
-          <radialGradient id="mobile-lamp-bulb-off" cx="38%" cy="30%" r="70%">
-            <stop offset="0%" stopColor="#464d64" />
-            <stop offset="65%" stopColor="#252935" />
-            <stop offset="100%" stopColor="#171916" />
-          </radialGradient>
-        </defs>
-
-        {/* Ceiling bracket */}
-        <g className={styles.canopy} aria-hidden="true">
-          <path d="M54 0h32v5c0 3.5-3 6-6.5 6h-19C57 11 54 8.5 54 5V0z" className={styles.canopyBody} />
-          <circle cx={ANCHOR.x} cy={ANCHOR.y + 1} r="3" className={styles.canopyRing} />
-        </g>
-
-        {/* Flexible multi-node rope path + weighted pendant (60fps ref-driven) */}
-        <g className={styles.cordGroup} aria-hidden="true">
-          <path
-            ref={cordPathRef}
-            className={styles.cordLine}
-            d={initialPath}
-            strokeWidth="3.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-          <g ref={beadGroupRef} transform={`translate(${KNOT.x} ${KNOT.y})`}>
-            <circle className={styles.bulbHalo} cx="0" cy="10" r="22" fill="url(#mobile-lamp-glow)" />
-            <rect className={styles.socket} x="-5.5" y="-3" width="11" height="6.5" rx="2.5" />
-            <path
-              className={styles.bulbBody}
-              d="M-8.5 4C-8.5 3 -5.5 2 0 2C5.5 2 8.5 3 8.5 4C10 8.8 10.4 13.5 8.5 18C6.8 22.2 3.8 24 0 24C-3.8 24 -6.8 22.2 -8.5 18C-10.4 13.5 -10 8.8 -8.5 4Z"
-              fill={dark ? "url(#mobile-lamp-bulb-off)" : "url(#mobile-lamp-bulb-on)"}
-            />
-            <path className={styles.filament} d="M-3 8.8c0 3.6 1.4 5.4 3 5.4s3-1.8 3-5.4" strokeWidth="1.5" strokeLinecap="round" />
-          </g>
-        </g>
-
-        {/* Generous touch/pointer hit target kept last in paint order */}
-        <circle
-          className={styles.hitArea}
-          cx={KNOT.x}
-          cy={KNOT.y + 10}
-          r="36"
-          fill="#c4c4c4"
-          fillOpacity="0.01"
-          role="switch"
-          tabIndex={0}
-          aria-label={dark ? "Pull lamp cord to switch to light mode" : "Pull lamp cord to switch to dark mode"}
-          aria-checked={dark}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerEnd}
-          onPointerCancel={handlePointerEnd}
-          onLostPointerCapture={handlePointerEnd}
-          onKeyDown={handleKeyboardToggle}
+        <path
+          ref={cordPathRef}
+          className={styles.cordLine}
+          d={initialPath}
+          strokeLinecap="round"
+          aria-hidden="true"
         />
+        <path className={styles.anchor} d="M65 -3h10v5a5 5 0 0 1-10 0z" aria-hidden="true" />
+        <g ref={beadGroupRef} transform={`translate(${KNOT.x} ${KNOT.y})`}>
+          <g aria-hidden="true" className={styles.pendant}>
+            <rect className={styles.socket} x="-5" y="-3" width="10" height="9" rx="2.5" />
+            <path className={styles.socketGroove} d="M-3.5 0h7" />
+            <circle className={styles.rim} cy="30" r="27" />
+            <circle className={styles.face} cy="28" r="26" />
+            <circle className={styles.engraving} cy="28" r="22" />
+            <g transform="translate(0 28)" className={styles.symbol}>
+              {dark ? (
+                <path d="M6.5 7.8A10.3 10.3 0 0 1-4.2-9.5 8.4 8.4 0 0 0 8.9 5.4a10.8 10.8 0 0 1-2.4 2.4Z" />
+              ) : (
+                <>
+                  <circle r="5.2" />
+                  <path d="M0-12v3 M0 9v3 M-12 0h3 M9 0h3 M-8.5-8.5l2.1 2.1 M6.4 6.4l2.1 2.1 M8.5-8.5 6.4-6.4 M-6.4 6.4l-2.1 2.1" />
+                </>
+              )}
+            </g>
+          </g>
+          <circle
+            className={styles.hitArea} cy="28" r="31" fill="transparent"
+            role="switch" tabIndex={0} aria-label="Dark mode" aria-checked={dark}
+            aria-describedby="mobile-lamp-instructions"
+            onPointerDown={handlePointerDown} onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerEnd} onPointerCancel={handlePointerEnd}
+            onLostPointerCapture={handlePointerEnd} onKeyDown={handleKeyboardToggle}
+            onClick={event => { if (event.detail === 0) tapSwitch(); }}
+          />
+        </g>
       </svg>
     </div>
   );

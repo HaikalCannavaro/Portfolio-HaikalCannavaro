@@ -6,11 +6,11 @@
 .mobile button { font:inherit; color:inherit; cursor:pointer; }
 .mobile :focus-visible { outline:3px solid var(--orange); outline-offset:5px; }
 .mobile section, .contact { scroll-margin-top:24px; }
-.header { height:84px; padding:22px 6%; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
+.header { height:84px; padding:22px 6%; display:grid; grid-template-columns:auto minmax(0,1fr) 44px 44px; column-gap:8px; align-items:center; border-bottom:1px solid var(--line); }
 .header > a:first-child { font-weight:900; font-size:30px; letter-spacing:-3px; }
 .header > a:first-child span { font-size:13px; vertical-align:top; letter-spacing:0; }
-.header > span { font:11px var(--font-meta), monospace; letter-spacing:1px; }
-.header > a:last-child { display:grid; place-items:center; width:44px; height:44px; border:1px solid var(--line); border-radius:50%; font-size:27px; }
+.header > span { text-align:center; font:11px var(--font-meta), monospace; letter-spacing:1px; }
+.header > a:last-child { grid-column:4; display:grid; place-items:center; width:44px; height:44px; border:1px solid var(--line); border-radius:50%; font-size:27px; }
 .hero { padding:25px 6% 30px; position:relative; }
 .issue { display:flex; justify-content:space-between; font:11px var(--font-meta), monospace; letter-spacing:.04em; margin-bottom:25px; }
 .hero h1 { position:relative; z-index:2; font-family:var(--font-hero); font-size:clamp(24px,9.5vw,73px); font-weight:700; line-height:1; letter-spacing:0; }
