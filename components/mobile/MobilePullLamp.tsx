@@ -83,6 +83,7 @@ export default function MobilePullLamp() {
   const [isDragging, setIsDragging] = useState(false);
   const [isArmed, setIsArmed] = useState(false);
 
+  const railRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const cordPathRef = useRef<SVGPathElement>(null);
   const beadGroupRef = useRef<SVGGElement>(null);
@@ -133,13 +134,21 @@ export default function MobilePullLamp() {
     };
   }, []);
 
-  // Block iOS Safari / WebKit scroll hijacking while actively dragging the cord.
+  // Install before the first drag. A touch that starts on the lamp stays targeted
+  // here even after the finger leaves it, so the rest of the page can scroll.
   useEffect(() => {
-    if (!isDragging) return undefined;
-    const blockScroll = (e: TouchEvent) => e.preventDefault();
-    document.addEventListener("touchmove", blockScroll, { passive: false });
-    return () => document.removeEventListener("touchmove", blockScroll);
-  }, [isDragging]);
+    const rail = railRef.current;
+    if (!rail) return;
+    const preventPan = (event: TouchEvent) => {
+      if (event.cancelable) event.preventDefault();
+    };
+    rail.addEventListener("touchstart", preventPan, { passive: false });
+    rail.addEventListener("touchmove", preventPan, { passive: false });
+    return () => {
+      rail.removeEventListener("touchstart", preventPan);
+      rail.removeEventListener("touchmove", preventPan);
+    };
+  }, []);
 
   const renderRope = useCallback(() => {
     const nodes = nodesRef.current;
@@ -325,7 +334,7 @@ export default function MobilePullLamp() {
   }, [animate, renderRope, startPhysicsLoop, toggleTheme]);
 
   const handlePointerDown = useCallback(
-    (e: React.PointerEvent<SVGCircleElement>) => {
+    (e: React.PointerEvent<SVGGraphicsElement>) => {
       if (!e.isPrimary || e.button !== 0 || activePointerRef.current !== null) return;
       const svgEl = svgRef.current;
       if (!svgEl) return;
@@ -355,7 +364,7 @@ export default function MobilePullLamp() {
     [startPhysicsLoop]
   );
 
-  const handlePointerMove = useCallback((e: React.PointerEvent<SVGCircleElement>) => {
+  const handlePointerMove = useCallback((e: React.PointerEvent<SVGGraphicsElement>) => {
     if (activePointerRef.current !== e.pointerId) return;
 
     const movedX = e.clientX - startClientRef.current.x;
@@ -403,7 +412,7 @@ export default function MobilePullLamp() {
   }, [animate, startPhysicsLoop]);
 
   const handlePointerEnd = useCallback(
-    (e: PointerEvent | React.PointerEvent<SVGCircleElement>) => {
+    (e: PointerEvent | React.PointerEvent<SVGGraphicsElement>) => {
       if (activePointerRef.current !== e.pointerId) return;
       activePointerRef.current = null;
       armedRef.current = false;
@@ -412,7 +421,7 @@ export default function MobilePullLamp() {
 
       if ("currentTarget" in e && e.currentTarget && "releasePointerCapture" in e.currentTarget) {
         try {
-          (e.currentTarget as SVGCircleElement).releasePointerCapture?.(e.pointerId);
+          (e.currentTarget as SVGGraphicsElement).releasePointerCapture?.(e.pointerId);
         } catch {
           /* Ignore if already released. */
         }
@@ -468,10 +477,18 @@ export default function MobilePullLamp() {
     [tapSwitch]
   );
 
+  const dragHandlers = {
+    onPointerDown: handlePointerDown,
+    onPointerMove: handlePointerMove,
+    onPointerUp: handlePointerEnd,
+    onPointerCancel: handlePointerEnd,
+    onLostPointerCapture: handlePointerEnd,
+  };
   const initialPath = buildSmoothPath(createRestNodes());
 
   return (
     <div
+      ref={railRef}
       className={styles.lampRail}
       data-dark={dark}
       data-dragging={isDragging}
@@ -485,14 +502,17 @@ export default function MobilePullLamp() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <path
-          ref={cordPathRef}
-          className={styles.cordLine}
-          d={initialPath}
-          strokeLinecap="round"
-          aria-hidden="true"
-        />
+        <defs>
+          <path id="mobile-pull-cord" ref={cordPathRef} d={initialPath} />
+        </defs>
+        <use href="#mobile-pull-cord" className={styles.cordLine} strokeLinecap="round" aria-hidden="true" />
         <path className={styles.anchor} d="M65 -3h10v5a5 5 0 0 1-10 0z" aria-hidden="true" />
+        <use
+          href="#mobile-pull-cord"
+          className={styles.cordHitArea}
+          stroke="transparent" strokeWidth="60" strokeLinecap="round" aria-hidden="true"
+          {...dragHandlers}
+        />
         <g ref={beadGroupRef} transform={`translate(${KNOT.x} ${KNOT.y})`}>
           <g aria-hidden="true" className={styles.pendant}>
             <rect className={styles.socket} x="-5" y="-3" width="10" height="9" rx="2.5" />
@@ -512,12 +532,10 @@ export default function MobilePullLamp() {
             </g>
           </g>
           <circle
-            className={styles.hitArea} cy="28" r="31" fill="transparent"
+            className={styles.hitArea} cy="28" r="34" fill="transparent"
             role="switch" tabIndex={0} aria-label="Dark mode" aria-checked={dark}
             aria-describedby="mobile-lamp-instructions"
-            onPointerDown={handlePointerDown} onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerEnd} onPointerCancel={handlePointerEnd}
-            onLostPointerCapture={handlePointerEnd} onKeyDown={handleKeyboardToggle}
+            {...dragHandlers} onKeyDown={handleKeyboardToggle}
             onClick={event => { if (event.detail === 0) tapSwitch(); }}
           />
         </g>
