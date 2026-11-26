@@ -1,15 +1,18 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ToolCard from "../toolbox/ToolCard";
 import { FacetMark, HCMonogram } from "../brand/BrandMarks";
 import GlitchWord from "../brand/GlitchWord";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import useMotionAllowed from "../../hooks/useMotionAllowed";
 import { projects } from "../work/projects";
-import MobilePullLamp from "./MobilePullLamp";
+import ThemeToggle from "../desktop/ThemeToggle";
+import useActiveMobileSection from "../../hooks/useActiveMobileSection";
+import { isPlainClick, navigateWithCover, rememberCard, restoreCardPosition } from "./projectStoryNavigation";
 import styles from "./MobilePortfolio.module.css";
 
 const groups = [
@@ -43,20 +46,50 @@ export default function MobilePortfolio() {
   const [skill, setSkill] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [portraitTurned, setPortraitTurned] = useState(false);
+  const router = useRouter();
+  const activeSection = useActiveMobileSection();
+  const [restoredStory, setRestoredStory] = useState("");
+  const coverRef = useRef<HTMLDivElement>(null);
+  const ignoreClickUntil = useRef(0);
   const selected = projects[project];
+  useLayoutEffect(() => {
+    const readLocation = () => {
+      if (!matchMedia("(max-width: 768px)").matches || (location.hash && location.hash !== "#m-work")) return;
+      const slug = new URLSearchParams(location.search).get("project");
+      const index = projects.findIndex(item => item.storyHref === `/blog/${slug}`);
+      if (index < 0) return;
+      setProject(index);
+      setRestoredStory(projects[index].storyHref);
+    };
+    readLocation();
+    window.addEventListener("popstate", readLocation);
+    return () => window.removeEventListener("popstate", readLocation);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!restoredStory) return;
+    const restore = () => {
+      if (coverRef.current?.dataset.deckCover === restoredStory) restoreCardPosition(restoredStory, coverRef.current);
+    };
+    if (!document.documentElement.hasAttribute("data-splash")) { restore(); return; }
+    const observer = new MutationObserver(() => {
+      if (!document.documentElement.hasAttribute("data-splash")) { observer.disconnect(); restore(); }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-splash"] });
+    return () => observer.disconnect();
+  }, [restoredStory]);
   const reveal = animate ? { initial: false as const, animate: { opacity: .25, y: 36 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: .15 }, transition: { duration: .7, ease } } : { initial: false as const, animate: { opacity: 1, y: 0 } };
 
   function changeProject(next: number) {
     const index = (next + projects.length) % projects.length;
     setDirection(next > project ? 1 : -1);
     setProject(index);
+    if (new URLSearchParams(location.search).has("project")) rememberCard(projects[index].storyHref);
   }
 
   return (
-    <>
-      <MobilePullLamp />
       <div className={styles.mobile}>
-      <header className={styles.header}><a href="#m-home" aria-label="Haikal, home"><HCMonogram /></a><span>SOFTWARE DEVELOPER</span><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal"><ArrowUpRight /></a></header>
+      <header className={styles.header}><a href="#m-home" aria-label="Haikal, home"><HCMonogram /></a><span>SOFTWARE DEVELOPER</span><ThemeToggle /><a href="mailto:haikalcannavaro64@gmail.com" aria-label="Email Haikal"><ArrowUpRight /></a></header>
       <main>
         <section id="m-home" ref={hero} className={styles.hero}>
           <div className={styles.issue}><span>PORTFOLIO / SELECTED WORK</span><span>01—04</span></div>
@@ -64,6 +97,7 @@ export default function MobilePortfolio() {
             <span className={styles.titleLine}><GlitchWord dataText="Hello!">HAIKAL</GlitchWord></span>
             <span className={styles.titleLine}><GlitchWord>CANNAVARO</GlitchWord></span>
           </motion.h1>
+          <div className={styles.heroBottom}><p>I turn curious ideas into<br /><strong>working digital experiences.</strong></p><a href="#m-work" aria-label="Explore selected work">↓</a></div>
           <div className={styles.portraitStage}>
             <span className={styles.orbit} aria-hidden="true" /><span className={styles.orbitSmall} aria-hidden="true" />
             <motion.span className={styles.star} aria-hidden="true" style={animate ? { rotate: portraitRotate } : undefined}><FacetMark /></motion.span>
@@ -77,7 +111,6 @@ export default function MobilePortfolio() {
             </motion.button>
             <span className={styles.tapNote}>TAP TO TURN ↻</span>
           </div>
-          <div className={styles.heroBottom}><p>I turn curious ideas into<br /><strong>working digital experiences.</strong></p><a href="#m-work" aria-label="Explore selected work">↓</a></div>
         </section>
         <div className={styles.ticker} aria-hidden="true"><motion.div style={animate ? { x: tickerX } : undefined}>{Array.from({ length: 4 }, (_, i) => <span key={i}>CODE WITH CURIOSITY <b><FacetMark /></b> BUILD WITH INTENT <b><FacetMark /></b> </span>)}</motion.div></div>
 
@@ -87,14 +120,32 @@ export default function MobilePortfolio() {
           <div className={styles.projectNav}><span>DRAG TO DISCOVER ↔</span><span aria-live="polite" aria-atomic="true">0{project + 1} <i>/ 0{projects.length}</i></span></div>
           <motion.div layout={animate} transition={{ duration: animate ? .45 : 0, ease }} className={styles.deck}>
             <span className={styles.deckBack} aria-hidden="true" />
-            <AnimatePresence initial={false} mode="wait" custom={direction}>
+            <AnimatePresence key={restoredStory} initial={false} mode="wait" custom={direction}>
               <motion.article key={project} custom={direction} className={styles.project}
                 variants={{ enter: (d: number) => ({ x: animate ? d * 70 : 0, rotate: animate ? d * 4 : 0, opacity: animate ? 0 : 1 }), center: { x: 0, rotate: 0, opacity: 1 }, exit: (d: number) => ({ x: animate ? d * -70 : 0, rotate: animate ? d * -4 : 0, opacity: animate ? 0 : 1 }) }}
                 initial="enter" animate="center" exit="exit" transition={{ duration: animate ? .3 : 0, ease }}
                 drag="x" dragConstraints={{ left: 0, right: 0 }} dragElastic={.12} dragSnapToOrigin
-                onDragEnd={(_, info) => { if (Math.abs(info.offset.x) > 45 || Math.abs(info.velocity.x) > 400) changeProject(project + (info.offset.x < 0 ? 1 : -1)); }}>
-                <div className={styles.projectImage}>{selected.image && <Image src={selected.image} alt={selected.title} fill sizes="(max-width: 768px) 90vw, 1px" draggable={false} />}<span>0{project + 1}</span></div>
-                <div className={styles.projectBody}><p className={styles.projectDate}>{selected.dates}</p><h3>{selected.title}</h3><p>{selected.description}</p><div className={styles.tags}>{selected.tags.map(tag => <span key={tag}>{tag}</span>)}</div>{selected.storyHref && <Link href={`${selected.storyHref}?from=selected-work`} prefetch={false} draggable={false} className={styles.story}>Explore the story <span><ArrowUpRight /></span></Link>}</div>
+                onDragEnd={(_, info) => {
+                  ignoreClickUntil.current = performance.now() + 250;
+                  if (Math.abs(info.offset.x) > 45 || Math.abs(info.velocity.x) > 400) changeProject(project + (info.offset.x < 0 ? 1 : -1));
+                }}>
+                <div ref={coverRef} className={styles.projectImage} data-deck-cover={selected.storyHref} data-wordmark={selected.wordmark || undefined}>
+                  {selected.image && <Image src={selected.image} alt={selected.title} fill sizes="(max-width: 768px) 90vw, 1px" draggable={false} />}
+                  <span>0{project + 1}</span>
+                </div>
+                <div className={styles.projectBody}>
+                  <p className={styles.projectDate}>{selected.dates}</p><h3>{selected.title}</h3>
+                  <p>{selected.summary}</p>
+                  <div className={styles.tags}>{selected.tags.slice(0, 3).map(tag => <span key={tag}>{tag}</span>)}</div>
+                  <Link href={`${selected.storyHref}?from=selected-work`} draggable={false} className={styles.story}
+                    aria-label={`Explore the story: ${selected.title}`} onClick={event => {
+                      if (!isPlainClick(event)) return;
+                      if (performance.now() < ignoreClickUntil.current) { event.preventDefault(); return; }
+                      rememberCard(selected.storyHref);
+                      const href = event.currentTarget.getAttribute("href")!;
+                      navigateWithCover(event, selected.storyHref, "open", () => router.push(href, { scroll: false }));
+                    }}>Explore the story <span><ArrowUpRight /></span></Link>
+                </div>
               </motion.article>
             </AnimatePresence>
           </motion.div>
@@ -120,8 +171,17 @@ export default function MobilePortfolio() {
         </section>
         <footer id="m-contact" className={styles.contact}><SectionTitle number="04">LET’S MAKE SOMETHING</SectionTitle><motion.a {...reveal} className={styles.contactTitle} href="mailto:haikalcannavaro64@gmail.com">Have an idea?<br /><em>Let’s talk.</em><span><ArrowUpRight /></span></motion.a><div className={styles.socials}><a href="https://github.com/HaikalCannavaro" target="_blank" rel="noopener noreferrer">GITHUB <ArrowUpRight /></a><a href="https://www.instagram.com/haikalcnnvr" target="_blank" rel="noopener noreferrer">INSTAGRAM <ArrowUpRight /></a></div><p>HAIKAL CANNAVARO <span>BUILT WITH CURIOSITY.</span></p></footer>
       </main>
-      <nav aria-label="Mobile sections" className={styles.dock}><motion.div className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} /><a href="#m-home" aria-label="Back to top"><HCMonogram /></a><a href="#m-work">Work</a><a href="#m-about">About</a><a href="#m-skills">Skills</a><a href="#m-contact" aria-label="Contact Haikal"><ArrowUpRight /></a></nav>
+      <nav aria-label="Mobile sections" className={styles.dock}>
+        <div className={styles.dockTrack} aria-hidden="true">
+          <motion.span initial={false} animate={{ x: `${activeSection * 100}%` }} transition={animate ? { type: "spring", stiffness: 390, damping: 36 } : { duration: 0 }} />
+        </div>
+        <motion.div aria-hidden="true" className={styles.progress} style={{ scaleX: animate ? progress : scrollYProgress }} />
+        <a href="#m-home" aria-current={activeSection === 0 ? "location" : undefined} aria-label="Back to top"><HCMonogram /></a>
+        <a href="#m-work" aria-current={activeSection === 1 ? "location" : undefined}>Work</a>
+        <a href="#m-about" aria-current={activeSection === 2 ? "location" : undefined}>About</a>
+        <a href="#m-skills" aria-current={activeSection === 3 ? "location" : undefined}>Skills</a>
+        <a href="#m-contact" aria-current={activeSection === 4 ? "location" : undefined} aria-label="Contact Haikal"><ArrowUpRight /></a>
+      </nav>
       </div>
-    </>
   );
 }

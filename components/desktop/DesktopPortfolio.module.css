@@ -139,6 +139,30 @@
 .sunIcon { display:none; }
 :global(html[data-theme="dark"]) .sunIcon { display:block; }
 :global(html[data-theme="dark"]) .moonIcon { display:none; }
+
+@media (max-width:768px) {
+  .themeToggle, .themeToggle:hover {
+    position:relative; display:grid; place-items:center; width:44px; height:44px;
+    padding:0; border:0; background:transparent; color:var(--ink);
+  }
+  .themeToggle::before {
+    content:""; width:32px; height:32px; border:1px solid var(--line);
+    border-radius:50%; background:var(--paper); grid-area:1/1;
+  }
+  .themeToggle .themeLabel { display:none; }
+  .themeToggle > svg, :global(html[data-theme]) .themeToggle > svg {
+    display:block; grid-area:1/1; position:relative; width:16px; height:16px;
+  }
+  .themeToggle .sunIcon { opacity:1; transform:rotate(0) scale(1); }
+  .themeToggle .moonIcon { opacity:0; transform:rotate(-60deg) scale(.55); }
+  :global(html[data-theme="dark"]) .themeToggle .sunIcon { opacity:0; transform:rotate(60deg) scale(.55); }
+  :global(html[data-theme="dark"]) .themeToggle .moonIcon { opacity:1; transform:rotate(0) scale(1); }
+}
+@media (max-width:768px) and (prefers-reduced-motion:no-preference) {
+  .themeToggle > svg { transition:transform .28s cubic-bezier(.2,.8,.2,1), opacity .18s; }
+  .themeToggle::before { transition:transform .2s ease, background-color .2s; }
+  .themeToggle:active::before { transform:scale(.88); }
+}
 @media(min-width:769px) and (max-width:1050px) { .header { gap:18px; } .themeLabel { display:none; } .hello { gap:15px; } }
 
 .logo { display:flex; align-items:center; min-width:68px; padding:6px 0; }

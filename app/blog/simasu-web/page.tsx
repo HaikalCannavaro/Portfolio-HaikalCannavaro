@@ -44,7 +44,7 @@ export default function SimasuWebCaseStudy() {
         </nav>
 
         {/* GAMBAR HERO */}
-        <div className={styles.heroImageWrapper}>
+        <div className={styles.heroImageWrapper} data-story-cover>
           <Image
             width={1400}
             height={900}

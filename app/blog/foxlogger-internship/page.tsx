@@ -45,7 +45,7 @@ export default function FoxLoggerCaseStudy() {
         </nav>
 
         {/* GAMBAR HERO */}
-        <div className={styles.heroImageWrapper}>
+        <div className={styles.heroImageWrapper} data-story-cover>
           {/* Siapin gambar ilustrasi AI, prompt, atau logo perusahaan di sini */}
           <Image
             width={1400}
