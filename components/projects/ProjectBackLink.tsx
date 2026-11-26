@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { animateHistoryReturn, navigateWithCover, selectedWorkHref } from "../mobile/projectStoryNavigation";
+import { navigateWithCover, selectedWorkHref, watchHistoryReturn } from "../mobile/projectStoryNavigation";
 export default function ProjectBackLink({ className }: { className?: string }) {
   const router = useRouter();
   const [collection, setCollection] = useState(false);
@@ -13,13 +13,12 @@ export default function ProjectBackLink({ className }: { className?: string }) {
     const media = window.matchMedia("(max-width: 768px)");
     const storyPath = location.pathname;
     const sync = () => setHref(fromCollection ? "/projects" : media.matches ? selectedWorkHref(storyPath) : "/#d-work");
-    const onBack = () => { if (!fromCollection) void animateHistoryReturn(storyPath); };
+    const stopWatching = fromCollection ? undefined : watchHistoryReturn(storyPath);
     sync();
     media.addEventListener("change", sync);
-    window.addEventListener("popstate", onBack, true);
     return () => {
       media.removeEventListener("change", sync);
-      window.removeEventListener("popstate", onBack, true);
+      stopWatching?.();
     };
   }, []);
   const deck = href.startsWith("/?project=");

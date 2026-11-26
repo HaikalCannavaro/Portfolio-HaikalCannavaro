@@ -5,7 +5,7 @@ const mobile = "(max-width: 768px)";
 
 export function selectedWorkHref(storyPath: string) {
   const slug = storyPath.split("/").pop() || "";
-  return `/?project=${encodeURIComponent(slug)}#m-work`;
+  return `/?project=${encodeURIComponent(slug)}`;
 }
 
 export function isPlainClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -49,9 +49,9 @@ function waitForCover(selector: string): Promise<HTMLElement | null> {
 
 // Browser Back already drives the router. Carry the departing image across that
 // navigation without intercepting history or delaying the back gesture.
-export async function animateHistoryReturn(storyPath: string) {
-  const url = new URL(location.href);
-  if (url.pathname !== "/" || url.searchParams.get("project") !== storyPath.split("/").pop() ||
+async function animateHistoryReturn(storyPath: string, destination: URL) {
+  if (destination.origin !== location.origin || destination.pathname !== "/" ||
+      destination.searchParams.get("project") !== storyPath.split("/").pop() ||
       !matchMedia(mobile).matches || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const cover = document.querySelector<HTMLElement>("[data-story-cover]");
   const image = cover?.querySelector("img");
@@ -69,12 +69,12 @@ export async function animateHistoryReturn(storyPath: string) {
     top: `${from.y}px`, left: `${from.x}px`, width: `${from.width}px`, height: `${from.height}px`,
     padding: paint.padding, background: paint.backgroundColor, transformOrigin: "top left",
   });
-  document.body.appendChild(layer);
   try {
     const target = await waitForCover(`[data-deck-cover="${CSS.escape(storyPath)}"]`);
     if (!target || location.pathname !== "/") return;
     restoreCardPosition(storyPath, target);
     const to = target.getBoundingClientRect();
+    document.body.appendChild(layer);
     const transform = `translate(${to.x - from.x}px, ${to.y - from.y}px) scale(${to.width / from.width}, ${to.height / from.height})`;
     await layer.animate([
       { transform: "none", opacity: 1 },
@@ -83,6 +83,22 @@ export async function animateHistoryReturn(storyPath: string) {
   } finally {
     layer.remove();
   }
+}
+
+export function watchHistoryReturn(storyPath: string) {
+  // The navigation event fires while the departing React tree is still mounted.
+  const navigation = (window as Window & { navigation?: EventTarget }).navigation;
+  if (navigation) {
+    const onNavigate = (event: Event) => {
+      const traversal = event as Event & { navigationType: string; destination: { url: string } };
+      if (traversal.navigationType === "traverse") void animateHistoryReturn(storyPath, new URL(traversal.destination.url));
+    };
+    navigation.addEventListener("navigate", onNavigate);
+    return () => navigation.removeEventListener("navigate", onNavigate);
+  }
+  const onBack = () => { void animateHistoryReturn(storyPath, new URL(location.href)); };
+  window.addEventListener("popstate", onBack, true);
+  return () => window.removeEventListener("popstate", onBack, true);
 }
 
 type TransitionDocument = Document & {
