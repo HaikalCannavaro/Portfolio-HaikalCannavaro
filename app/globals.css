@@ -83,8 +83,20 @@ a {
   }
 }
 
-html[data-splash="pending"] body {
+html[data-splash],
+html[data-splash] body {
   overflow: hidden;
+  overscroll-behavior: none;
+  scroll-behavior: auto;
+}
+
+html[data-splash] body {
+  position: fixed;
+  inset: 0;
+}
+
+html[data-splash="pending"] #portfolio-content {
+  visibility: hidden;
 }
 
 html[data-splash="pending"] body::before {
@@ -97,4 +109,19 @@ html[data-splash="pending"] body::before {
 
 html[data-theme="dark"][data-splash="pending"] body::before {
   background: #171916;
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: no-preference) {
+  html[data-project-transition] { scroll-behavior: auto; }
+  html[data-project-transition] :is([data-deck-cover], [data-story-cover]) {
+    view-transition-name: selected-project-cover;
+  }
+  html::view-transition-group(selected-project-cover) {
+    z-index: 1;
+    animation-duration: 370ms;
+    animation-timing-function: cubic-bezier(.22,.8,.24,1);
+  }
+  html::view-transition-old(selected-project-cover),
+  html::view-transition-new(selected-project-cover) { height: 100%; object-fit: cover; }
+  html::view-transition-group(root) { animation-duration: 180ms; }
 }

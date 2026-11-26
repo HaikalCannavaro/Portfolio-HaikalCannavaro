@@ -232,6 +232,7 @@
     font-size: 15px;
   }
   .heroImageWrapper {
+    order: -1;
     padding: 14px;
     width: 100%;
     margin-bottom: 36px;

@@ -27,24 +27,19 @@ assert(avatar.includes('ContactShadows'), 'AvatarScene should render ContactShad
 assert(avatar.includes('hemisphereLight'), 'AvatarScene should include hemisphereLight');
 assert(avatar.includes('#6384ff'), 'AvatarScene should include cobalt rim light');
 
-// 4. Mobile dark mode & natural 2D spring pull-cord lamp switch
+// 4. Mobile theme button uses the same preference and event as desktop.
 const mobileTsx = read('components/mobile/MobilePortfolio.tsx');
 const mobileCss = read('components/mobile/MobilePortfolio.module.css');
-const lampTsx = read('components/mobile/MobilePullLamp.tsx');
-const lampCss = read('components/mobile/MobilePullLamp.module.css');
+const toggle = read('components/desktop/ThemeToggle.tsx');
+const toggleCss = read('components/desktop/DesktopPortfolio.module.css');
 
-assert(mobileTsx.includes('<MobilePullLamp />'), 'MobilePortfolio should mount MobilePullLamp');
+assert(mobileTsx.includes('<ThemeToggle />'), 'Mobile header mounts the shared theme button');
 assert(mobileCss.includes('html[data-theme="dark"]'), 'MobilePortfolio CSS should define dark mode tokens');
-assert(lampTsx.includes('haikal-portfolio-theme'), 'MobilePullLamp should share localStorage theme key');
-assert(lampTsx.includes('portfolio-theme-change'), 'MobilePullLamp should sync theme event with desktop ThemeToggle');
-assert(lampTsx.includes('SPRING_STIFFNESS') && lampTsx.includes('SPRING_DAMPING'), 'MobilePullLamp should use damped harmonic spring physics');
-assert(lampTsx.includes('requestAnimationFrame'), 'MobilePullLamp should animate spring-back via rAF');
-assert(lampTsx.includes('setPointerCapture'), 'MobilePullLamp should support smooth pointer drag capture');
-assert(lampTsx.includes('aria-checked={dark}'), 'MobilePullLamp should expose accessible switch state');
-assert(lampCss.includes('touch-action: none'), 'MobilePullLamp hit area should prevent scroll hijack while pulling');
-assert(lampCss.includes('prefers-reduced-motion: reduce'), 'MobilePullLamp should respect reduced-motion preference');
+assert(toggle.includes('haikal-portfolio-theme') && toggle.includes('portfolio-theme-change'), 'Theme persists and synchronizes');
+assert(toggle.includes('type="button"') && toggle.includes('aria-pressed={dark}'), 'Theme action is a keyboard-accessible toggle');
+assert(toggleCss.includes('prefers-reduced-motion:no-preference') && toggleCss.includes('.themeToggle:active::before'), 'Mobile button animates when motion is enabled');
 
 // 5. Hero PressStart2P preserved (Point 6 intentionally skipped)
 assert(layout.includes('PressStart2P.woff2'), 'Hero PressStart2P font should remain untouched');
 
-console.log('PASS: typography, paper grain, body theme sync, 3D avatar lighting, mobile dark mode, and natural 2D spring pull-cord lamp switch.');
+console.log('PASS: typography, paper grain, theme sync, avatar lighting, and compact mobile theme button.');

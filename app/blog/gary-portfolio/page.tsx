@@ -32,7 +32,7 @@ export default function CaseStudy() {
           <a href="#chapter-2">2/ The toolkit</a>
           <a href="#chapter-3">3/ The experience</a>
         </nav>
-        <div className={styles.heroImageWrapper}>
+        <div className={styles.heroImageWrapper} data-story-cover>
           <Image
             width={1400}
             height={900}
